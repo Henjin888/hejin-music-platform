@@ -64,3 +64,31 @@
 - transaction_id
 - status
 - paid_at
+
+## 8. 搜索历史（SearchHistory）
+- id (PK)
+- user_id (FK: User)
+- keyword
+- search_type (music|users|all)
+- search_count
+- last_searched_at
+- created_at
+
+## 9. 搜索统计（SearchStats）
+- id (PK)
+- keyword
+- search_count
+- period_date
+- created_at
+
+## 10. 音乐标签（MusicTags）
+- id (PK)
+- music_id (FK: Music)
+- tag_name
+- created_at
+
+## 11. 用户关注（UserFollow）
+- id (PK)
+- follower_id (FK: User)
+- following_id (FK: User)
+- created_at
