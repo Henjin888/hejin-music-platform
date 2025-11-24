@@ -4,6 +4,7 @@ from enum import Enum
 from decimal import Decimal
 from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, ForeignKey, Enum as SQLEnum
 from sqlalchemy.types import DECIMAL
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
@@ -42,6 +43,14 @@ class User(db.Model):
     processed_reports = db.relationship('Report', backref='admin_processor', lazy=True, foreign_keys='Report.processed_by_admin_id')
     created_blacklists = db.relationship('Blacklist', backref='admin_creator', lazy=True, foreign_keys='Blacklist.created_by_admin_id')
     created_filters = db.relationship('ContentFilter', backref='admin_creator', lazy=True, foreign_keys='ContentFilter.created_by_admin_id')
+    
+    def set_password(self, password):
+        """设置密码（加密存储）"""
+        self.password_hash = generate_password_hash(password)
+    
+    def check_password(self, password):
+        """验证密码"""
+        return check_password_hash(self.password_hash, password)
 
 class Music(db.Model):
     __tablename__ = 'music'
