@@ -33,7 +33,9 @@ def create_app(config=None):
     
     # 注册蓝图
     from src.api.moderation import moderation_bp
+    from src.api.auth import auth_bp
     app.register_blueprint(moderation_bp)
+    app.register_blueprint(auth_bp)
     
     # 基础健康检查路由
     @app.route('/health')
@@ -52,6 +54,9 @@ def create_app(config=None):
             "version": "1.0.0",
             "admin_dashboard": "/admin",
             "api_endpoints": [
+                "/api/auth/register",
+                "/api/auth/login",
+                "/api/auth/me",
                 "/api/report/create",
                 "/api/report/list",
                 "/api/blacklist/add",
