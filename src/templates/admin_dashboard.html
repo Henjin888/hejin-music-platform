@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音乐平台内容审核管理后台</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Arial', sans-serif; background-color: #f5f5f5; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+        .card { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; padding: 20px; }
+        .btn { background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        .btn:hover { background: #5a67d8; }
+        .btn-danger { background: #e53e3e; }
+        .btn-danger:hover { background: #c53030; }
+        .btn-success { background: #38a169; }
+        .btn-success:hover { background: #2f855a; }
+        .table { width: 100%; border-collapse: collapse; }
+        .table th, .table td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        .table th { background-color: #edf2f7; font-weight: bold; }
+        .status { padding: 4px 8px; border-radius: 12px; font-size: 12px; }
+        .status-pending { background: #fef5e7; color: #744210; }
+        .status-approved { background: #e6fffa; color: #234e52; }
+        .status-rejected { background: #fed7d7; color: #742a2a; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; }
+        .nav { background: white; padding: 15px 0; border-bottom: 1px solid #e2e8f0; }
+        .nav-item { display: inline-block; padding: 10px 20px; margin-right: 20px; cursor: pointer; border-radius: 5px; }
+        .nav-item:hover { background: #edf2f7; }
+        .nav-item.active { background: #667eea; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎵 音乐平台内容审核管理系统</h1>
+        <p>确保平台内容合规与用户安全</p>
+    </div>
+
+    <div class="container">
+        <div class="nav">
+            <div class="nav-item active" onclick="showTab('reports')">举报管理</div>
+            <div class="nav-item" onclick="showTab('blacklist')">黑名单管理</div>
+            <div class="nav-item" onclick="showTab('music-audit')">音乐审核</div>
+            <div class="nav-item" onclick="showTab('content-filter')">内容过滤</div>
+            <div class="nav-item" onclick="showTab('stats')">统计信息</div>
+        </div>
+
+        <!-- 举报管理 -->
+        <div id="reports" class="tab-content active">
+            <div class="card">
+                <h2>📋 举报列表</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>举报者</th>
+                            <th>音乐作品</th>
+                            <th>举报原因</th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reports-list">
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
+                                暂无举报数据，请使用API创建测试数据
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 黑名单管理 -->
+        <div id="blacklist" class="tab-content">
+            <div class="card">
+                <h2>🚫 黑名单管理</h2>
+                
+                <div style="margin-bottom: 20px;">
+                    <h3>添加用户到黑名单</h3>
+                    <form id="add-blacklist-form" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; align-items: end;">
+                        <div class="form-group">
+                            <label>用户ID</label>
+                            <input type="number" id="blacklist-user-id" required>
+                        </div>
+                        <div class="form-group">
+                            <label>封禁原因</label>
+                            <input type="text" id="blacklist-reason" required>
+                        </div>
+                        <div class="form-group">
+                            <label>结束日期 (可选)</label>
+                            <input type="datetime-local" id="blacklist-end-date">
+                        </div>
+                        <button type="submit" class="btn btn-danger">添加黑名单</button>
+                    </form>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>用户</th>
+                            <th>封禁原因</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="blacklist-list">
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 40px; color: #666;">
+                                暂无黑名单数据
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 音乐审核 -->
+        <div id="music-audit" class="tab-content">
+            <div class="card">
+                <h2>🎵 音乐作品审核</h2>
+                
+                <div style="margin-bottom: 20px;">
+                    <h3>快速审核</h3>
+                    <form id="audit-form" style="display: grid; grid-template-columns: 1fr 1fr 2fr auto auto; gap: 10px; align-items: end;">
+                        <div class="form-group">
+                            <label>音乐ID</label>
+                            <input type="number" id="audit-music-id" required>
+                        </div>
+                        <div class="form-group">
+                            <label>审核决定</label>
+                            <select id="audit-action" required>
+                                <option value="">选择操作</option>
+                                <option value="approve">通过</option>
+                                <option value="reject">拒绝</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>审核意见</label>
+                            <input type="text" id="audit-comment" placeholder="可选">
+                        </div>
+                        <button type="submit" class="btn btn-success">提交审核</button>
+                    </form>
+                </div>
+                
+                <div style="background: #f7fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #4299e1;">
+                    <h4>📝 审核指引</h4>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>检查音乐内容是否符合平台规范</li>
+                        <li>确认无版权纠纷或违规内容</li>
+                        <li>评估音乐质量和用户体验</li>
+                        <li>如有疑问，可标记为需要进一步审核</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 内容过滤 -->
+        <div id="content-filter" class="tab-content">
+            <div class="card">
+                <h2>🔍 内容过滤管理</h2>
+                
+                <div style="margin-bottom: 20px;">
+                    <h3>添加过滤规则</h3>
+                    <form id="filter-form" style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: end;">
+                        <div class="form-group">
+                            <label>关键词</label>
+                            <input type="text" id="filter-keyword" required>
+                        </div>
+                        <div class="form-group">
+                            <label>过滤范围</label>
+                            <select id="filter-type" required>
+                                <option value="">选择范围</option>
+                                <option value="title">仅标题</option>
+                                <option value="description">仅描述</option>
+                                <option value="both">标题和描述</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>处理动作</label>
+                            <select id="filter-action" required>
+                                <option value="">选择动作</option>
+                                <option value="block">直接阻止</option>
+                                <option value="flag">标记审核</option>
+                                <option value="moderate">人工审核</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn">添加规则</button>
+                    </form>
+                </div>
+
+                <div style="background: #fef5e7; padding: 15px; border-radius: 8px; border-left: 4px solid #ed8936;">
+                    <h4>⚠️ 注意事项</h4>
+                    <p style="margin-top: 10px;">过滤规则将自动应用到新上传的内容。请谨慎设置关键词，避免误杀正常内容。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 统计信息 -->
+        <div id="stats" class="tab-content">
+            <div class="card">
+                <h2>📊 平台审核统计</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                        <h3 style="font-size: 24px;">待处理举报</h3>
+                        <p style="font-size: 36px; margin: 10px 0;" id="pending-reports">-</p>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                        <h3 style="font-size: 24px;">黑名单用户</h3>
+                        <p style="font-size: 36px; margin: 10px 0;" id="blacklisted-users">-</p>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                        <h3 style="font-size: 24px;">今日审核</h3>
+                        <p style="font-size: 36px; margin: 10px 0;" id="today-audits">-</p>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                        <h3 style="font-size: 24px;">过滤规则</h3>
+                        <p style="font-size: 36px; margin: 10px 0;" id="filter-rules">-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 导航切换
+        function showTab(tabName) {
+            // 隐藏所有标签页
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 显示选中的标签页
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // API调用辅助函数
+        function apiCall(endpoint, method = 'GET', data = null) {
+            const options = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            };
+            
+            if (data) {
+                options.body = JSON.stringify(data);
+            }
+            
+            return fetch('/api' + endpoint, options);
+        }
+
+        // 添加黑名单表单
+        document.getElementById('add-blacklist-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const userId = document.getElementById('blacklist-user-id').value;
+            const reason = document.getElementById('blacklist-reason').value;
+            const endDate = document.getElementById('blacklist-end-date').value;
+            
+            const data = {
+                user_id: parseInt(userId),
+                reason: reason
+            };
+            
+            if (endDate) {
+                data.end_date = endDate;
+            }
+            
+            try {
+                const response = await apiCall('/blacklist/add', 'POST', data);
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('用户已成功添加到黑名单');
+                    this.reset();
+                } else {
+                    alert('操作失败: ' + result.message);
+                }
+            } catch (error) {
+                alert('网络错误，请检查是否已登录并具有管理员权限');
+            }
+        });
+
+        // 音乐审核表单
+        document.getElementById('audit-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const musicId = document.getElementById('audit-music-id').value;
+            const action = document.getElementById('audit-action').value;
+            const comment = document.getElementById('audit-comment').value;
+            
+            const data = {
+                action: action,
+                comment: comment || ''
+            };
+            
+            try {
+                const response = await apiCall(`/music/${musicId}/audit`, 'POST', data);
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('审核结果已提交');
+                    this.reset();
+                } else {
+                    alert('操作失败: ' + result.message);
+                }
+            } catch (error) {
+                alert('网络错误，请检查是否已登录并具有管理员权限');
+            }
+        });
+
+        // 内容过滤表单
+        document.getElementById('filter-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const keyword = document.getElementById('filter-keyword').value;
+            const filterType = document.getElementById('filter-type').value;
+            const action = document.getElementById('filter-action').value;
+            
+            const data = {
+                keyword: keyword,
+                filter_type: filterType,
+                action: action
+            };
+            
+            try {
+                const response = await apiCall('/content-filter/add', 'POST', data);
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('过滤规则已添加');
+                    this.reset();
+                } else {
+                    alert('操作失败: ' + result.message);
+                }
+            } catch (error) {
+                alert('网络错误，请检查是否已登录并具有管理员权限');
+            }
+        });
+
+        // 页面加载时显示说明
+        window.addEventListener('load', function() {
+            alert('👋 欢迎使用音乐平台内容审核管理系统！\n\n⚠️ 注意：\n1. 此为演示界面，需要先通过API进行用户认证\n2. 管理员权限为必需\n3. 可以通过API创建测试数据进行功能验证\n4. 完整功能需要配合后端API使用');
+        });
+    </script>
+</body>
+</html>
