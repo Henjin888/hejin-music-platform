@@ -33,7 +33,9 @@ def create_app(config=None):
     
     # 注册蓝图
     from src.api.moderation import moderation_bp
+    from src.api.music import music_bp
     app.register_blueprint(moderation_bp)
+    app.register_blueprint(music_bp)
     
     # 基础健康检查路由
     @app.route('/health')
@@ -57,7 +59,10 @@ def create_app(config=None):
                 "/api/blacklist/add",
                 "/api/blacklist/list",
                 "/api/music/<id>/audit",
-                "/api/content-filter/add"
+                "/api/content-filter/add",
+                "/api/music/upload",
+                "/api/music/list",
+                "/api/music/<id>"
             ]
         })
     
