@@ -1,8 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from marshmallow import Schema, fields, ValidationError
-from ..models.models import db, Music, User, AuditStatus
-from datetime import datetime
+from ..models.models import db, Music, AuditStatus
 
 # 创建蓝图
 music_bp = Blueprint('music', __name__, url_prefix='/api/music')
