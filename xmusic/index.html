@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMUSIC - 音乐投资平台</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #121212;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .header {
+            background: #070707;
+            border-bottom: 1px solid #282828;
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #1DB954;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .nav {
+            display: flex;
+            gap: 24px;
+        }
+        .nav a {
+            color: #B3B3B3;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .nav a:hover {
+            color: #fff;
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: 500px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #fff;
+            color: #000;
+        }
+        .btn-primary:hover {
+            background: #F0F0F0;
+        }
+        .btn-green {
+            background: #1DB954;
+            color: #000;
+        }
+        .btn-green:hover {
+            background: #1ED760;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #878787;
+            color: #fff;
+        }
+        
+        /* Hero */
+        .hero {
+            background: linear-gradient(180deg, rgba(29,185,84,0.3) 0%, #121212 100%);
+            padding: 80px 24px;
+            text-align: center;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(29,185,84,0.2);
+            color: #1DB954;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(29,185,84,0.3);
+        }
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 900;
+            margin-bottom: 24px;
+            line-height: 1.1;
+        }
+        .hero h1 span {
+            color: #1DB954;
+        }
+        .hero p {
+            font-size: 18px;
+            color: #B3B3B3;
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 48px;
+        }
+        
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .stat-card {
+            background: #181818;
+            padding: 24px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            color: #B3B3B3;
+            font-size: 14px;
+        }
+        
+        /* Section */
+        .section {
+            padding: 60px 24px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .section-link {
+            color: #B3B3B3;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .section-link:hover {
+            color: #fff;
+        }
+        
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background: #181818;
+            border-radius: 8px;
+            padding: 16px;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        .card:hover {
+            background: #282828;
+        }
+        .card-cover {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            position: relative;
+            overflow: hidden;
+        }
+        .card-cover::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 48px;
+            height: 48px;
+            background: #1DB954;
+            border-radius: 50%;
+            margin: 8px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .card:hover .card-cover::after {
+            opacity: 1;
+        }
+        .card-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .card-subtitle {
+            color: #B3B3B3;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .card-meta {
+            color: #6a6a6a;
+            font-size: 12px;
+        }
+        .progress-bar {
+            height: 4px;
+            background: #404040;
+            border-radius: 2px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #1DB954;
+            border-radius: 2px;
+        }
+        
+        /* How it works */
+        .how-it-works {
+            background: linear-gradient(180deg, #121212 0%, #0a0a0a 100%);
+        }
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .step-card {
+            background: #181818;
+            padding: 32px;
+            border-radius: 8px;
+        }
+        .step-icon {
+            width: 48px;
+            height: 48px;
+            background: #1DB954;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        .step-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .step-desc {
+            color: #B3B3B3;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* CTA */
+        .cta {
+            text-align: center;
+            padding: 80px 24px;
+        }
+        .cta h2 {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+        .cta p {
+            color: #B3B3B3;
+            font-size: 18px;
+            margin-bottom: 32px;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #070707;
+            border-top: 1px solid #282828;
+            padding: 40px 24px;
+            text-align: center;
+        }
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        .footer-links a {
+            color: #B3B3B3;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .footer-links a:hover {
+            color: #fff;
+        }
+        .footer-copy {
+            color: #6a6a6a;
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 40px;
+            }
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">🎵</div>
+            <div class="logo-text">XMUSIC</div>
+        </div>
+        <nav class="nav">
+            <a href="#">发现</a>
+            <a href="#">浏览</a>
+            <a href="#">投资人</a>
+            <a href="#">治理</a>
+        </nav>
+        <div style="display: flex; gap: 12px;">
+            <button class="btn btn-outline">注册</button>
+            <button class="btn btn-primary">登录</button>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge">Web3 音乐投资基础设施</div>
+        <h1>让每个歌手拥有<br><span>自己的小投行</span></h1>
+        <p>XMUSIC 是音乐现金流的资产化和分配层。把音乐事业变成可投资、可分配、可治理的数字资产。</p>
+        <div class="hero-buttons">
+            <button class="btn btn-green" style="font-size: 16px; padding: 16px 32px;">🎵 开始探索</button>
+            <button class="btn btn-outline" style="font-size: 16px; padding: 16px 32px;">发起融资</button>
+        </div>
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-icon">💿</div>
+                <div class="stat-value">12</div>
+                <div class="stat-label">已上线项目</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-value">$180K+</div>
+                <div class="stat-label">累计融资</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-value">456</div>
+                <div class="stat-label">活跃投资人</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-value">14.5%</div>
+                <div class="stat-label">平均回报</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Artists -->
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">热门音乐人</h2>
+            <a href="#" class="section-link">查看全部 →</a>
+        </div>
+        
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-cover" style="background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);">🎵</div>
+                <div class="card-title">林夕</div>
+                <div class="card-subtitle">2025巡演计划 · 独立流行</div>
+                <div class="card-meta">45.2K 月听众</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                    <span style="color: #1DB954; font-size: 12px; font-weight: 600;">$32.5K / $50K</span>
+                    <span style="color: #6a6a6a; font-size: 12px;">128 投资人</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 65%;"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-cover" style="background: linear-gradient(135deg, #10B981 0%, #14B8A6 100%);">🎹</div>
+                <div class="card-title">陈默</div>
+                <div class="card-subtitle">新专辑《午夜飞行》· 电子</div>
+                <div class="card-meta">28.7K 月听众</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                    <span style="color: #1DB954; font-size: 12px; font-weight: 600;">✓ 已达成</span>
+                    <span style="color: #6a6a6a; font-size: 12px;">89 投资人</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%;"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-cover" style="background: linear-gradient(135deg, #F97316 0%, #EF4444 100%);">🎤</div>
+                <div class="card-title">MC 阿龙</div>
+                <div class="card-subtitle">地下说唱联盟 · 说唱</div>
+                <div class="card-meta">12.3K 月听众</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                    <span style="color: #1DB954; font-size: 12px; font-weight: 600;">$8.5K / $20K</span>
+                    <span style="color: #6a6a6a; font-size: 12px;">45 投资人</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 42%;"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-cover" style="background: linear-gradient(135deg, #EAB308 0%, #F97316 100%);">🎸</div>
+                <div class="card-title">小雨</div>
+                <div class="card-subtitle">民谣诗集 · 民谣</div>
+                <div class="card-meta">18.5K 月听众</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                    <span style="color: #1DB954; font-size: 12px; font-weight: 600;">$12K / $15K</span>
+                    <span style="color: #6a6a6a; font-size: 12px;">67 投资人</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 80%;"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-cover" style="background: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);">🎧</div>
+                <div class="card-title">DJ Nova</div>
+                <div class="card-subtitle">电子音乐节 · 电子</div>
+                <div class="card-meta">32.1K 月听众</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                    <span style="color: #1DB954; font-size: 12px; font-weight: 600;">$28K / $40K</span>
+                    <span style="color: #6a6a6a; font-size: 12px;">95 投资人</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 70%;"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-cover" style="background: linear-gradient(135deg, #DC2626 0%, #EC4899 100%);">🎸</div>
+                <div class="card-title">摇滚老张</div>
+                <div class="card-subtitle">复出巡演 · 摇滚</div>
+                <div class="card-meta">55.8K 月听众</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                    <span style="color: #1DB954; font-size: 12px; font-weight: 600;">$45K / $60K</span>
+                    <span style="color: #6a6a6a; font-size: 12px;">156 投资人</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section how-it-works">
+        <div style="text-align: center; margin-bottom: 48px;">
+            <h2 style="font-size: 32px; margin-bottom: 16px;">如何运作</h2>
+            <p style="color: #B3B3B3; max-width: 600px; margin: 0 auto;">每个歌手项目都是一个独立的小公司，拥有清晰的权利结构和收益分配机制</p>
+        </div>
+        
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-icon">💿</div>
+                <div class="step-title">发现音乐人</div>
+                <div class="step-desc">浏览不同风格的独立音乐人，了解他们的项目计划、历史表现和收益预期。</div>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-icon">💰</div>
+                <div class="step-title">投资份额</div>
+                <div class="step-desc">使用 USDC 购买项目份额代币，最低 $10 起投，成为音乐事业的股东。</div>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-icon">📈</div>
+                <div class="step-title">分享收益</div>
+                <div class="step-desc">项目产生的收益自动按比例分配，随时提取你的投资回报。</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <h2>准备好开始了吗？</h2>
+        <p>无论你是歌手、投资人还是经纪人，XMUSIC 都能帮你开启音乐事业的新篇章。</p>
+        <button class="btn btn-green" style="font-size: 18px; padding: 20px 40px;">免费注册</button>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">关于我们</a>
+            <a href="#">博客</a>
+            <a href="#">隐私政策</a>
+            <a href="#">Cookie 政策</a>
+        </div>
+        <div class="footer-copy">© 2025 XMUSIC. 音乐现金流的资产化层。</div>
+    </footer>
+</body>
+</html>
