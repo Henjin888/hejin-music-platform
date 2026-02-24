@@ -1,0 +1,15 @@
+{
+  "name": "@xmusic/contracts",
+  "version": "1.0.0",
+  "description": "XMUSIC Platform Smart Contracts",
+  "scripts": {
+    "build": "forge build",
+    "test": "forge test",
+    "deploy:local": "forge script script/Deploy.s.sol --rpc-url localhost --broadcast",
+    "deploy:sepolia": "forge script script/Deploy.s.sol --rpc-url sepolia --broadcast --verify",
+    "verify": "forge verify-contract"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts": "^5.0.0"
+  }
+}

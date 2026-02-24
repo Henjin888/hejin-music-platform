@@ -1,0 +1,137 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Spotify Green Theme */
+:root {
+  --spotify-green: #1DB954;
+  --spotify-green-light: #1ED760;
+  --spotify-green-dark: #169C46;
+  --spotify-black: #121212;
+  --spotify-dark-gray: #181818;
+  --spotify-gray: #282828;
+  --spotify-light-gray: #535353;
+  --spotify-text: #B3B3B3;
+  --spotify-white: #FFFFFF;
+  
+  --radius: 0.5rem;
+  --background: #121212;
+  --foreground: #FFFFFF;
+  --card: #181818;
+  --card-foreground: #FFFFFF;
+  --popover: #181818;
+  --popover-foreground: #FFFFFF;
+  --primary: #1DB954;
+  --primary-foreground: #000000;
+  --secondary: #282828;
+  --secondary-foreground: #FFFFFF;
+  --muted: #282828;
+  --muted-foreground: #B3B3B3;
+  --accent: #1DB954;
+  --accent-foreground: #000000;
+  --destructive: #E22134;
+  --border: #282828;
+  --input: #282828;
+  --ring: #1DB954;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--ring);
+  --color-sidebar-border: var(--border);
+  --color-sidebar-accent-foreground: var(--primary-foreground);
+  --color-sidebar-accent: var(--accent);
+  --color-sidebar-primary-foreground: var(--primary-foreground);
+  --color-sidebar-primary: var(--primary);
+  --color-sidebar-foreground: var(--foreground);
+  --color-sidebar: var(--card);
+  --color-chart-5: var(--primary);
+  --color-chart-4: var(--accent);
+  --color-chart-3: var(--secondary);
+  --color-chart-2: var(--muted);
+  --color-chart-1: var(--primary);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #535353;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b6b6b;
+}
+
+/* Spotify-style gradients */
+.spotify-gradient {
+  background: linear-gradient(180deg, #1DB954 0%, #121212 100%);
+}
+
+.spotify-card {
+  background: #181818;
+  transition: background-color 0.3s ease;
+}
+
+.spotify-card:hover {
+  background: #282828;
+}
+
+/* TikTok-style video container */
+.tiktok-container {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.tiktok-item {
+  scroll-snap-align: start;
+  height: 100vh;
+  position: relative;
+}

@@ -1,0 +1,3 @@
+[submodule "xmusic/contracts/lib/openzeppelin-contracts"]
+	path = xmusic/contracts/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
