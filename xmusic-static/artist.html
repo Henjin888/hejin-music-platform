@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>林夕 - XMUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        .spotify-green { color: #1DB954; }
+        .spotify-bg { background-color: #1DB954; }
+        .dark-bg { background-color: #121212; }
+        .card-bg { background-color: #181818; }
+        .border-dark { border-color: #282828; }
+        .text-muted { color: #B3B3B3; }
+        .text-dim { color: #6A6A6A; }
+        .header-bg { background-color: #070707; }
+    </style>
+</head>
+<body class="dark-bg text-white min-h-screen pb-20">
+    <!-- Header -->
+    <header class="header-bg border-b border-dark sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+            <a href="index.html" class="text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </a>
+            
+            <span class="font-bold">林夕</span>
+            
+            <button class="text-white">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Profile Header -->
+    <div class="relative">
+        <!-- Banner -->
+        <div class="h-32 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600"></div>
+
+        <!-- Profile Info -->
+        <div class="px-4 -mt-12">
+            <div class="flex items-end gap-4">
+                <div class="w-24 h-24 rounded-full border-4 border-[#121212] bg-[#282828] flex items-center justify-center text-4xl">
+                    🎵
+                </div>
+                
+                <div class="flex-1 pb-2">
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-2xl font-bold">林夕</h1>
+                        <svg class="w-5 h-5 spotify-green" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <p class="text-muted">@linxi_music</p>
+                </div>
+            </div>
+
+            <div class="mt-4 space-y-3">
+                <p class="text-white">独立音乐人 | 2025巡演筹备中 🎸</p>
+                <div class="flex items-center gap-1 text-muted text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    </svg>
+                    北京
+                </div>
+
+                <!-- Stats -->
+                <div class="flex gap-6 py-2">
+                    <div class="text-center">
+                        <p class="font-bold text-lg">234</p>
+                        <p class="text-xs text-muted">关注</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="font-bold text-lg">128.5K</p>
+                        <p class="text-xs text-muted">粉丝</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="font-bold text-lg">2.3M</p>
+                        <p class="text-xs text-muted">获赞</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3">
+                    <button class="flex-1 spotify-bg hover:bg-[#1ED760] text-black font-bold rounded-full py-2 transition-colors">
+                        投资支持
+                    </button>
+                    <button class="flex-1 border border-[#404040] text-white hover:bg-[#282828] rounded-full py-2 transition-colors">
+                        关注
+                    </button>
+                    <button class="border border-[#404040] text-white hover:bg-[#282828] rounded-full p-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Funding Card -->
+    <div class="px-4 mt-6">
+        <div class="bg-gradient-to-r from-[#1DB954]/20 to-[#1DB954]/5 border border-[#1DB954]/30 rounded-xl p-4">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <svg class="w-5 h-5 spotify-green" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zm0-5.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"/>
+                    </svg>
+                    <span class="font-bold">2025全国巡演计划</span>
+                </div>
+                <span class="px-2 py-1 bg-[#1DB954]/20 text-[#1DB954] rounded-full text-xs">融资中</span>
+            </div>
+
+            <div class="space-y-2">
+                <div class="flex justify-between text-sm">
+                    <span class="text-muted">已融资</span>
+                    <span class="font-bold">$32,500 / $50,000</span>
+                </div>
+                <div class="h-2 bg-[#404040] rounded-full overflow-hidden">
+                    <div class="h-full spotify-bg rounded-full" style="width: 65%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-muted">
+                    <span>128 位投资人</span>
+                    <span>15 天剩余</span>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between mt-4 pt-4 border-t border-dark">
+                <div class="flex items-center gap-4">
+                    <div class="text-center">
+                        <p class="text-xs text-muted">预期回报</p>
+                        <p class="font-bold spotify-green">15% 年化</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xs text-muted">月听众</p>
+                        <p class="font-bold">45.2K</p>
+                    </div>
+                </div>
+                <button class="bg-white text-black hover:bg-gray-100 rounded-full px-4 py-2 text-sm font-bold transition-colors">
+                    立即投资
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="mt-6 border-b border-dark">
+        <div class="flex">
+            <button class="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium text-white border-b-2 border-[#1DB954]">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                作品
+            </button>
+            <button class="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium text-muted hover:text-white transition-colors">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                </svg>
+                音乐
+            </button>
+            <button class="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium text-muted hover:text-white transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+                投资人
+            </button>
+        </div>
+    </div>
+
+    <!-- Content - Videos Grid -->
+    <div class="px-4 py-4">
+        <div class="grid grid-cols-3 gap-1">
+            <div class="aspect-[3/4] bg-[#282828] relative group cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 flex items-center justify-center text-4xl">🎸</div>
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </div>
+                <div class="absolute bottom-2 left-2 right-2">
+                    <div class="flex items-center gap-1 text-xs text-white">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        2.3M
+                    </div>
+                </div>
+            </div>
+
+            <div class="aspect-[3/4] bg-[#282828] relative group cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 flex items-center justify-center text-4xl">🎹</div>
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </div>
+                <div class="absolute bottom-2 left-2 right-2">
+                    <div class="flex items-center gap-1 text-xs text-white">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        1.8M
+                    </div>
+                </div>
+            </div>
+
+            <div class="aspect-[3/4] bg-[#282828] relative group cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 flex items-center justify-center text-4xl">🎤</div>
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </div>
+                <div class="absolute bottom-2 left-2 right-2">
+                    <div class="flex items-center gap-1 text-xs text-white">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        956K
+                    </div>
+                </div>
+            </div>
+
+            <div class="aspect-[3/4] bg-[#282828] relative group cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 flex items-center justify-center text-4xl">🎵</div>
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </div>
+                <div class="absolute bottom-2 left-2 right-2">
+                    <div class="flex items-center gap-1 text-xs text-white">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        734K
+                    </div>
+                </div>
+            </div>
+
+            <div class="aspect-[3/4] bg-[#282828] relative group cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 flex items-center justify-center text-4xl">🎧</div>
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </div>
+                <div class="absolute bottom-2 left-2 right-2">
+                    <div class="flex items-center gap-1 text-xs text-white">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        523K
+                    </div>
+                </div>
+            </div>
+
+            <div class="aspect-[3/4] bg-[#282828] relative group cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 flex items-center justify-center text-4xl">🎼</div>
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </div>
+                <div class="absolute bottom-2 left-2 right-2">
+                    <div class="flex items-center gap-1 text-xs text-white">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        412K
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
