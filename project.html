@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目详情 - XMUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .tab-active { border-bottom: 2px solid #1DB954; }
+    </style>
+</head>
+<body class="bg-[#121212] text-white min-h-screen">
+    <!-- Header -->
+    <header class="bg-[#070707] border-b border-[#282828] sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="index.html" class="text-white hover:text-[#1DB954] transition-colors">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <span class="font-bold">林夕的2025巡演计划</span>
+            </div>
+            <button class="bg-white text-black hover:bg-[#F0F0F0] rounded-full px-6 py-2 font-bold text-sm">
+                连接钱包
+            </button>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Main Content -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Project Header -->
+                <div class="relative h-64 rounded-xl overflow-hidden bg-gradient-to-r from-purple-600 to-blue-600">
+                    <div class="absolute inset-0 flex items-center justify-center text-8xl">🎵</div>
+                    <div class="absolute top-4 left-4">
+                        <span class="bg-[#1DB954] text-black px-3 py-1 rounded-full text-sm font-bold">融资中</span>
+                    </div>
+                </div>
+
+                <!-- Project Info -->
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold mb-2">林夕的2025巡演计划</h1>
+                        <div class="flex items-center gap-4 text-[#B3B3B3]">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center text-xs">林</div>
+                                <span>林夕</span>
+                            </div>
+                            <span>·</span>
+                            <span>独立流行</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <button class="border border-[#404040] rounded-full w-10 h-10 flex items-center justify-center hover:border-white transition-colors">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                        <button class="border border-[#404040] rounded-full w-10 h-10 flex items-center justify-center hover:border-white transition-colors">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <p class="text-[#B3B3B3] leading-relaxed">
+                    支持我的首次全国巡演，包含10场演出。投资人将获得门票分成 + 周边收益。这是一次将音乐现场与粉丝投资结合的尝试，让我们一起创造难忘的音乐体验。
+                </p>
+
+                <!-- Tabs -->
+                <div class="border-b border-[#282828]">
+                    <div class="flex gap-6">
+                        <button class="tab-active py-3 px-2 font-medium flex items-center gap-2">
+                            <i class="fas fa-file-alt"></i> 概览
+                        </button>
+                        <button class="py-3 px-2 font-medium text-[#B3B3B3] hover:text-white flex items-center gap-2">
+                            <i class="fas fa-chart-pie"></i> 份额分配
+                        </button>
+                        <button class="py-3 px-2 font-medium text-[#B3B3B3] hover:text-white flex items-center gap-2">
+                            <i class="fas fa-clock"></i> 时间线
+                        </button>
+                        <button class="py-3 px-2 font-medium text-[#B3B3B3] hover:text-white flex items-center gap-2">
+                            <i class="fas fa-chart-line"></i> 动态
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Overview Content -->
+                <div class="bg-[#181818] rounded-lg border border-[#282828]">
+                    <div class="p-6 border-b border-[#282828]">
+                        <h3 class="font-bold flex items-center gap-2">
+                            <i class="fas fa-file-alt text-[#1DB954]"></i>
+                            项目详情
+                        </h3>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 bg-[#282828] rounded-lg">
+                                <p class="text-sm text-[#B3B3B3] mb-1">融资目标</p>
+                                <p class="text-2xl font-bold">$50,000</p>
+                            </div>
+                            <div class="p-4 bg-[#282828] rounded-lg">
+                                <p class="text-sm text-[#B3B3B3] mb-1">已融资</p>
+                                <p class="text-2xl font-bold text-[#1DB954]">$32,500</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 bg-[#282828] rounded-lg">
+                                <p class="text-sm text-[#B3B3B3] mb-1">投资人</p>
+                                <p class="text-2xl font-bold">128</p>
+                            </div>
+                            <div class="p-4 bg-[#282828] rounded-lg">
+                                <p class="text-sm text-[#B3B3B3] mb-1">最低投资</p>
+                                <p class="text-2xl font-bold">$10</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#282828] rounded-lg">
+                            <p class="text-sm text-[#B3B3B3] mb-1">预期回报</p>
+                            <p class="text-xl font-bold text-[#1DB954]">15% 年化 + 治理权</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Allocation Section -->
+                <div class="bg-[#181818] rounded-lg border border-[#282828]">
+                    <div class="p-6 border-b border-[#282828]">
+                        <h3 class="font-bold flex items-center gap-2">
+                            <i class="fas fa-chart-pie text-[#1DB954]"></i>
+                            份额分配
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-4 h-4 rounded bg-purple-500"></div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between mb-1">
+                                        <span>艺人</span>
+                                        <span class="font-bold">40%</span>
+                                    </div>
+                                    <div class="h-2 bg-[#404040] rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500 rounded-full" style="width: 40%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4">
+                                <div class="w-4 h-4 rounded bg-[#1DB954]"></div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between mb-1">
+                                        <span>投资人</span>
+                                        <span class="font-bold">35%</span>
+                                    </div>
+                                    <div class="h-2 bg-[#404040] rounded-full overflow-hidden">
+                                        <div class="h-full bg-[#1DB954] rounded-full" style="width: 35%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4">
+                                <div class="w-4 h-4 rounded bg-blue-500"></div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between mb-1">
+                                        <span>经纪人</span>
+                                        <span class="font-bold">15%</span>
+                                    </div>
+                                    <div class="h-2 bg-[#404040] rounded-full overflow-hidden">
+                                        <div class="h-full bg-blue-500 rounded-full" style="width: 15%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4">
+                                <div class="w-4 h-4 rounded bg-yellow-500"></div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between mb-1">
+                                        <span>社区储备</span>
+                                        <span class="font-bold">10%</span>
+                                    </div>
+                                    <div class="h-2 bg-[#404040] rounded-full overflow-hidden">
+                                        <div class="h-full bg-yellow-500 rounded-full" style="width: 10%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Section -->
+                <div class="bg-[#181818] rounded-lg border border-[#282828]">
+                    <div class="p-6 border-b border-[#282828]">
+                        <h3 class="font-bold flex items-center gap-2">
+                            <i class="fas fa-clock text-[#1DB954]"></i>
+                            项目时间线
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-3 h-3 rounded-full bg-[#1DB954]"></div>
+                                    <div class="w-0.5 h-12 bg-[#404040]"></div>
+                                </div>
+                                <div class="pb-6">
+                                    <p class="text-sm text-[#B3B3B3]">2025-01</p>
+                                    <p class="font-medium">项目启动</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-3 h-3 rounded-full bg-[#1DB954]"></div>
+                                    <div class="w-0.5 h-12 bg-[#404040]"></div>
+                                </div>
+                                <div class="pb-6">
+                                    <p class="text-sm text-[#B3B3B3]">2025-02</p>
+                                    <p class="font-medium">融资完成</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-3 h-3 rounded-full bg-[#404040]"></div>
+                                    <div class="w-0.5 h-12 bg-[#404040]"></div>
+                                </div>
+                                <div class="pb-6">
+                                    <p class="text-sm text-[#B3B3B3]">2025-03</p>
+                                    <p class="font-medium">巡演开始</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-3 h-3 rounded-full bg-[#404040]"></div>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-[#B3B3B3]">2025-06</p>
+                                    <p class="font-medium">首次分红</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Investment Card -->
+                <div class="bg-[#181818] rounded-lg border border-[#282828] sticky top-24">
+                    <div class="p-6 space-y-6">
+                        <div>
+                            <p class="text-sm text-[#B3B3B3] mb-2">融资进度</p>
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-3xl font-bold">65%</span>
+                                <span class="text-sm text-[#B3B3B3]">128 位投资人</span>
+                            </div>
+                            <div class="h-2 bg-[#404040] rounded-full overflow-hidden">
+                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 65%"></div>
+                            </div>
+                        </div>
+
+                        <hr class="border-[#282828]">
+
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-[#B3B3B3]">预期回报</span>
+                                <span class="font-bold text-[#1DB954]">15% 年化</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-[#B3B3B3]">最低投资</span>
+                                <span class="font-bold">$10</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-[#B3B3B3]">剩余时间</span>
+                                <span class="font-bold">15 天</span>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-[#1DB954] hover:bg-[#1ED760] text-black font-bold rounded-full py-4 transition-colors flex items-center justify-center gap-2">
+                            <i class="fas fa-wallet"></i>
+                            立即投资
+                        </button>
+
+                        <p class="text-xs text-center text-[#6a6a6a]">
+                            连接钱包后即可投资
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Artist Card -->
+                <div class="bg-[#181818] rounded-lg border border-[#282828]">
+                    <div class="p-6">
+                        <h3 class="font-bold mb-4">关于艺人</h3>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-xl">林</div>
+                            <div>
+                                <p class="font-bold">林夕</p>
+                                <p class="text-sm text-[#B3B3B3]">独立流行歌手</p>
+                            </div>
+                        </div>
+                        
+                        <p class="text-sm text-[#B3B3B3] mb-4">
+                            独立音乐人，擅长将电子元素融入流行曲风。已发行3张专辑，累计播放量超过500万。
+                        </p>
+
+                        <div class="flex gap-4 text-sm">
+                            <div>
+                                <p class="text-[#B3B3B3]">月听众</p>
+                                <p class="font-bold">45.2K</p>
+                            </div>
+                            <div>
+                                <p class="text-[#B3B3B3]">项目</p>
+                                <p class="font-bold">2</p>
+                            </div>
+                            <div>
+                                <p class="text-[#B3B3B3]">粉丝</p>
+                                <p class="font-bold">12.8K</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
