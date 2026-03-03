@@ -566,24 +566,6 @@
             });
         });
 
-        // 侧边栏展开/收起
-        function expandSidebar() {
-            document.getElementById('sidebar').classList.add('expanded');
-        }
-        
-        function collapseSidebar() {
-            document.getElementById('sidebar').classList.remove('expanded');
-        }
-        
-        // 鼠标进入侧边栏时展开
-        document.getElementById('sidebar').addEventListener('mouseenter', function() {
-            this.classList.add('expanded');
-        });
-        
-        // 鼠标离开侧边栏时收起
-        document.getElementById('sidebar').addEventListener('mouseleave', function() {
-            this.classList.remove('expanded');
-        });
     </script>
 </body>
 </html>

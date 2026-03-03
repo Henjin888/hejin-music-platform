@@ -65,7 +65,7 @@
                 </button>
                 <button onclick="showLangModal()" class="flex items-center gap-3 px-4 py-3 text-[#b3b3b3] hover:text-white transition-colors w-full">
                     <i class="fas fa-globe"></i>
-                    <span>语言: 中文</span>
+                    <span id="currentLangDisplay">语言: 中文</span>
                 </button>
             </div>
         </aside>
@@ -455,7 +455,16 @@
 
         function setLanguage(lang) {
             localStorage.setItem('xmusic-lang', lang);
-            currentLang = lang;
+            let currentLang = lang;
+            const langNames = {
+                'zh': '简体中文', 'zht': '繁體中文', 'en': 'English', 'ja': '日本語',
+                'ko': '한국어', 'es': 'Español', 'fr': 'Français', 'de': 'Deutsch',
+                'pt': 'Português', 'ru': 'Русский'
+            };
+            const langDisplay = document.getElementById('currentLangDisplay');
+            if (langDisplay) {
+                langDisplay.textContent = '语言: ' + (langNames[lang] || '简体中文');
+            }
             applyTranslations();
             updateLangUI();
             closeLangModal();
@@ -478,6 +487,17 @@
         document.addEventListener('DOMContentLoaded', function() {
             const savedCurrency = localStorage.getItem('xmusic-currency') || 'USD';
             document.getElementById('currentCurrency').textContent = savedCurrency;
+            
+            const savedLang = localStorage.getItem('xmusic-lang') || 'zh';
+            const langNames = {
+                'zh': '简体中文', 'zht': '繁體中文', 'en': 'English', 'ja': '日本語',
+                'ko': '한국어', 'es': 'Español', 'fr': 'Français', 'de': 'Deutsch',
+                'pt': 'Português', 'ru': 'Русский'
+            };
+            const langDisplay = document.getElementById('currentLangDisplay');
+            if (langDisplay) {
+                langDisplay.textContent = '语言: ' + (langNames[savedLang] || '简体中文');
+            }
         });
     </script>
 </body>
