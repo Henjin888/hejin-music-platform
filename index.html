@@ -168,7 +168,7 @@
             <div class="h-px bg-[#282828]"></div>
 
             <nav class="flex flex-col gap-2">
-                <a href="investments.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                <a href="dashboard.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
                     <i class="fas fa-book text-xl w-6 text-center"></i>
                     <span class="nav-text">我的投资</span>
                 </a>
@@ -545,7 +545,25 @@
             if (sidebarExpanded) {
                 document.getElementById('sidebar').classList.add('expanded');
             }
-        });
+            
+            // 侧边栏展开/收起
+            window.expandSidebar = function() {
+                document.getElementById('sidebar').classList.add('expanded');
+            }
+            
+            window.collapseSidebar = function() {
+                document.getElementById('sidebar').classList.remove('expanded');
+            }
+            
+            // 鼠标进入侧边栏时展开
+            document.getElementById('sidebar').addEventListener('mouseenter', function() {
+                this.classList.add('expanded');
+            });
+            
+            // 鼠标离开侧边栏时收起
+            document.getElementById('sidebar').addEventListener('mouseleave', function() {
+                this.classList.remove('expanded');
+            });
         });
 
         // 侧边栏展开/收起
