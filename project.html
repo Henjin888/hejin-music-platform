@@ -443,10 +443,21 @@
     </div>
 
     <script src="public/js/xmusic.js"></script>
+    <script src="public/js/security-utils.js"></script>
     <script>
         function showInvestModal() {
             document.getElementById('investModal').classList.remove('hidden');
             document.getElementById('investModal').classList.add('flex');
+            // 清空之前的输入
+            const amountInput = document.getElementById('investAmount');
+            if (amountInput) {
+                amountInput.value = '';
+                amountInput.focus();
+            }
+            const shareDisplay = document.getElementById('shareAmount');
+            if (shareDisplay) {
+                shareDisplay.textContent = '0 份';
+            }
         }
 
         function closeInvestModal() {
@@ -455,20 +466,68 @@
         }
 
         function confirmInvest() {
-            const amount = document.getElementById('investAmount').value;
-            if (!amount || amount < 10) {
-                alert('最低投资金额为 $10');
+            const amountInput = document.getElementById('investAmount');
+            const amount = parseFloat(amountInput?.value);
+            
+            // 输入验证
+            if (!amountInput || !amountInput.value.trim()) {
+                alert('请输入投资金额');
+                amountInput?.focus();
                 return;
             }
-            alert(`投资成功！您投资了 $${amount} USDC`);
+            
+            if (isNaN(amount) || amount <= 0) {
+                alert('请输入有效的投资金额');
+                amountInput.focus();
+                return;
+            }
+            
+            if (amount < 10) {
+                alert('最低投资金额为 $10');
+                amountInput.focus();
+                return;
+            }
+            
+            if (amount > 1000000) {
+                alert('单笔投资金额不能超过 $1,000,000');
+                amountInput.focus();
+                return;
+            }
+            
+            // 检查小数位数
+            const decimalPlaces = (amountInput.value.split('.')[1] || '').length;
+            if (decimalPlaces > 2) {
+                alert('投资金额最多保留两位小数');
+                amountInput.focus();
+                return;
+            }
+            
+            // TODO: 集成区块链交易
+            console.log('Investment confirmed:', { amount: amount, timestamp: new Date().toISOString() });
+            
+            alert(`投资成功！您投资了 $${amount.toFixed(2)} USDC`);
             closeInvestModal();
         }
 
-        // 计算份额
+        // 计算份额 - 使用防抖优化
+        let debounceTimer;
         document.getElementById('investAmount')?.addEventListener('input', function() {
-            const amount = parseFloat(this.value) || 0;
-            const shares = Math.floor(amount / 0.5);
-            document.getElementById('shareAmount').textContent = shares + ' 份';
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const value = this.value;
+                // 只允许数字和小数点
+                if (!/^\d*\.?\d{0,2}$/.test(value)) {
+                    this.value = value.slice(0, -1);
+                    return;
+                }
+                
+                const amount = parseFloat(value) || 0;
+                const shares = Math.floor(amount / 0.5);
+                const shareDisplay = document.getElementById('shareAmount');
+                if (shareDisplay) {
+                    shareDisplay.textContent = shares + ' 份';
+                }
+            }, 100);
         });
 
         // 货币切换

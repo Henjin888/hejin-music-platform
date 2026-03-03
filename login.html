@@ -150,16 +150,42 @@
         </div>
     </div>
 
+    <script src="public/js/security-utils.js"></script>
     <script>
+        // 输入验证正则表达式
+        const PHONE_REGEX = /^1[3-9]\d{9}$/;
+        const CODE_REGEX = /^\d{6}$/;
+        
+        // XSS防护：转义HTML特殊字符
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // 验证手机号
+        function validatePhone(phone) {
+            return PHONE_REGEX.test(phone);
+        }
+        
+        // 验证验证码
+        function validateCode(code) {
+            return CODE_REGEX.test(code);
+        }
+
         // Web3 钱包连接
         async function connectWeb3Wallet() {
             if (typeof window.ethereum !== 'undefined') {
                 try {
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                     console.log('Connected:', accounts[0]);
+                    // 存储钱包地址（用于后续使用）
+                    localStorage.setItem('xmusic-wallet', accounts[0]);
                     showBindPhoneModal();
                 } catch (error) {
-                    alert('连接钱包失败: ' + error.message);
+                    console.error('Wallet connection error:', error);
+                    alert('连接钱包失败: ' + escapeHtml(error.message));
                 }
             } else {
                 alert('请安装 MetaMask 或其他 Web3 钱包');
@@ -193,9 +219,18 @@
 
         // 发送验证码
         function sendVerifyCode() {
-            const phone = document.getElementById('phoneNumber').value;
+            const phoneInput = document.getElementById('phoneNumber');
+            const phone = phoneInput.value.trim();
+            
             if (!phone) {
                 alert('请输入手机号码');
+                phoneInput.focus();
+                return;
+            }
+            
+            if (!validatePhone(phone)) {
+                alert('请输入正确的手机号码格式');
+                phoneInput.focus();
                 return;
             }
             
@@ -214,20 +249,43 @@
                 }
             }, 1000);
             
-            alert('验证码已发送: 123456');
+            // TODO: 集成后端API发送真实验证码
+            console.log('Sending verification code to:', phone);
+            alert('验证码已发送（演示模式）');
         }
 
         // 手机号登录
         function loginWithPhone() {
-            const phone = document.getElementById('phoneNumber').value;
-            const code = document.getElementById('verifyCode').value;
+            const phoneInput = document.getElementById('phoneNumber');
+            const codeInput = document.getElementById('verifyCode');
+            const phone = phoneInput.value.trim();
+            const code = codeInput.value.trim();
             
             if (!phone || !code) {
                 alert('请填写完整信息');
                 return;
             }
             
-            // 登录成功，跳转到首页
+            if (!validatePhone(phone)) {
+                alert('请输入正确的手机号码格式');
+                phoneInput.focus();
+                return;
+            }
+            
+            if (!validateCode(code)) {
+                alert('验证码应为6位数字');
+                codeInput.focus();
+                return;
+            }
+            
+            // TODO: 集成后端API验证验证码
+            console.log('Login attempt:', { phone: phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') });
+            
+            // 登录成功，存储登录状态
+            localStorage.setItem('xmusic-logged-in', 'true');
+            localStorage.setItem('xmusic-user-phone', phone);
+            
+            // 跳转到首页
             window.location.href = 'index.html';
         }
 
@@ -246,24 +304,52 @@
 
         // 发送绑定验证码
         function sendBindVerifyCode() {
-            const phone = document.getElementById('bindPhoneNumber').value;
+            const phoneInput = document.getElementById('bindPhoneNumber');
+            const phone = phoneInput.value.trim();
+            
             if (!phone) {
                 alert('请输入手机号码');
+                phoneInput.focus();
                 return;
             }
-            alert('验证码已发送: 123456');
+            
+            if (!validatePhone(phone)) {
+                alert('请输入正确的手机号码格式');
+                phoneInput.focus();
+                return;
+            }
+            
+            // TODO: 集成后端API发送真实验证码
+            console.log('Sending bind verification code to:', phone);
+            alert('验证码已发送（演示模式）');
         }
 
         // 确认绑定手机号
         function confirmBindPhone() {
-            const phone = document.getElementById('bindPhoneNumber').value;
-            const code = document.getElementById('bindVerifyCode').value;
+            const phoneInput = document.getElementById('bindPhoneNumber');
+            const codeInput = document.getElementById('bindVerifyCode');
+            const phone = phoneInput.value.trim();
+            const code = codeInput.value.trim();
             
             if (!phone || !code) {
                 alert('请填写完整信息');
                 return;
             }
             
+            if (!validatePhone(phone)) {
+                alert('请输入正确的手机号码格式');
+                phoneInput.focus();
+                return;
+            }
+            
+            if (!validateCode(code)) {
+                alert('验证码应为6位数字');
+                codeInput.focus();
+                return;
+            }
+            
+            // TODO: 集成后端API验证验证码
+            localStorage.setItem('xmusic-user-phone', phone);
             alert('绑定成功！');
             window.location.href = 'index.html';
         }
@@ -272,6 +358,15 @@
         function showRegister() {
             alert('注册功能与登录相同，选择任意方式即可自动注册');
         }
+        
+        // 页面加载时检查登录状态
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('xmusic-logged-in');
+            if (isLoggedIn === 'true') {
+                // 已登录，可选择跳转到首页或保持当前页面
+                console.log('User already logged in');
+            }
+        });
     </script>
 </body>
 </html>

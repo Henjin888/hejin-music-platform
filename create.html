@@ -451,6 +451,8 @@
         </main>
     </div>
 
+    <script src="public/js/xmusic.js"></script>
+    <script src="public/js/security-utils.js"></script>
     <script>
         // 货币配置
         const CURRENCY_CONFIG = {
@@ -536,7 +538,120 @@
 
         let currentStep = 1;
 
+        // 表单验证规则
+        const VALIDATION_RULES = {
+            step1: {
+                required: ['projectName', 'projectDesc', 'musicStyle', 'projectLocation'],
+                validators: {
+                    projectName: (val) => val.length >= 2 && val.length <= 100,
+                    projectDesc: (val) => val.length >= 10 && val.length <= 2000,
+                    musicStyle: (val) => val !== '',
+                    projectLocation: (val) => val.length >= 2 && val.length <= 100
+                }
+            },
+            step2: {
+                required: ['fundingGoal', 'fundingDuration', 'minInvest', 'sharePrice'],
+                validators: {
+                    fundingGoal: (val) => {
+                        const num = parseFloat(val);
+                        return !isNaN(num) && num >= 1000 && num <= 10000000;
+                    },
+                    fundingDuration: (val) => {
+                        const num = parseInt(val);
+                        return !isNaN(num) && num >= 7 && num <= 90;
+                    },
+                    minInvest: (val) => {
+                        const num = parseFloat(val);
+                        return !isNaN(num) && num >= 1;
+                    },
+                    sharePrice: (val) => {
+                        const num = parseFloat(val);
+                        return !isNaN(num) && num > 0;
+                    }
+                }
+            }
+        };
+
+        // XSS防护：转义HTML
+        function escapeHtml(text) {
+            if (typeof text !== 'string') return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 验证当前步骤
+        function validateStep(step) {
+            const rules = VALIDATION_RULES[`step${step}`];
+            if (!rules) return true;
+            
+            let isValid = true;
+            const errors = [];
+            
+            // 获取当前步骤的输入元素
+            const stepEl = document.getElementById(`step${step}`);
+            if (!stepEl) return true;
+            
+            // 清除之前的错误样式
+            stepEl.querySelectorAll('.border-red-500').forEach(el => {
+                el.classList.remove('border-red-500');
+                el.classList.add('border-transparent');
+            });
+            
+            // 验证必填字段
+            rules.required.forEach(fieldName => {
+                const input = stepEl.querySelector(`[name="${fieldName}"], #${fieldName}, input[placeholder*="${getFieldPlaceholder(fieldName)}"]`);
+                if (input) {
+                    const value = input.value.trim();
+                    const validator = rules.validators[fieldName];
+                    
+                    if (!value || (validator && !validator(value))) {
+                        isValid = false;
+                        input.classList.remove('border-transparent');
+                        input.classList.add('border-red-500');
+                        errors.push(getFieldLabel(fieldName));
+                    }
+                }
+            });
+            
+            if (!isValid) {
+                alert(`请正确填写以下字段：${errors.join('、')}`);
+            }
+            
+            return isValid;
+        }
+
+        // 获取字段标签
+        function getFieldLabel(fieldName) {
+            const labels = {
+                projectName: '项目名称',
+                projectDesc: '项目介绍',
+                musicStyle: '音乐风格',
+                projectLocation: '项目地点',
+                fundingGoal: '融资目标',
+                fundingDuration: '融资周期',
+                minInvest: '最低投资',
+                sharePrice: '每份价格'
+            };
+            return labels[fieldName] || fieldName;
+        }
+
+        // 获取字段placeholder
+        function getFieldPlaceholder(fieldName) {
+            const placeholders = {
+                projectName: '2025全国巡演计划',
+                projectDesc: '介绍',
+                projectLocation: '全国巡演'
+            };
+            return placeholders[fieldName] || '';
+        }
+
         function nextStep(step) {
+            // 验证当前步骤
+            if (!validateStep(currentStep)) {
+                return;
+            }
+            
             // 隐藏当前步骤
             document.getElementById(`step${currentStep}`).classList.add('hidden');
             
@@ -579,8 +694,48 @@
                 alert('请同意服务条款和隐私政策');
                 return;
             }
+            
+            // 收集表单数据
+            const formData = collectFormData();
+            console.log('Publishing project:', formData);
+            
             alert('项目发布成功！');
             window.location.href = 'index.html';
+        }
+        
+        // 收集表单数据
+        function collectFormData() {
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            
+            return {
+                name: step1.querySelector('input[type="text"]')?.value?.trim() || '',
+                description: step1.querySelector('textarea')?.value?.trim() || '',
+                style: step1.querySelector('select')?.value || '',
+                location: step1.querySelectorAll('input[type="text"]')[1]?.value?.trim() || '',
+                fundingGoal: parseFloat(step2.querySelector('input[type="number"]')?.value) || 0,
+                duration: parseInt(step2.querySelectorAll('input[type="number"]')[1]?.value) || 0,
+                minInvest: parseFloat(step2.querySelectorAll('input[type="number"]')[2]?.value) || 0,
+                sharePrice: parseFloat(step2.querySelectorAll('input[type="number"]')[3]?.value) || 0
+            };
+        }
+        
+        // 份额分配验证
+        function validateAllocation() {
+            const inputs = document.querySelectorAll('#step2 input[type="number"]');
+            const artist = parseFloat(inputs[4]?.value) || 0;
+            const investor = parseFloat(inputs[5]?.value) || 0;
+            const manager = parseFloat(inputs[6]?.value) || 0;
+            const community = parseFloat(inputs[7]?.value) || 0;
+            
+            const total = artist + investor + manager + community;
+            
+            if (total !== 100) {
+                alert(`份额分配总和必须等于100%，当前为${total}%`);
+                return false;
+            }
+            
+            return true;
         }
 
         // 初始化

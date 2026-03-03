@@ -424,6 +424,7 @@
     </div>
 
     <script src="public/js/xmusic.js"></script>
+    <script src="public/js/security-utils.js"></script>
     <script>
         // 语言切换
         function showLangModal() {
@@ -526,44 +527,58 @@
 
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
-            const savedCurrency = localStorage.getItem('xmusic-currency') || 'USD';
-            document.getElementById('currentCurrency').textContent = savedCurrency;
-            
-            const savedLang = localStorage.getItem('xmusic-lang') || 'zh';
-            const langNames = {
-                'zh': '简体中文', 'zht': '繁體中文', 'en': 'English', 'ja': '日本語',
-                'ko': '한국어', 'es': 'Español', 'fr': 'Français', 'de': 'Deutsch',
-                'pt': 'Português', 'ru': 'Русский'
-            };
-            const langDisplay = document.querySelector('button[onclick="showLangModal()"] span');
-            if (langDisplay) {
-                langDisplay.textContent = '语言: ' + (langNames[savedLang] || '简体中文');
+            try {
+                // 恢复货币设置
+                const savedCurrency = localStorage.getItem('xmusic-currency') || 'USD';
+                const currencyEl = document.getElementById('currentCurrency');
+                if (currencyEl) {
+                    currencyEl.textContent = savedCurrency;
+                }
+                
+                // 恢复语言设置
+                const savedLang = localStorage.getItem('xmusic-lang') || 'zh';
+                const langNames = {
+                    'zh': '简体中文', 'zht': '繁體中文', 'en': 'English', 'ja': '日本語',
+                    'ko': '한국어', 'es': 'Español', 'fr': 'Français', 'de': 'Deutsch',
+                    'pt': 'Português', 'ru': 'Русский'
+                };
+                const langDisplay = document.querySelector('button[onclick="showLangModal()"] span');
+                if (langDisplay) {
+                    langDisplay.textContent = '语言: ' + (langNames[savedLang] || '简体中文');
+                }
+                
+                // 恢复侧边栏状态
+                const sidebarExpanded = localStorage.getItem('xmusic-sidebar-expanded') === 'true';
+                const sidebar = document.getElementById('sidebar');
+                if (sidebarExpanded && sidebar) {
+                    sidebar.classList.add('expanded');
+                }
+                
+                // 侧边栏展开/收起
+                window.expandSidebar = function() {
+                    if (sidebar) sidebar.classList.add('expanded');
+                }
+                
+                window.collapseSidebar = function() {
+                    if (sidebar) sidebar.classList.remove('expanded');
+                }
+                
+                // 鼠标进入侧边栏时展开
+                if (sidebar) {
+                    sidebar.addEventListener('mouseenter', function() {
+                        this.classList.add('expanded');
+                    });
+                    
+                    // 鼠标离开侧边栏时收起
+                    sidebar.addEventListener('mouseleave', function() {
+                        this.classList.remove('expanded');
+                    });
+                }
+                
+                console.log('XMUSIC initialized successfully');
+            } catch (error) {
+                console.error('Initialization error:', error);
             }
-            
-            // 恢复侧边栏状态
-            const sidebarExpanded = localStorage.getItem('xmusic-sidebar-expanded') === 'true';
-            if (sidebarExpanded) {
-                document.getElementById('sidebar').classList.add('expanded');
-            }
-            
-            // 侧边栏展开/收起
-            window.expandSidebar = function() {
-                document.getElementById('sidebar').classList.add('expanded');
-            }
-            
-            window.collapseSidebar = function() {
-                document.getElementById('sidebar').classList.remove('expanded');
-            }
-            
-            // 鼠标进入侧边栏时展开
-            document.getElementById('sidebar').addEventListener('mouseenter', function() {
-                this.classList.add('expanded');
-            });
-            
-            // 鼠标离开侧边栏时收起
-            document.getElementById('sidebar').addEventListener('mouseleave', function() {
-                this.classList.remove('expanded');
-            });
         });
 
     </script>
