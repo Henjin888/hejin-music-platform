@@ -58,7 +58,58 @@
                     <span>发起融资</span>
                 </a>
             </nav>
+
+            <div class="mt-auto space-y-2">
+                <button onclick="showCurrencyModal()" class="flex items-center gap-3 px-4 py-3 text-[#b3b3b3] hover:text-white transition-colors w-full">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span id="currentCurrency">USD</span>
+                </button>
+                <button onclick="showLangModal()" class="flex items-center gap-3 px-4 py-3 text-[#b3b3b3] hover:text-white transition-colors w-full">
+                    <i class="fas fa-globe"></i>
+                    <span id="currentLangDisplay">语言: 中文</span>
+                </button>
+            </div>
         </aside>
+
+        <!-- 货币选择弹窗 -->
+        <div id="currencyModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+            <div class="bg-[#181818] rounded-2xl p-6 max-w-sm w-full mx-4">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold">选择货币</h2>
+                    <button onclick="closeCurrencyModal()" class="text-[#b3b3b3] hover:text-white"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="setCurrency('USD')" class="currency-btn bg-[#1DB954] text-black py-3 px-4 rounded-lg font-semibold" data-currency="USD">USD $</button>
+                    <button onclick="setCurrency('CNY')" class="currency-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-currency="CNY">CNY ¥</button>
+                    <button onclick="setCurrency('EUR')" class="currency-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-currency="EUR">EUR €</button>
+                    <button onclick="setCurrency('GBP')" class="currency-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-currency="GBP">GBP £</button>
+                    <button onclick="setCurrency('JPY')" class="currency-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-currency="JPY">JPY ¥</button>
+                    <button onclick="setCurrency('KRW')" class="currency-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-currency="KRW">KRW ₩</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 语言选择弹窗 -->
+        <div id="langModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+            <div class="bg-[#181818] rounded-2xl p-6 max-w-md w-full mx-4">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold">选择语言</h2>
+                    <button onclick="closeLangModal()" class="text-[#b3b3b3] hover:text-white"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="setLanguage('zh')" class="lang-btn bg-[#1DB954] text-black py-3 px-4 rounded-lg font-semibold" data-lang="zh">简体中文</button>
+                    <button onclick="setLanguage('zht')" class="lang-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-lang="zht">繁體中文</button>
+                    <button onclick="setLanguage('en')" class="lang-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-lang="en">English</button>
+                    <button onclick="setLanguage('ja')" class="lang-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-lang="ja">日本語</button>
+                    <button onclick="setLanguage('ko')" class="lang-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-lang="ko">한국어</button>
+                    <button onclick="setLanguage('es')" class="lang-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-lang="es">Español</button>
+                    <button onclick="setLanguage('fr')" class="lang-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-lang="fr">Français</button>
+                    <button onclick="setLanguage('de')" class="lang-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-lang="de">Deutsch</button>
+                    <button onclick="setLanguage('pt')" class="lang-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-lang="pt">Português</button>
+                    <button onclick="setLanguage('ru')" class="lang-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-lang="ru">Русский</button>
+                </div>
+            </div>
+        </div>
 
         <!-- 主内容区 -->
         <main class="flex-1 bg-[#121212] rounded-lg m-2 overflow-hidden flex flex-col">
@@ -300,14 +351,101 @@
     </div>
 
     <script>
+        // 货币配置
+        const CURRENCY_CONFIG = {
+            USD: { symbol: '$', rate: 1, name: 'USD' },
+            CNY: { symbol: '¥', rate: 7.2, name: 'CNY' },
+            EUR: { symbol: '€', rate: 0.92, name: 'EUR' },
+            GBP: { symbol: '£', rate: 0.79, name: 'GBP' },
+            JPY: { symbol: '¥', rate: 150, name: 'JPY' },
+            KRW: { symbol: '₩', rate: 1330, name: 'KRW' }
+        };
+
+        let currentCurrency = localStorage.getItem('xmusic-currency') || 'USD';
+        let currentLang = localStorage.getItem('xmusic-lang') || 'zh';
+
+        const LANG_NAMES = {
+            zh: '简体中文', zht: '繁體中文', en: 'English', ja: '日本語', ko: '한국어',
+            es: 'Español', fr: 'Français', de: 'Deutsch', pt: 'Português', ru: 'Русский'
+        };
+
+        function showCurrencyModal() {
+            document.getElementById('currencyModal').classList.remove('hidden');
+            document.getElementById('currencyModal').classList.add('flex');
+            updateCurrencyButtons();
+        }
+
+        function closeCurrencyModal() {
+            document.getElementById('currencyModal').classList.add('hidden');
+            document.getElementById('currencyModal').classList.remove('flex');
+        }
+
+        function showLangModal() {
+            document.getElementById('langModal').classList.remove('hidden');
+            document.getElementById('langModal').classList.add('flex');
+            updateLangButtons();
+        }
+
+        function closeLangModal() {
+            document.getElementById('langModal').classList.add('hidden');
+            document.getElementById('langModal').classList.remove('flex');
+        }
+
+        function setCurrency(currency) {
+            currentCurrency = currency;
+            localStorage.setItem('xmusic-currency', currency);
+            document.getElementById('currentCurrency').textContent = currency;
+            updateCurrencyButtons();
+            closeCurrencyModal();
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('xmusic-lang', lang);
+            document.getElementById('currentLangDisplay').textContent = '语言: ' + LANG_NAMES[lang];
+            updateLangButtons();
+            closeLangModal();
+        }
+
+        function updateCurrencyButtons() {
+            document.querySelectorAll('.currency-btn').forEach(btn => {
+                const btnCurrency = btn.getAttribute('data-currency');
+                if (btnCurrency === currentCurrency) {
+                    btn.classList.remove('bg-[#282828]', 'text-white');
+                    btn.classList.add('bg-[#1DB954]', 'text-black');
+                } else {
+                    btn.classList.remove('bg-[#1DB954]', 'text-black');
+                    btn.classList.add('bg-[#282828]', 'text-white');
+                }
+            });
+        }
+
+        function updateLangButtons() {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                const btnLang = btn.getAttribute('data-lang');
+                if (btnLang === currentLang) {
+                    btn.classList.remove('bg-[#282828]', 'text-white');
+                    btn.classList.add('bg-[#1DB954]', 'text-black');
+                } else {
+                    btn.classList.remove('bg-[#1DB954]', 'text-black');
+                    btn.classList.add('bg-[#282828]', 'text-white');
+                }
+            });
+        }
+
         function focusArtist(id) {
             console.log('Focus artist:', id);
-            // 在真实应用中，这里会移动地图中心到对应标记
         }
 
         function showArtistDetail(id) {
             window.location.href = `project.html?id=${id}`;
         }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('currentCurrency').textContent = currentCurrency;
+            document.getElementById('currentLangDisplay').textContent = '语言: ' + LANG_NAMES[currentLang];
+        });
     </script>
 </body>
 </html>
