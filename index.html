@@ -17,54 +17,72 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* 可收起侧边栏样式 */
+        /* 自动隐藏侧边栏样式 */
         #sidebar {
-            transition: width 0.3s ease, transform 0.3s ease;
-        }
-        #sidebar.collapsed {
-            width: 80px;
-        }
-        #sidebar.collapsed .nav-text {
-            display: none;
-        }
-        #sidebar.collapsed .logo-text {
-            display: none;
-        }
-        #sidebar.collapsed .sidebar-item {
-            justify-content: center;
-            padding-left: 0;
-            padding-right: 0;
-        }
-        #sidebar.collapsed .sidebar-item i {
-            margin-right: 0;
-        }
-        #sidebarToggle {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 256px;
+            transform: translateX(-100%);
             transition: transform 0.3s ease;
+            z-index: 50;
         }
-        #sidebar.collapsed + #mainContent #sidebarToggle {
-            transform: rotate(180deg);
+        #sidebar:hover,
+        #sidebar.expanded {
+            transform: translateX(0);
         }
-        .sidebar-trigger {
+        
+        /* 三角箭头触发器 */
+        .sidebar-arrow {
             position: fixed;
             left: 0;
             top: 50%;
             transform: translateY(-50%);
-            width: 4px;
-            height: 60px;
-            background: #1DB954;
-            border-radius: 0 4px 4px 0;
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 12px solid #1DB954;
             cursor: pointer;
-            z-index: 45;
+            z-index: 40;
+            transition: all 0.2s ease;
+            filter: drop-shadow(2px 0 4px rgba(0,0,0,0.3));
+        }
+        .sidebar-arrow:hover {
+            border-left-width: 16px;
+            filter: drop-shadow(4px 0 8px rgba(29,185,84,0.5));
+        }
+        #sidebar:hover ~ .sidebar-arrow,
+        #sidebar.expanded ~ .sidebar-arrow {
             opacity: 0;
-            transition: opacity 0.2s ease, width 0.2s ease;
+            pointer-events: none;
         }
-        .sidebar-trigger:hover {
-            opacity: 1;
-            width: 8px;
+        
+        /* 主内容区 */
+        #mainContent {
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
         }
-        #sidebar.collapsed ~ .sidebar-trigger {
+        #sidebar:hover ~ #mainContent,
+        #sidebar.expanded ~ #mainContent {
+            margin-left: 256px;
+        }
+        
+        /* 遮罩层 */
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 35;
+        }
+        #sidebar:hover ~ .sidebar-overlay,
+        #sidebar.expanded ~ .sidebar-overlay {
             opacity: 1;
-            width: 6px;
+            visibility: visible;
         }
     </style>
 </head>
@@ -112,14 +130,17 @@
     </div>
 
     <div class="flex h-screen">
-        <!-- 侧边栏触发条 -->
-        <div class="sidebar-trigger" onclick="toggleSidebar()" title="展开导航栏"></div>
+        <!-- 三角箭头触发器 -->
+        <div class="sidebar-arrow" onclick="expandSidebar()" title="展开导航栏"></div>
+        
+        <!-- 遮罩层 -->
+        <div class="sidebar-overlay" onclick="collapseSidebar()"></div>
 
         <!-- 左侧导航栏 -->
-        <aside id="sidebar" class="w-64 bg-[#000000] flex flex-col p-6 gap-6 relative">
-            <!-- 收起按钮 -->
-            <button onclick="toggleSidebar()" class="absolute -right-3 top-20 w-6 h-6 bg-[#1DB954] rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform z-50" title="收起/展开">
-                <i id="sidebarToggle" class="fas fa-chevron-left text-black text-xs"></i>
+        <aside id="sidebar" class="bg-[#000000] flex flex-col p-6 gap-6">
+            <!-- 关闭按钮 -->
+            <button onclick="collapseSidebar()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-[#b3b3b3] hover:text-white transition-colors md:hidden">
+                <i class="fas fa-times"></i>
             </button>
 
             <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
@@ -520,19 +541,31 @@
             }
             
             // 恢复侧边栏状态
-            const sidebarCollapsed = localStorage.getItem('xmusic-sidebar-collapsed') === 'true';
-            if (sidebarCollapsed) {
-                document.getElementById('sidebar').classList.add('collapsed');
+            const sidebarExpanded = localStorage.getItem('xmusic-sidebar-expanded') === 'true';
+            if (sidebarExpanded) {
+                document.getElementById('sidebar').classList.add('expanded');
             }
         });
+        });
 
-        // 侧边栏收起/展开
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('collapsed');
-            const isCollapsed = sidebar.classList.contains('collapsed');
-            localStorage.setItem('xmusic-sidebar-collapsed', isCollapsed);
+        // 侧边栏展开/收起
+        function expandSidebar() {
+            document.getElementById('sidebar').classList.add('expanded');
         }
+        
+        function collapseSidebar() {
+            document.getElementById('sidebar').classList.remove('expanded');
+        }
+        
+        // 鼠标进入侧边栏时展开
+        document.getElementById('sidebar').addEventListener('mouseenter', function() {
+            this.classList.add('expanded');
+        });
+        
+        // 鼠标离开侧边栏时收起
+        document.getElementById('sidebar').addEventListener('mouseleave', function() {
+            this.classList.remove('expanded');
+        });
     </script>
 </body>
 </html>
