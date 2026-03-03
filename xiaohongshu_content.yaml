@@ -1,0 +1,179 @@
+# 小红书自动发布 - 内容模板库
+# 每篇内容包含：标题、正文、标签、配图提示词
+
+posts:
+  # 贴文1：揭秘向（高互动）
+  - id: post_001
+    title: "在好莱坞做了8年音乐经纪人，说点得罪人的大实话"
+    content: |
+      在好莱坞做了8年音乐经纪人，说点得罪人的大实话
+      
+      很多人以为好莱坞音乐圈光鲜亮丽
+      实际上90%的音乐人都在为房租发愁
+      
+      我见过太多有才华的歌手
+      因为不懂规则，被合同坑到倾家荡产
+      也见过太多"关系户"
+      靠资源上位，作品却一文不值
+      
+      这就是为什么我要做这件事——
+      重新制定公平的音乐人合作规则
+      
+      不看出身，只看作品
+      不论资排辈，只论才华
+      
+      如果你是有实力的音乐制作人/歌手
+      欢迎投稿📮 xiao2240275008@gmail.com
+      让我们一起，做些不凡的金曲
+    tags: ["好莱坞音乐", "音乐制作人", "独立音乐人", "音乐合作", "音乐人招募", "洛杉矶音乐", "音乐经纪人"]
+    image_prompts:
+      - "Hollywood music studio at night, professional recording booth with vintage microphone, warm amber lighting, mixing console with glowing buttons, cinematic atmosphere --ar 3:4"
+      - "Close-up of music producer hands adjusting mixing board faders, golden hour lighting through studio window, professional audio equipment --ar 3:4"
+
+  # 贴文2：干货向（高收藏）
+  - id: post_002
+    title: "好莱坞音乐人的一天｜凌晨4点的录音棚"
+    content: |
+      好莱坞音乐人的一天｜凌晨4点的录音棚
+      
+      很多人好奇好莱坞音乐人怎么工作的
+      今天带你们看看真实的幕后
+      
+      🕐 凌晨4点
+      顶级制作人已经坐在录音棚里了
+      灵感来的时候，不分昼夜
+      
+      🕐 上午10点
+      A&R会议，筛选demo
+      一天听200首歌是常态
+      
+      🕐 下午3点
+      跟艺人沟通创作方向
+      有时候为了一个音符争论3小时
+      
+      🕐 晚上9点
+      录音棚灯火通明
+      真正的音乐，都是熬出来的
+      
+      这就是我们要找的人——
+      对音乐有执念，对作品有要求
+      
+      如果你是，欢迎加入我们
+      📮 xiao2240275008@gmail.com
+    tags: ["好莱坞日常", "音乐制作", "录音棚", "音乐幕后", "洛杉矶生活", "音乐人日常", "创作过程"]
+    image_prompts:
+      - "Music studio timeline infographic, 4am to 9pm schedule, recording booth scenes, professional lighting, modern design --ar 3:4"
+      - "Behind the scenes music production, artist and producer in discussion, professional studio environment --ar 3:4"
+
+  # 贴文3：招募向（高转化）
+  - id: post_003
+    title: "🎵 招募音乐制作人｜好莱坞金曲团队等你加入"
+    content: |
+      🎵 招募音乐制作人｜好莱坞金曲团队等你加入
+      
+      我们在找这样的你：
+      
+      ✅ 有独特的音乐审美
+      ✅ 擅长流行/R&B/电子/嘻哈任一风格
+      ✅ 对作品有极致追求
+      ✅ 渴望做出被世界听到的音乐
+      
+      我们能提供：
+      
+      🎹 好莱坞顶级录音棚资源
+      🌐 全球发行渠道
+      💰 公平透明的合作分成
+      🤝 与格莱美级制作人合作机会
+      
+      不限地域，只看作品
+      不限资历，只论才华
+      
+      📮 投稿方式：
+      发送你的作品到 xiao2240275008@gmail.com
+      邮件标题：【制作人合作】+ 你的名字
+      
+      期待听到你的声音 🎶
+    tags: ["音乐招募", "制作人合作", "好莱坞音乐", "音乐投稿", "独立音乐人", "音乐机会"]
+    image_prompts:
+      - "Music producer recruitment poster, Hollywood style, professional studio background, modern typography --ar 3:4"
+      - "Diverse musicians collaborating in studio, creative energy, warm lighting, professional equipment --ar 3:4"
+
+  # 贴文4：故事向（高共鸣）
+  - id: post_004
+    title: "那个在洛杉矶地下室写歌的女孩，现在怎么样了"
+    content: |
+      那个在洛杉矶地下室写歌的女孩，现在怎么样了
+      
+      3年前，我在一个地下室的open mic遇到她
+      破旧的吉他，颤抖的声音
+      但歌词里有光
+      
+      她说她从俄亥俄州来
+      睡在朋友家的沙发上
+      白天在餐厅打工
+      晚上写歌到3点
+      
+      我给了她一张名片
+      说："有demo了发我"
+      
+      半年后，她发来3首歌
+      我听完直接飞到洛杉矶
+      
+      现在
+      她的歌在Spotify有500万播放
+      下个月要在The Troubadour演出
+      
+      这就是我为什么相信
+      才华永远值得被看见
+      
+      如果你也在某个地下室写歌
+      如果你也相信你的声音值得被听到
+      
+      📮 xiao2240275008@gmail.com
+      我等你
+    tags: ["音乐故事", "洛杉矶音乐", "音乐人成长", "追梦故事", "独立音乐人", "好莱坞音乐"]
+    image_prompts:
+      - "Young female singer songwriter in basement studio, intimate lighting, guitar, authentic emotional moment --ar 3:4"
+      - "Before and after music career journey, split image, inspiring transformation --ar 3:4"
+
+  # 贴文5：观点向（高讨论）
+  - id: post_005
+    title: "为什么90%的音乐人赚不到钱｜行业真相"
+    content: |
+      为什么90%的音乐人赚不到钱｜行业真相
+      
+      在好莱坞8年，看过太多音乐人起起落落
+      说几个残酷的事实：
+      
+      ❶ 才华只是入场券
+      市面上不缺好歌手
+      缺的是能把才华变现的能力
+      
+      ❷ 合同陷阱无处不在
+      很多新人被"长期独家"绑死
+      歌红了，钱没赚到
+      
+      ❸ 社交媒体是双刃剑
+      不会运营=没有曝光
+      但过度运营=失去音乐灵魂
+      
+      ❹ 合作比单打独斗重要
+      一个人的才华有限
+      找到对的制作人、编曲、混音
+      才能做出好作品
+      
+      这就是为什么我坚持——
+      
+      公平的分成
+      透明的合作
+      尊重创作者
+      
+      如果你厌倦了被剥削
+      如果你想专心做音乐
+      
+      📮 xiao2240275008@gmail.com
+      我们聊聊
+    tags: ["音乐行业", "音乐人收入", "好莱坞音乐", "音乐产业", "独立音乐人", "音乐合作"]
+    image_prompts:
+      - "Music industry infographic, pie charts showing revenue distribution, modern design, professional style --ar 3:4"
+      - "Contract and music notes concept, business meeting scene, professional lighting --ar 3:4"
