@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC 身份验证 - XMUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        .step-active { background-color: #1DB954; color: black; }
+        .step-pending { background-color: #282828; color: #b3b3b3; }
+        .step-line-active { background-color: #1DB954; }
+        .step-line-pending { background-color: #282828; }
+    </style>
+</head>
+<body class="bg-[#121212] text-white min-h-screen">
+    <div class="max-w-2xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <div class="w-16 h-16 bg-[#1DB954] rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-shield-alt text-black text-2xl"></i>
+            </div>
+            
+            <h1 class="text-3xl font-bold mb-2">KYC 身份验证</h1>
+            
+            <p class="text-[#b3b3b3]">完成KYC验证以提高账户安全性和投资额度</p>
+        </div>
+
+        <!-- 步骤指示器 -->
+        <div class="flex items-center justify-between mb-10">
+            <div class="flex items-center">
+                <div id="step1-indicator" class="w-10 h-10 rounded-full flex items-center justify-center font-bold step-active">1</div>
+                <div id="line1" class="w-20 h-1 mx-2 step-line-pending"></div>
+            </div>
+            
+            <div class="flex items-center">
+                <div id="step2-indicator" class="w-10 h-10 rounded-full flex items-center justify-center font-bold step-pending">2</div>
+                <div id="line2" class="w-20 h-1 mx-2 step-line-pending"></div>
+            </div>
+            
+            <div id="step3-indicator" class="w-10 h-10 rounded-full flex items-center justify-center font-bold step-pending">3</div>
+        </div>
+
+        <!-- 步骤 1: 个人信息 -->
+        <div id="step1" class="bg-[#181818] rounded-lg p-8">
+            <h2 class="text-xl font-bold mb-6">个人信息</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block font-semibold mb-3">真实姓名 *</label>
+                    <input type="text" placeholder="请输入真实姓名" 
+                        class="w-full bg-[#242424] text-white px-4 py-4 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors placeholder-[#757575]"
+                    >
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-3">出生日期 *</label>
+                    <input type="date" 
+                        class="w-full bg-[#242424] text-white px-4 py-4 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors"
+                    >
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-3">国籍 *</label>
+                    <select class="w-full bg-[#242424] text-white px-4 py-4 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none"
+                    >
+                        <option value="">选择国籍</option>
+                        <option>中国</option>
+                        <option>美国</option>
+                        <option>日本</option>
+                        <option>韩国</option>
+                        <option>新加坡</option>
+                        <option>其他</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-3">居住地址 *</label>
+                    <textarea placeholder="请输入详细居住地址" rows="3"
+                        class="w-full bg-[#242424] text-white px-4 py-4 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors placeholder-[#757575] resize-none"
+                    ></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-end mt-8">
+                <button onclick="nextStep(2)" class="bg-[#1DB954] text-black font-bold py-3 px-8 rounded-full hover:scale-105 transition-transform">
+                    下一步
+                </button>
+            </div>
+        </div>
+
+        <!-- 步骤 2: 身份证明 -->
+        <div id="step2" class="bg-[#181818] rounded-lg p-8 hidden">
+            <h2 class="text-xl font-bold mb-6">身份证明</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block font-semibold mb-3">证件类型 *</label>
+                    <div class="grid grid-cols-3 gap-4">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="idType" value="passport" class="hidden peer">
+                            <div class="bg-[#242424] rounded-lg p-4 text-center peer-checked:bg-[#1DB954] peer-checked:text-black transition-colors">
+                                <i class="fas fa-passport text-2xl mb-2"></i>
+                                <p class="font-semibold">护照</p>
+                            </div>
+                        </label>
+                        
+                        <label class="cursor-pointer">
+                            <input type="radio" name="idType" value="idcard" class="hidden peer" checked>
+                            <div class="bg-[#242424] rounded-lg p-4 text-center peer-checked:bg-[#1DB954] peer-checked:text-black transition-colors">
+                                <i class="fas fa-id-card text-2xl mb-2"></i>
+                                <p class="font-semibold">身份证</p>
+                            </div>
+                        </label>
+                        
+                        <label class="cursor-pointer">
+                            <input type="radio" name="idType" value="license" class="hidden peer">
+                            <div class="bg-[#242424] rounded-lg p-4 text-center peer-checked:bg-[#1DB954] peer-checked:text-black transition-colors">
+                                <i class="fas fa-car text-2xl mb-2"></i>
+                                <p class="font-semibold">驾照</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-3">证件号码 *</label>
+                    <input type="text" placeholder="请输入证件号码" 
+                        class="w-full bg-[#242424] text-white px-4 py-4 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors placeholder-[#757575]"
+                    >
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-3">上传证件照片 *</label>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="border-2 border-dashed border-[#404040] rounded-lg p-8 text-center hover:border-[#1DB954] transition-colors cursor-pointer">
+                            <i class="fas fa-id-card text-4xl text-[#404040] mb-4"></i>
+                            <p class="text-[#b3b3b3] mb-2">证件正面</p>
+                            <p class="text-xs text-[#666]">点击上传</p>
+                        </div>
+                        
+                        <div class="border-2 border-dashed border-[#404040] rounded-lg p-8 text-center hover:border-[#1DB954] transition-colors cursor-pointer">
+                            <i class="fas fa-id-card text-4xl text-[#404040] mb-4"></i>
+                            <p class="text-[#b3b3b3] mb-2">证件反面</p>
+                            <p class="text-xs text-[#666]">点击上传</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-8">
+                <button onclick="prevStep(1)" class="bg-[#282828] text-white font-bold py-3 px-8 rounded-full hover:bg-[#383838] transition-colors">
+                    上一步
+                </button>
+                
+                <button onclick="nextStep(3)" class="bg-[#1DB954] text-black font-bold py-3 px-8 rounded-full hover:scale-105 transition-transform">
+                    下一步
+                </button>
+            </div>
+        </div>
+
+        <!-- 步骤 3: 自拍验证 -->
+        <div id="step3" class="bg-[#181818] rounded-lg p-8 hidden">
+            <h2 class="text-xl font-bold mb-6">自拍验证</h2>
+            
+            <div class="text-center mb-8">
+                <div class="w-48 h-48 bg-[#242424] rounded-full mx-auto mb-6 flex items-center justify-center relative overflow-hidden">
+                    <div id="cameraPreview" class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-user text-6xl text-[#404040]"></i>
+                    </div>
+                    
+                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
+                        <button onclick="takePhoto()" class="w-14 h-14 bg-[#1DB954] rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                            <i class="fas fa-camera text-black text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <p class="text-[#b3b3b3] mb-2">请拍摄一张清晰的自拍照</p>
+                <p class="text-sm text-[#666]">确保光线充足，面部清晰可见</p>
+            </div>
+
+            <div class="bg-[#242424] rounded-lg p-6 mb-6">
+                <h3 class="font-semibold mb-4">拍摄要求</h3>
+                
+                <ul class="space-y-2 text-sm text-[#b3b3b3]">
+                    <li class="flex items-center gap-2">
+                        <i class="fas fa-check-circle text-[#1DB954]"></i>
+                        面部清晰可见，无遮挡
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fas fa-check-circle text-[#1DB954]"></i>
+                        光线充足，无阴影
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fas fa-check-circle text-[#1DB954]"></i>
+                        背景简洁，纯色最佳
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fas fa-check-circle text-[#1DB954]"></i>
+                        不要佩戴墨镜或帽子
+                    </li>
+                </ul>
+            </div>
+
+            <div class="flex justify-between mt-8">
+                <button onclick="prevStep(2)" class="bg-[#282828] text-white font-bold py-3 px-8 rounded-full hover:bg-[#383838] transition-colors">
+                    上一步
+                </button>
+                
+                <button onclick="submitKYC()" class="bg-[#1DB954] text-black font-bold py-3 px-8 rounded-full hover:scale-105 transition-transform">
+                    提交验证
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+
+        function nextStep(step) {
+            document.getElementById(`step${currentStep}`).classList.add('hidden');
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('step-active');
+            document.getElementById(`step${currentStep}-indicator`).classList.add('step-pending');
+            
+            if (currentStep < 3) {
+                document.getElementById(`line${currentStep}`).classList.remove('step-line-pending');
+                document.getElementById(`line${currentStep}`).classList.add('step-line-active');
+            }
+            
+            currentStep = step;
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('step-pending');
+            document.getElementById(`step${currentStep}-indicator`).classList.add('step-active');
+        }
+
+        function prevStep(step) {
+            document.getElementById(`step${currentStep}`).classList.add('hidden');
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('step-active');
+            document.getElementById(`step${currentStep}-indicator`).classList.add('step-pending');
+            
+            if (step < 3) {
+                document.getElementById(`line${step}`).classList.remove('step-line-active');
+                document.getElementById(`line${step}`).classList.add('step-line-pending');
+            }
+            
+            currentStep = step;
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('step-pending');
+            document.getElementById(`step${currentStep}-indicator`).classList.add('step-active');
+        }
+
+        function takePhoto() {
+            alert('拍照功能演示');
+        }
+
+        function submitKYC() {
+            alert('KYC验证提交成功！审核将在1-3个工作日内完成。');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
