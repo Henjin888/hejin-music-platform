@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - XMUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        .login-btn { transition: all 0.2s ease; }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    </style>
+</head>
+<body class="bg-[#121212] text-white min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="px-8 py-6">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+            <div class="w-10 h-10 bg-[#1DB954] rounded-full flex items-center justify-center">
+                <i class="fas fa-music text-black text-lg"></i>
+            </div>
+            <span class="text-2xl font-bold">XMUSIC</span>
+        </div>
+    </header>
+
+    <!-- 登录内容 -->
+    <main class="flex-1 flex items-center justify-center px-4 py-12">
+        <div class="w-full max-w-md">
+            <!-- 登录标题 -->
+            <div class="text-center mb-10">
+                <h1 class="text-4xl font-bold mb-3">登录 XMUSIC</h1>
+                <p class="text-[#b3b3b3]">选择你喜欢的方式登录</p>
+            </div>
+
+            <!-- 登录选项 -->
+            <div class="space-y-4">
+                <!-- Web3 钱包 -->
+                <button onclick="connectWeb3Wallet()" class="login-btn w-full bg-[#1DB954] text-black font-bold py-4 px-6 rounded-full flex items-center justify-center gap-3">
+                    <i class="fas fa-wallet text-xl"></i>
+                    <span>Web3 钱包登录</span>
+                </button>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- 苹果 ID -->
+                    <button onclick="connectApple()" class="login-btn w-full bg-white text-black font-semibold py-4 px-4 rounded-full flex items-center justify-center gap-2">
+                        <i class="fab fa-apple text-xl"></i>
+                        <span class="text-sm">苹果 ID</span>
+                    </button>
+
+                    <!-- 谷歌 -->
+                    <button onclick="connectGoogle()" class="login-btn w-full bg-white text-black font-semibold py-4 px-4 rounded-full flex items-center justify-center gap-2">
+                        <i class="fab fa-google text-xl"></i>
+                        <span class="text-sm">谷歌账号</span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Twitter -->
+                    <button onclick="connectTwitter()" class="login-btn w-full bg-[#1DA1F2] text-white font-semibold py-4 px-4 rounded-full flex items-center justify-center gap-2">
+                        <i class="fab fa-twitter text-xl"></i>
+                        <span class="text-sm">Twitter</span>
+                    </button>
+
+                    <!-- Discord -->
+                    <button onclick="connectDiscord()" class="login-btn w-full bg-[#5865F2] text-white font-semibold py-4 px-4 rounded-full flex items-center justify-center gap-2">
+                        <i class="fab fa-discord text-xl"></i>
+                        <span class="text-sm">Discord</span>
+                    </button>
+                </div>
+
+                <!-- 分隔线 -->
+                <div class="flex items-center gap-4 my-6">
+                    <div class="flex-1 h-px bg-[#282828]"></div>
+                    <span class="text-[#b3b3b3] text-sm">或者</span>
+                    <div class="flex-1 h-px bg-[#282828]"></div>
+                </div>
+
+                <!-- 手机号登录 -->
+                <div id="phoneLoginForm" class="space-y-4">
+                    <div class="relative">
+                        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-[#757575]">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <input type="tel" id="phoneNumber" placeholder="请输入手机号码" 
+                            class="w-full bg-[#242424] text-white pl-12 pr-4 py-4 rounded-full border border-transparent focus:border-white focus:outline-none transition-colors placeholder-[#757575]"
+                        >
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-[#757575]">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <input type="text" id="verifyCode" placeholder="请输入验证码" 
+                            class="w-full bg-[#242424] text-white pl-12 pr-32 py-4 rounded-full border border-transparent focus:border-white focus:outline-none transition-colors placeholder-[#757575]"
+                        >
+                        <button onclick="sendVerifyCode()" id="sendCodeBtn" class="absolute right-2 top-1/2 -translate-y-1/2 bg-[#1DB954] text-black px-4 py-2 rounded-full font-semibold text-sm hover:opacity-90 transition-opacity"
+                        >
+                            发送验证码
+                        </button>
+                    </div>
+
+                    <button onclick="loginWithPhone()" class="login-btn w-full bg-[#1DB954] text-black font-bold py-4 px-6 rounded-full">
+                        手机号登录
+                    </button>
+                </div>
+            </div>
+
+            <!-- 注册提示 -->
+            <div class="text-center mt-8 text-[#b3b3b3]">
+                还没有账号？
+                <a href="#" onclick="showRegister()" class="text-white font-semibold hover:underline ml-1">立即注册</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 绑定手机号弹窗 -->
+    <div id="bindPhoneModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+        <div class="bg-[#181818] rounded-2xl p-8 max-w-md w-full mx-4">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-[#1DB954]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-mobile-alt text-[#1DB954] text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">绑定手机号码</h2>
+                <p class="text-[#b3b3b3]">为了账户安全，请绑定您的手机号码</p>
+            </div>
+
+            <div class="space-y-4">
+                <input type="tel" id="bindPhoneNumber" placeholder="请输入手机号" 
+                    class="w-full bg-[#242424] text-white px-4 py-4 rounded-xl border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors placeholder-[#757575]"
+                >
+
+                <div class="flex gap-3">
+                    <input type="text" id="bindVerifyCode" placeholder="验证码" 
+                        class="flex-1 bg-[#242424] text-white px-4 py-4 rounded-xl border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors placeholder-[#757575]"
+                    >
+                    <button onclick="sendBindVerifyCode()" class="bg-[#282828] text-white px-6 py-4 rounded-xl font-semibold whitespace-nowrap hover:bg-[#383838] transition-colors">
+                        发送
+                    </button>
+                </div>
+
+                <button onclick="confirmBindPhone()" class="w-full bg-[#1DB954] text-black font-bold py-4 rounded-full hover:opacity-90 transition-opacity">
+                    确认绑定
+                </button>
+
+                <button onclick="closeBindPhoneModal()" class="w-full text-[#b3b3b3] py-4 hover:text-white transition-colors">
+                    跳过
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web3 钱包连接
+        async function connectWeb3Wallet() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    console.log('Connected:', accounts[0]);
+                    showBindPhoneModal();
+                } catch (error) {
+                    alert('连接钱包失败: ' + error.message);
+                }
+            } else {
+                alert('请安装 MetaMask 或其他 Web3 钱包');
+                window.open('https://metamask.io/download/', '_blank');
+            }
+        }
+
+        // 苹果登录
+        function connectApple() {
+            alert('Apple ID 登录（演示）');
+            showBindPhoneModal();
+        }
+
+        // 谷歌登录
+        function connectGoogle() {
+            alert('Google 登录（演示）');
+            showBindPhoneModal();
+        }
+
+        // Twitter 登录
+        function connectTwitter() {
+            alert('Twitter 登录（演示）');
+            showBindPhoneModal();
+        }
+
+        // Discord 登录
+        function connectDiscord() {
+            alert('Discord 登录（演示）');
+            showBindPhoneModal();
+        }
+
+        // 发送验证码
+        function sendVerifyCode() {
+            const phone = document.getElementById('phoneNumber').value;
+            if (!phone) {
+                alert('请输入手机号码');
+                return;
+            }
+            
+            const btn = document.getElementById('sendCodeBtn');
+            let countdown = 60;
+            btn.disabled = true;
+            btn.textContent = `${countdown}s`;
+            
+            const timer = setInterval(() => {
+                countdown--;
+                btn.textContent = `${countdown}s`;
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    btn.disabled = false;
+                    btn.textContent = '发送验证码';
+                }
+            }, 1000);
+            
+            alert('验证码已发送: 123456');
+        }
+
+        // 手机号登录
+        function loginWithPhone() {
+            const phone = document.getElementById('phoneNumber').value;
+            const code = document.getElementById('verifyCode').value;
+            
+            if (!phone || !code) {
+                alert('请填写完整信息');
+                return;
+            }
+            
+            // 登录成功，跳转到首页
+            window.location.href = 'index.html';
+        }
+
+        // 显示绑定手机号弹窗
+        function showBindPhoneModal() {
+            document.getElementById('bindPhoneModal').classList.remove('hidden');
+            document.getElementById('bindPhoneModal').classList.add('flex');
+        }
+
+        // 关闭绑定手机号弹窗
+        function closeBindPhoneModal() {
+            document.getElementById('bindPhoneModal').classList.add('hidden');
+            document.getElementById('bindPhoneModal').classList.remove('flex');
+            window.location.href = 'index.html';
+        }
+
+        // 发送绑定验证码
+        function sendBindVerifyCode() {
+            const phone = document.getElementById('bindPhoneNumber').value;
+            if (!phone) {
+                alert('请输入手机号码');
+                return;
+            }
+            alert('验证码已发送: 123456');
+        }
+
+        // 确认绑定手机号
+        function confirmBindPhone() {
+            const phone = document.getElementById('bindPhoneNumber').value;
+            const code = document.getElementById('bindVerifyCode').value;
+            
+            if (!phone || !code) {
+                alert('请填写完整信息');
+                return;
+            }
+            
+            alert('绑定成功！');
+            window.location.href = 'index.html';
+        }
+
+        // 显示注册
+        function showRegister() {
+            alert('注册功能与登录相同，选择任意方式即可自动注册');
+        }
+    </script>
+</body>
+</html>

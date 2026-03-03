@@ -1,0 +1,123 @@
+{
+  "common": {
+    "appName": "XMUSIC",
+    "slogan": "让每个歌手拥有自己的小投行",
+    "description": "音乐现金流的资产化和分配层",
+    "login": "登录",
+    "register": "注册",
+    "logout": "退出",
+    "search": "搜索",
+    "explore": "探索",
+    "library": "库",
+    "create": "创建",
+    "invest": "投资",
+    "dashboard": "投资面板",
+    "settings": "设置",
+    "language": "语言",
+    "zh": "中文",
+    "en": "English"
+  },
+  "nav": {
+    "home": "首页",
+    "explore": "探索",
+    "library": "我的投资",
+    "create": "发起融资",
+    "map": "附近音乐人"
+  },
+  "home": {
+    "heroTitle": "让每个歌手拥有",
+    "heroHighlight": "自己的小投行",
+    "heroDesc": "XMUSIC 是音乐现金流的资产化和分配层。把音乐事业变成可投资、可分配、可治理的数字资产。",
+    "startExploring": "开始探索",
+    "startFunding": "发起融资",
+    "featuredArtists": "热门音乐人",
+    "stats": {
+      "artists": "已上线艺人",
+      "funding": "累计融资",
+      "investors": "活跃投资人",
+      "returns": "平均回报"
+    },
+    "howItWorks": "如何运作",
+    "howItWorksDesc": "每个歌手项目都是一个独立的小公司，拥有清晰的权利结构和收益分配机制",
+    "step1": {
+      "title": "发现音乐人",
+      "desc": "浏览不同风格的独立音乐人，了解他们的项目计划、历史表现和收益预期。"
+    },
+    "step2": {
+      "title": "投资份额",
+      "desc": "使用 USDC 购买项目份额代币，最低 $10 起投，成为音乐事业的股东。"
+    },
+    "step3": {
+      "title": "分享收益",
+      "desc": "项目产生的收益自动按比例分配，随时提取你的投资回报。"
+    }
+  },
+  "login": {
+    "title": "登录 XMUSIC",
+    "subtitle": "选择你喜欢的方式登录",
+    "web3Wallet": "Web3 钱包",
+    "appleId": "苹果 ID",
+    "googleId": "谷歌账号",
+    "phone": "手机号码",
+    "twitter": "Twitter",
+    "discord": "Discord",
+    "bindPhone": "绑定手机号码",
+    "bindPhoneDesc": "为了账户安全，请绑定您的手机号码",
+    "phonePlaceholder": "请输入手机号",
+    "codePlaceholder": "请输入验证码",
+    "sendCode": "发送验证码",
+    "confirm": "确认"
+  },
+  "project": {
+    "funding": "融资中",
+    "completed": "已完成",
+    "target": "融资目标",
+    "raised": "已融资",
+    "investors": "投资人",
+    "minInvest": "最低投资",
+    "expectedReturn": "预期回报",
+    "allocation": "份额分配",
+    "artist": "艺人",
+    "investor": "投资人",
+    "agent": "经纪人",
+    "community": "社区",
+    "timeline": "项目时间线",
+    "investNow": "立即投资"
+  },
+  "create": {
+    "title": "发起新项目",
+    "subtitle": "创建你的音乐事业融资计划",
+    "step1": "基本信息",
+    "step2": "融资设置",
+    "step3": "团队配置",
+    "step4": "确认发布",
+    "projectName": "项目名称",
+    "projectDesc": "项目介绍",
+    "genre": "音乐风格",
+    "location": "项目地点",
+    "targetAmount": "融资目标",
+    "duration": "融资周期",
+    "minInvest": "最低投资",
+    "pricePerShare": "每份价格",
+    "allocation": "收益分配结构"
+  },
+  "dashboard": {
+    "title": "投资面板",
+    "totalInvested": "总投资额",
+    "totalReturns": "累计收益",
+    "activeProjects": "活跃项目",
+    "pendingRewards": "待领取",
+    "myInvestments": "我的投资",
+    "transactions": "交易记录",
+    "governance": "治理投票",
+    "claimRewards": "领取收益"
+  },
+  "map": {
+    "title": "附近音乐人",
+    "subtitle": "发现你身边的音乐创作者",
+    "searchNearby": "搜索附近",
+    "filter": "筛选",
+    "distance": "距离",
+    "genre": "风格"
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "common": {
+    "appName": "XMUSIC",
+    "slogan": "Let every artist have their own mini investment bank",
+    "description": "The assetization and distribution layer for music cash flows",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "search": "Search",
+    "explore": "Explore",
+    "library": "Library",
+    "create": "Create",
+    "invest": "Invest",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "language": "Language",
+    "zh": "中文",
+    "en": "English"
+  },
+  "nav": {
+    "home": "Home",
+    "explore": "Explore",
+    "library": "My Investments",
+    "create": "Start Funding",
+    "map": "Nearby Artists"
+  },
+  "home": {
+    "heroTitle": "Let every artist have",
+    "heroHighlight": "their own mini investment bank",
+    "heroDesc": "XMUSIC is the assetization and distribution layer for music cash flows. Turn music careers into investable, distributable, and governable digital assets.",
+    "startExploring": "Start Exploring",
+    "startFunding": "Start Funding",
+    "featuredArtists": "Featured Artists",
+    "stats": {
+      "artists": "Artists Online",
+      "funding": "Total Funding",
+      "investors": "Active Investors",
+      "returns": "Avg Returns"
+    },
+    "howItWorks": "How It Works",
+    "howItWorksDesc": "Each artist project is an independent mini-company with clear rights and revenue distribution mechanisms",
+    "step1": {
+      "title": "Discover Artists",
+      "desc": "Browse independent musicians across different genres, understand their project plans, historical performance, and expected returns."
+    },
+    "step2": {
+      "title": "Invest in Shares",
+      "desc": "Buy project share tokens with USDC, starting from $10, become a shareholder in music careers."
+    },
+    "step3": {
+      "title": "Share Revenue",
+      "desc": "Project revenue is automatically distributed proportionally, withdraw your investment returns anytime."
+    }
+  },
+  "login": {
+    "title": "Login to XMUSIC",
+    "subtitle": "Choose your preferred login method",
+    "web3Wallet": "Web3 Wallet",
+    "appleId": "Apple ID",
+    "googleId": "Google",
+    "phone": "Phone Number",
+    "twitter": "Twitter",
+    "discord": "Discord",
+    "bindPhone": "Bind Phone Number",
+    "bindPhoneDesc": "For account security, please bind your phone number",
+    "phonePlaceholder": "Enter phone number",
+    "codePlaceholder": "Enter verification code",
+    "sendCode": "Send Code",
+    "confirm": "Confirm"
+  },
+  "project": {
+    "funding": "Funding",
+    "completed": "Completed",
+    "target": "Funding Target",
+    "raised": "Raised",
+    "investors": "Investors",
+    "minInvest": "Min Investment",
+    "expectedReturn": "Expected Return",
+    "allocation": "Share Allocation",
+    "artist": "Artist",
+    "investor": "Investor",
+    "agent": "Agent",
+    "community": "Community",
+    "timeline": "Project Timeline",
+    "investNow": "Invest Now"
+  },
+  "create": {
+    "title": "Start New Project",
+    "subtitle": "Create your music career funding plan",
+    "step1": "Basic Info",
+    "step2": "Funding Setup",
+    "step3": "Team Config",
+    "step4": "Review & Publish",
+    "projectName": "Project Name",
+    "projectDesc": "Project Description",
+    "genre": "Genre",
+    "location": "Location",
+    "targetAmount": "Target Amount",
+    "duration": "Duration",
+    "minInvest": "Min Investment",
+    "pricePerShare": "Price Per Share",
+    "allocation": "Revenue Allocation"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalInvested": "Total Invested",
+    "totalReturns": "Total Returns",
+    "activeProjects": "Active Projects",
+    "pendingRewards": "Pending Rewards",
+    "myInvestments": "My Investments",
+    "transactions": "Transactions",
+    "governance": "Governance",
+    "claimRewards": "Claim Rewards"
+  },
+  "map": {
+    "title": "Nearby Artists",
+    "subtitle": "Discover music creators around you",
+    "searchNearby": "Search Nearby",
+    "filter": "Filter",
+    "distance": "Distance",
+    "genre": "Genre"
+  }
+}

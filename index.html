@@ -3,303 +3,400 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XMUSIC - 音乐现金流资产化平台</title>
+    <title>XMUSIC - 让每个歌手拥有自己的小投行</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .gradient-text { background: linear-gradient(135deg, #1DB954 0%, #1ed760 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        .sidebar-item:hover { background: rgba(255,255,255,0.1); }
         .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-        .play-btn { opacity: 0; transform: translateY(10px); transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); background: rgba(255,255,255,0.1); }
+        .play-btn { opacity: 0; transform: translateY(8px); transition: all 0.3s ease; }
         .card-hover:hover .play-btn { opacity: 1; transform: translateY(0); }
+        .gradient-text { background: linear-gradient(135deg, #1DB954 0%, #1ed760 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-[#121212] text-white min-h-screen">
-    <!-- Header -->
-    <header class="bg-[#070707] border-b border-[#282828] sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
+<body class="bg-[#000000] text-white overflow-hidden">
+    <div class="flex h-screen">
+        <!-- 左侧导航栏 - Spotify 风格 -->
+        <aside class="w-64 bg-[#000000] flex flex-col p-6 gap-6">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
                 <div class="w-10 h-10 bg-[#1DB954] rounded-full flex items-center justify-center">
                     <i class="fas fa-music text-black text-lg"></i>
                 </div>
-                <span class="text-xl font-bold tracking-tight">XMUSIC</span>
+                <span class="text-2xl font-bold tracking-tight">XMUSIC</span>
             </div>
-            <nav class="hidden md:flex items-center gap-6">
-                <a href="#explore" class="text-sm text-[#B3B3B3] hover:text-white transition-colors font-medium">发现</a>
-                <a href="#how-it-works" class="text-sm text-[#B3B3B3] hover:text-white transition-colors font-medium">运作</a>
-                <a href="#stats" class="text-sm text-[#B3B3B3] hover:text-white transition-colors font-medium">数据</a>
+
+            <!-- 主导航 -->
+            <nav class="flex flex-col gap-2">
+                <a href="index.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-white font-semibold transition-colors bg-[#282828]">
+                    <i class="fas fa-home text-xl w-6"></i>
+                    <span>首页</span>
+                </a>
+                <a href="explore.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-compass text-xl w-6"></i>
+                    <span>探索</span>
+                </a>
+                <a href="map.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-map-marker-alt text-xl w-6"></i>
+                    <span>附近音乐人</span>
+                </a>
             </nav>
-            <div class="flex items-center gap-4">
-                <button class="text-[#B3B3B3] hover:text-white hidden sm:block font-medium">注册</button>
-                <button class="bg-white text-black hover:bg-[#F0F0F0] rounded-full px-6 py-2 font-bold text-sm">登录</button>
-            </div>
-        </div>
-    </header>
 
-    <!-- Hero Section -->
-    <section class="relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-b from-[#1DB954]/30 via-[#121212] to-[#121212]"></div>
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-            <div class="max-w-3xl">
-                <span class="inline-block mb-6 bg-[#1DB954]/20 text-[#1DB954] border border-[#1DB954]/30 px-4 py-2 rounded-full text-sm font-medium">
-                    Web3 音乐投资基础设施
-                </span>
-                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight mb-6">
-                    让每个歌手拥有
-                    <br>
-                    <span class="text-[#1DB954]">自己的小投行</span>
-                </h1>
-                <p class="text-lg text-[#B3B3B3] mb-8 max-w-xl leading-relaxed">
-                    XMUSIC 是音乐现金流的资产化和分配层。把音乐事业变成可投资、可分配、可治理的数字资产。
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="#explore" class="bg-[#1DB954] hover:bg-[#1ED760] text-black rounded-full px-8 py-4 font-bold text-base flex items-center justify-center gap-2 transition-colors">
-                        <i class="fas fa-play"></i>
-                        开始探索
-                    </a>
-                    <a href="create.html" class="border border-[#878787] text-white hover:bg-white/10 rounded-full px-8 py-4 font-bold flex items-center justify-center transition-colors">
+            <!-- 分隔线 -->
+            <div class="h-px bg-[#282828]"></div>
+
+            <!-- 库导航 -->
+            <nav class="flex flex-col gap-2">
+                <a href="dashboard.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-book text-xl w-6"></i>
+                    <span>我的投资</span>
+                </a>
+                <a href="create.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-plus-circle text-xl w-6"></i>
+                    <span>发起融资</span>
+                </a>
+            </nav>
+
+            <!-- 语言切换 -->
+            <div class="mt-auto">
+                <div class="flex items-center gap-2 px-4 py-3 text-[#b3b3b3]">
+                    <i class="fas fa-globe"></i>
+                    <select id="language" class="bg-transparent border-none outline-none text-sm cursor-pointer" onchange="changeLanguage(this.value)">
+                        <option value="zh" class="bg-[#282828]">中文</option>
+                        <option value="en" class="bg-[#282828]">English</option>
+                    </select>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="flex-1 bg-[#121212] rounded-lg m-2 overflow-hidden flex flex-col">
+            <!-- 顶部栏 -->
+            <header class="flex items-center justify-between px-8 py-4 bg-[#070707]">
+                <!-- 搜索框 -->
+                <div class="flex-1 max-w-md">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-[#757575]"></i>
+                        <input type="text" placeholder="搜索音乐人、项目..." 
+                            class="w-full bg-[#242424] text-white pl-12 pr-4 py-3 rounded-full border border-transparent focus:border-white focus:outline-none transition-colors placeholder-[#757575]">
+                    </div>
+                </div>
+
+                <!-- 右侧操作 -->
+                <div class="flex items-center gap-4">
+                    <button onclick="window.location.href='create.html'" class="bg-white text-black px-6 py-2 rounded-full font-bold hover:scale-105 transition-transform">
                         发起融资
-                    </a>
+                    </button>
+                    <button onclick="window.location.href='login.html'" class="bg-[#1DB954] text-black px-6 py-2 rounded-full font-bold hover:scale-105 transition-transform">
+                        登录
+                    </button>
                 </div>
-            </div>
-        </div>
-    </section>
+            </header>
 
-    <!-- Stats Section -->
-    <section id="stats" class="py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-[#181818] rounded-lg p-6 card-hover">
-                    <i class="fas fa-compact-disc text-[#1DB954] text-2xl mb-3"></i>
-                    <p class="text-2xl font-bold">12</p>
-                    <p class="text-sm text-[#B3B3B3]">已上线艺人</p>
-                </div>
-                <div class="bg-[#181818] rounded-lg p-6 card-hover">
-                    <i class="fas fa-wallet text-[#1DB954] text-2xl mb-3"></i>
-                    <p class="text-2xl font-bold">$180K+</p>
-                    <p class="text-sm text-[#B3B3B3]">累计融资</p>
-                </div>
-                <div class="bg-[#181818] rounded-lg p-6 card-hover">
-                    <i class="fas fa-users text-[#1DB954] text-2xl mb-3"></i>
-                    <p class="text-2xl font-bold">456</p>
-                    <p class="text-sm text-[#B3B3B3]">活跃投资人</p>
-                </div>
-                <div class="bg-[#181818] rounded-lg p-6 card-hover">
-                    <i class="fas fa-chart-line text-[#1DB954] text-2xl mb-3"></i>
-                    <p class="text-2xl font-bold">14.5%</p>
-                    <p class="text-sm text-[#B3B3B3]">平均回报</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Featured Artists Section -->
-    <section id="explore" class="py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold">热门音乐人</h2>
-                <a href="#" class="text-[#B3B3B3] hover:text-white text-sm font-bold">查看全部</a>
-            </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <!-- Artist 1 -->
-                <a href="project.html?id=1" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
-                    <div class="aspect-square rounded-md bg-gradient-to-br from-purple-600 to-blue-600 mb-4 relative overflow-hidden">
-                        <div class="absolute inset-0 flex items-center justify-center text-6xl">🎵</div>
-                        <div class="play-btn absolute bottom-2 right-2">
-                            <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
-                                <i class="fas fa-play text-black ml-1"></i>
-                            </div>
+            <!-- 可滚动内容区 -->
+            <div class="flex-1 overflow-y-auto scrollbar-hide">
+                <!-- Hero Section -->
+                <section class="relative bg-gradient-to-b from-[#1DB954]/40 via-[#121212] to-[#121212] px-8 py-12">
+                    <div class="max-w-4xl">
+                        <span class="inline-block bg-[#1DB954]/20 text-[#1DB954] px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
+                            Web3 音乐投资基础设施
+                        </span>
+                        <h1 class="text-5xl md:text-6xl font-black mb-6 leading-tight">
+                            让每个歌手拥有<br>
+                            <span class="text-[#1DB954]">自己的小投行</span>
+                        </h1>
+                        <p class="text-lg text-[#b3b3b3] mb-8 max-w-2xl">
+                            XMUSIC 是音乐现金流的资产化和分配层。把音乐事业变成可投资、可分配、可治理的数字资产。
+                        </p>
+                        <div class="flex gap-4">
+                            <button onclick="document.getElementById('featured').scrollIntoView({behavior: 'smooth'})" 
+                                class="bg-[#1DB954] text-black px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform flex items-center gap-2">
+                                <i class="fas fa-play"></i>
+                                开始探索
+                            </button>
+                            <button onclick="window.location.href='create.html'" 
+                                class="bg-transparent border border-white/30 text-white px-8 py-4 rounded-full font-bold text-lg hover:border-white transition-colors">
+                                发起融资
+                            </button>
                         </div>
                     </div>
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <h3 class="font-bold text-white truncate">林夕</h3>
-                            <i class="fas fa-check-circle text-[#1DB954] text-sm"></i>
+                </section>
+
+                <!-- 平台数据 -->
+                <section class="px-8 py-8">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-[#181818] rounded-lg p-6 card-hover">
+                            <div class="text-3xl font-bold mb-1">12</div>
+                            <div class="text-[#b3b3b3] text-sm">已上线艺人</div>
                         </div>
-                        <p class="text-sm text-[#B3B3B3] truncate">2025巡演计划</p>
-                        <p class="text-xs text-[#6a6a6a]">45.2K 月听众</p>
-                        <div class="mt-3 space-y-1">
-                            <div class="flex justify-between text-xs">
-                                <span class="text-[#1DB954] font-medium">$32.5K</span>
-                                <span class="text-[#6a6a6a]">$50K</span>
+                        <div class="bg-[#181818] rounded-lg p-6 card-hover">
+                            <div class="text-3xl font-bold mb-1 text-[#1DB954]">$180K+</div>
+                            <div class="text-[#b3b3b3] text-sm">累计融资</div>
+                        </div>
+                        <div class="bg-[#181818] rounded-lg p-6 card-hover">
+                            <div class="text-3xl font-bold mb-1">456</div>
+                            <div class="text-[#b3b3b3] text-sm">活跃投资人</div>
+                        </div>
+                        <div class="bg-[#181818] rounded-lg p-6 card-hover">
+                            <div class="text-3xl font-bold mb-1 text-[#1DB954]">14.5%</div>
+                            <div class="text-[#b3b3b3] text-sm">平均回报</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 热门音乐人 -->
+                <section id="featured" class="px-8 py-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold">热门音乐人</h2>
+                        <a href="explore.html" class="text-[#b3b3b3] text-sm font-bold hover:text-white transition-colors">查看全部</a>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        <!-- 艺人卡片 1 -->
+                        <a href="project.html?id=1" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-purple-600 to-blue-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎵</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="h-1 bg-[#404040] rounded-full overflow-hidden">
+                            <h3 class="font-bold text-white mb-1 truncate">林夕</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">2025巡演计划</p>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$32.5K / $50K</span>
+                                <span class="text-[#b3b3b3]">65%</span>
+                            </div>
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
                                 <div class="h-full bg-[#1DB954] rounded-full" style="width: 65%"></div>
                             </div>
-                        </div>
-                    </div>
-                </a>
+                        </a>
 
-                <!-- Artist 2 -->
-                <a href="project.html?id=2" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
-                    <div class="aspect-square rounded-md bg-gradient-to-br from-emerald-600 to-teal-600 mb-4 relative overflow-hidden">
-                        <div class="absolute inset-0 flex items-center justify-center text-6xl">🎹</div>
-                        <div class="play-btn absolute bottom-2 right-2">
-                            <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
-                                <i class="fas fa-play text-black ml-1"></i>
+                        <!-- 艺人卡片 2 -->
+                        <a href="project.html?id=2" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-emerald-600 to-teal-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎹</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <h3 class="font-bold text-white truncate">陈默</h3>
-                            <i class="fas fa-check-circle text-[#1DB954] text-sm"></i>
-                        </div>
-                        <p class="text-sm text-[#B3B3B3] truncate">新专辑《午夜飞行》</p>
-                        <p class="text-xs text-[#6a6a6a]">28.7K 月听众</p>
-                        <div class="mt-3 space-y-1">
-                            <div class="flex justify-between text-xs">
-                                <span class="text-[#1DB954] font-medium">$30K</span>
-                                <span class="text-[#6a6a6a]">$30K</span>
+                            <h3 class="font-bold text-white mb-1 truncate">陈默</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">新专辑《午夜飞行》</p>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$30K / $30K</span>
+                                <span class="text-[#b3b3b3]">100%</span>
                             </div>
-                            <div class="h-1 bg-[#404040] rounded-full overflow-hidden">
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
                                 <div class="h-full bg-[#1DB954] rounded-full" style="width: 100%"></div>
                             </div>
-                        </div>
-                    </div>
-                </a>
+                        </a>
 
-                <!-- Artist 3 -->
-                <a href="project.html?id=3" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
-                    <div class="aspect-square rounded-md bg-gradient-to-br from-orange-600 to-red-600 mb-4 relative overflow-hidden">
-                        <div class="absolute inset-0 flex items-center justify-center text-6xl">🎤</div>
-                        <div class="play-btn absolute bottom-2 right-2">
-                            <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
-                                <i class="fas fa-play text-black ml-1"></i>
+                        <!-- 艺人卡片 3 -->
+                        <a href="project.html?id=3" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-orange-600 to-red-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎤</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <h3 class="font-bold text-white truncate">MC 阿龙</h3>
-                        </div>
-                        <p class="text-sm text-[#B3B3B3] truncate">地下说唱联盟</p>
-                        <p class="text-xs text-[#6a6a6a]">12.3K 月听众</p>
-                        <div class="mt-3 space-y-1">
-                            <div class="flex justify-between text-xs">
-                                <span class="text-[#1DB954] font-medium">$8.5K</span>
-                                <span class="text-[#6a6a6a]">$20K</span>
+                            <h3 class="font-bold text-white mb-1 truncate">MC 阿龙</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">地下说唱联盟</p>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$8.5K / $20K</span>
+                                <span class="text-[#b3b3b3]">42%</span>
                             </div>
-                            <div class="h-1 bg-[#404040] rounded-full overflow-hidden">
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
                                 <div class="h-full bg-[#1DB954] rounded-full" style="width: 42%"></div>
                             </div>
-                        </div>
-                    </div>
-                </a>
+                        </a>
 
-                <!-- Artist 4 -->
-                <a href="project.html?id=4" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
-                    <div class="aspect-square rounded-md bg-gradient-to-br from-pink-600 to-rose-600 mb-4 relative overflow-hidden">
-                        <div class="absolute inset-0 flex items-center justify-center text-6xl">🎸</div>
-                        <div class="play-btn absolute bottom-2 right-2">
-                            <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
-                                <i class="fas fa-play text-black ml-1"></i>
+                        <!-- 艺人卡片 4 -->
+                        <a href="project.html?id=4" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-pink-600 to-rose-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎸</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <h3 class="font-bold text-white truncate">小雨</h3>
-                            <i class="fas fa-check-circle text-[#1DB954] text-sm"></i>
-                        </div>
-                        <p class="text-sm text-[#B3B3B3] truncate">独立民谣EP</p>
-                        <p class="text-xs text-[#6a6a6a]">18.5K 月听众</p>
-                        <div class="mt-3 space-y-1">
-                            <div class="flex justify-between text-xs">
-                                <span class="text-[#1DB954] font-medium">$15K</span>
-                                <span class="text-[#6a6a6a]">$25K</span>
+                            <h3 class="font-bold text-white mb-1 truncate">小雨</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">独立民谣EP</p>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$15K / $25K</span>
+                                <span class="text-[#b3b3b3]">60%</span>
                             </div>
-                            <div class="h-1 bg-[#404040] rounded-full overflow-hidden">
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
                                 <div class="h-full bg-[#1DB954] rounded-full" style="width: 60%"></div>
                             </div>
+                        </a>
+
+                        <!-- 艺人卡片 5 -->
+                        <a href="project.html?id=5" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-indigo-600 to-purple-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎺</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <h3 class="font-bold text-white mb-1 truncate">爵士老王</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">爵士酒吧驻场</p>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$12K / $40K</span>
+                                <span class="text-[#b3b3b3]">30%</span>
+                            </div>
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
+                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 30%"></div>
+                            </div>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- 附近音乐人（地图预览） -->
+                <section class="px-8 py-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold">附近音乐人</h2>
+                        <a href="map.html" class="text-[#b3b3b3] text-sm font-bold hover:text-white transition-colors">查看地图</a>
+                    </div>
+                    <div class="bg-[#181818] rounded-lg p-6 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-r from-[#1DB954]/20 to-transparent"></div>
+                        <div class="relative flex items-center gap-6">
+                            <div class="w-20 h-20 bg-[#282828] rounded-full flex items-center justify-center">
+                                <i class="fas fa-map-marker-alt text-[#1DB954] text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">发现你身边的音乐创作者</h3>
+                                <p class="text-[#b3b3b3] mb-4">通过地图寻找附近的音乐人，帮助附近的投资人快速找到附近的歌手</p>
+                                <button onclick="window.location.href='map.html'" class="bg-[#1DB954] text-black px-6 py-2 rounded-full font-bold hover:scale-105 transition-transform">
+                                    打开地图
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </a>
-            </div>
-        </div>
-    </section>
+                </section>
 
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="py-16 bg-gradient-to-b from-[#121212] to-[#0a0a0a]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold mb-4">如何运作</h2>
-                <p class="text-[#B3B3B3] max-w-2xl mx-auto">
-                    每个歌手项目都是一个独立的小公司，拥有清晰的权利结构和收益分配机制
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-[#181818] rounded-lg p-6 card-hover">
-                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-compact-disc text-black text-xl"></i>
+                <!-- 如何运作 -->
+                <section class="px-8 py-12 bg-gradient-to-b from-[#121212] to-[#000000]">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold mb-4">如何运作</h2>
+                        <p class="text-[#b3b3b3] max-w-2xl mx-auto">
+                            每个歌手项目都是一个独立的小公司，拥有清晰的权利结构和收益分配机制
+                        </p>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">发现音乐人</h3>
-                    <p class="text-[#B3B3B3] text-sm leading-relaxed">
-                        浏览不同风格的独立音乐人，了解他们的项目计划、历史表现和收益预期。
+
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="bg-[#181818] rounded-lg p-6 text-center">
+                            <div class="w-16 h-16 bg-[#1DB954] rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-compact-disc text-black text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">发现音乐人</h3>
+                            <p class="text-[#b3b3b3] text-sm">浏览不同风格的独立音乐人，了解他们的项目计划、历史表现和收益预期。</p>
+                        </div>
+
+                        <div class="bg-[#181818] rounded-lg p-6 text-center">
+                            <div class="w-16 h-16 bg-[#1DB954] rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-wallet text-black text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">投资份额</h3>
+                            <p class="text-[#b3b3b3] text-sm">使用 USDC 购买项目份额代币，最低 $10 起投，成为音乐事业的股东。</p>
+                        </div>
+
+                        <div class="bg-[#181818] rounded-lg p-6 text-center">
+                            <div class="w-16 h-16 bg-[#1DB954] rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-chart-line text-black text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">分享收益</h3>
+                            <p class="text-[#b3b3b3] text-sm">项目产生的收益自动按比例分配，随时提取你的投资回报。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 角色说明 -->
+                <section class="px-8 py-12">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold mb-4">四种角色，一个生态</h2>
+                        <p class="text-[#b3b3b3]">XMUSIC 把权利 & 收益分配都固化在链上</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-4 gap-6">
+                        <div class="bg-[#181818] rounded-lg p-6 border-t-4 border-purple-500">
+                            <div class="text-4xl mb-4">🎤</div>
+                            <h3 class="font-bold text-lg mb-2">创始人（歌手）</h3>
+                            <p class="text-[#b3b3b3] text-sm">项目发起人，可以决定：卖多少比例给投资人、给经纪人多少份额、给粉丝多少参与权</p>
+                        </div>
+
+                        <div class="bg-[#181818] rounded-lg p-6 border-t-4 border-blue-500">
+                            <div class="text-4xl mb-4">🤝</div>
+                            <h3 class="font-bold text-lg mb-2">运营合伙人（经纪人）</h3>
+                            <p class="text-[#b3b3b3] text-sm">负责运营，既拿 Carry 又拿 XMUSIC 激励</p>
+                        </div>
+
+                        <div class="bg-[#181818] rounded-lg p-6 border-t-4 border-[#1DB954]">
+                            <div class="text-4xl mb-4">💰</div>
+                            <h3 class="font-bold text-lg mb-2">LP（投资人）</h3>
+                            <p class="text-[#b3b3b3] text-sm">有真收益权 + 有治理权</p>
+                        </div>
+
+                        <div class="bg-[#181818] rounded-lg p-6 border-t-4 border-yellow-500">
+                            <div class="text-4xl mb-4">🌟</div>
+                            <h3 class="font-bold text-lg mb-2">社区（粉丝）</h3>
+                            <p class="text-[#b3b3b3] text-sm">从普通支持者变成"共创人"，可以通过努力升级成更核心角色</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CTA -->
+                <section class="px-8 py-16 text-center">
+                    <h2 class="text-4xl font-bold mb-6">准备好开始了吗？</h2>
+                    <p class="text-[#b3b3b3] mb-8 max-w-2xl mx-auto text-lg">
+                        无论你是歌手、投资人还是经纪人，XMUSIC 都能帮你开启音乐事业的新篇章。
                     </p>
-                </div>
+                    <button onclick="window.location.href='login.html'" class="bg-[#1DB954] text-black px-10 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform">
+                        免费注册
+                    </button>
+                </section>
 
-                <div class="bg-[#181818] rounded-lg p-6 card-hover">
-                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-wallet text-black text-xl"></i>
+                <!-- Footer -->
+                <footer class="px-8 py-8 border-t border-[#282828]">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-[#1DB954] rounded-full flex items-center justify-center">
+                                <i class="fas fa-music text-black text-sm"></i>
+                            </div>
+                            <span class="font-bold">XMUSIC</span>
+                        </div>
+                        <div class="flex gap-6 text-sm text-[#b3b3b3]">
+                            <a href="#" class="hover:text-white transition-colors">关于我们</a>
+                            <a href="#" class="hover:text-white transition-colors">帮助中心</a>
+                            <a href="#" class="hover:text-white transition-colors">隐私政策</a>
+                            <a href="#" class="hover:text-white transition-colors">服务条款</a>
+                        </div>
+                        <p class="text-sm text-[#666]">© 2025 XMUSIC</p>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">投资份额</h3>
-                    <p class="text-[#B3B3B3] text-sm leading-relaxed">
-                        使用 USDC 购买项目份额代币，最低 $10 起投，成为音乐事业的股东。
-                    </p>
-                </div>
-
-                <div class="bg-[#181818] rounded-lg p-6 card-hover">
-                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-chart-line text-black text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">分享收益</h3>
-                    <p class="text-[#B3B3B3] text-sm leading-relaxed">
-                        项目产生的收益自动按比例分配，随时提取你的投资回报。
-                    </p>
-                </div>
+                </footer>
             </div>
-        </div>
-    </section>
+        </main>
+    </div>
 
-    <!-- CTA Section -->
-    <section class="py-24">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl font-bold mb-6">准备好开始了吗？</h2>
-            <p class="text-[#B3B3B3] mb-8 max-w-2xl mx-auto text-lg">
-                无论你是歌手、投资人还是经纪人，XMUSIC 都能帮你开启音乐事业的新篇章。
-            </p>
-            <a href="create.html" class="inline-block bg-[#1DB954] hover:bg-[#1ED760] text-black rounded-full px-10 py-4 font-bold text-lg transition-colors">
-                免费注册
-            </a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-[#070707] border-t border-[#282828] py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-[#1DB954] rounded-full flex items-center justify-center">
-                        <i class="fas fa-music text-black text-sm"></i>
-                    </div>
-                    <span class="font-bold">XMUSIC</span>
-                </div>
-                <div class="flex gap-6 text-sm text-[#B3B3B3]">
-                    <a href="#" class="hover:text-white transition-colors">关于我们</a>
-                    <a href="#" class="hover:text-white transition-colors">博客</a>
-                    <a href="#" class="hover:text-white transition-colors">隐私政策</a>
-                    <a href="#" class="hover:text-white transition-colors">Cookie 政策</a>
-                </div>
-                <p class="text-sm text-[#6a6a6a]">
-                    © 2025 XMUSIC
-                </p>
-            </div>
-        </div>
-    </footer>
+    <script>
+        // 语言切换
+        function changeLanguage(lang) {
+            if (lang === 'en') {
+                window.location.href = 'index-en.html';
+            }
+        }
+    </script>
 </body>
 </html>

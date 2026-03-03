@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>附近音乐人 - XMUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        .sidebar-item:hover { background: rgba(255,255,255,0.1); }
+        .map-container { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
+        .artist-marker { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-[#000000] text-white overflow-hidden">
+    <div class="flex h-screen">
+        <!-- 左侧导航栏 -->
+        <aside class="w-64 bg-[#000000] flex flex-col p-6 gap-6">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+                <div class="w-10 h-10 bg-[#1DB954] rounded-full flex items-center justify-center">
+                    <i class="fas fa-music text-black text-lg"></i>
+                </div>
+                <span class="text-2xl font-bold">XMUSIC</span>
+            </div>
+
+            <nav class="flex flex-col gap-2">
+                <a href="index.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-home text-xl w-6"></i>
+                    <span>首页</span>
+                </a>
+                <a href="explore.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-compass text-xl w-6"></i>
+                    <span>探索</span>
+                </a>
+                <a href="map.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-white font-semibold transition-colors bg-[#282828]">
+                    <i class="fas fa-map-marker-alt text-xl w-6"></i>
+                    <span>附近音乐人</span>
+                </a>
+            </nav>
+
+            <div class="h-px bg-[#282828]"></div>
+
+            <nav class="flex flex-col gap-2">
+                <a href="dashboard.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-book text-xl w-6"></i>
+                    <span>我的投资</span>
+                </a>
+                <a href="create.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-plus-circle text-xl w-6"></i>
+                    <span>发起融资</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="flex-1 bg-[#121212] rounded-lg m-2 overflow-hidden flex flex-col">
+            <!-- 顶部栏 -->
+            <header class="flex items-center justify-between px-8 py-4 bg-[#070707]">
+                <div class="flex items-center gap-4">
+                    <button onclick="history.back()" class="w-10 h-10 bg-[#282828] rounded-full flex items-center justify-center hover:bg-[#383838] transition-colors">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <h1 class="text-2xl font-bold">附近音乐人</h1>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-[#757575]"></i>
+                        <input type="text" placeholder="搜索位置..." 
+                            class="w-64 bg-[#242424] text-white pl-12 pr-4 py-3 rounded-full border border-transparent focus:border-white focus:outline-none transition-colors placeholder-[#757575]"
+                        >
+                    </div>
+                    
+                    <button onclick="window.location.href='login.html'" class="bg-[#1DB954] text-black px-6 py-2 rounded-full font-bold hover:scale-105 transition-transform">
+                        登录
+                    </button>
+                </div>
+            </header>
+
+            <!-- 地图和内容 -->
+            <div class="flex-1 flex overflow-hidden">
+                <!-- 左侧筛选和列表 -->
+                <div class="w-96 bg-[#121212] border-r border-[#282828] flex flex-col">
+                    <!-- 筛选 -->
+                    <div class="p-6 border-b border-[#282828]">
+                        <h3 class="font-bold mb-4">筛选</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-sm text-[#b3b3b3] mb-2 block">距离</label>
+                                <select class="w-full bg-[#242424] text-white px-4 py-3 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none">
+                                    <option>1 公里内</option>
+                                    <option selected>5 公里内</option>
+                                    <option>10 公里内</option>
+                                    <option>50 公里内</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="text-sm text-[#b3b3b3] mb-2 block">音乐风格</label>
+                                <select class="w-full bg-[#242424] text-white px-4 py-3 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none">
+                                    <option>全部风格</option>
+                                    <option>流行</option>
+                                    <option>摇滚</option>
+                                    <option>电子</option>
+                                    <option>民谣</option>
+                                    <option>说唱</option>
+                                    <option>爵士</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="text-sm text-[#b3b3b3] mb-2 block">融资状态</label>
+                                <div class="flex gap-2">
+                                    <button class="flex-1 bg-[#1DB954] text-black py-2 rounded-lg font-semibold text-sm">融资中</button>
+                                    <button class="flex-1 bg-[#242424] text-white py-2 rounded-lg font-semibold text-sm hover:bg-[#383838]">已完成</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 音乐人列表 -->
+                    <div class="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-3">
+                        <!-- 音乐人 1 -->
+                        <div class="bg-[#181818] rounded-lg p-4 cursor-pointer hover:bg-[#282828] transition-colors" onclick="focusArtist(1)">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center text-2xl">🎵</div>
+                                <div>
+                                    <h4 class="font-bold">林夕</h4>
+                                    <p class="text-sm text-[#b3b3b3]">独立流行 · 2.3km</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">2025巡演计划</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[#1DB954] font-semibold text-sm">$32.5K / $50K</span>
+                                <span class="text-[#b3b3b3] text-xs">65%</span>
+                            </div>
+                        </div>
+
+                        <!-- 音乐人 2 -->
+                        <div class="bg-[#181818] rounded-lg p-4 cursor-pointer hover:bg-[#282828] transition-colors" onclick="focusArtist(2)">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-br from-emerald-600 to-teal-600 rounded-lg flex items-center justify-center text-2xl">🎹</div>
+                                <div>
+                                    <h4 class="font-bold">陈默</h4>
+                                    <p class="text-sm text-[#b3b3b3]">电子 · 3.1km</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">新专辑《午夜飞行》</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[#1DB954] font-semibold text-sm">$30K / $30K</span>
+                                <span class="text-[#b3b3b3] text-xs">100%</span>
+                            </div>
+                        </div>
+
+                        <!-- 音乐人 3 -->
+                        <div class="bg-[#181818] rounded-lg p-4 cursor-pointer hover:bg-[#282828] transition-colors" onclick="focusArtist(3)">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-br from-orange-600 to-red-600 rounded-lg flex items-center justify-center text-2xl">🎤</div>
+                                <div>
+                                    <h4 class="font-bold">MC 阿龙</h4>
+                                    <p class="text-sm text-[#b3b3b3]">说唱 · 4.5km</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">地下说唱联盟</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[#1DB954] font-semibold text-sm">$8.5K / $20K</span>
+                                <span class="text-[#b3b3b3] text-xs">42%</span>
+                            </div>
+                        </div>
+
+                        <!-- 音乐人 4 -->
+                        <div class="bg-[#181818] rounded-lg p-4 cursor-pointer hover:bg-[#282828] transition-colors" onclick="focusArtist(4)">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-br from-pink-600 to-rose-600 rounded-lg flex items-center justify-center text-2xl">🎸</div>
+                                <div>
+                                    <h4 class="font-bold">小雨</h4>
+                                    <p class="text-sm text-[#b3b3b3]">民谣 · 5.2km</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">独立民谣EP</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[#1DB954] font-semibold text-sm">$15K / $25K</span>
+                                <span class="text-[#b3b3b3] text-xs">60%</span>
+                            </div>
+                        </div>
+
+                        <!-- 音乐人 5 -->
+                        <div class="bg-[#181818] rounded-lg p-4 cursor-pointer hover:bg-[#282828] transition-colors" onclick="focusArtist(5)">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center text-2xl">🎺</div>
+                                <div>
+                                    <h4 class="font-bold">爵士老王</h4>
+                                    <p class="text-sm text-[#b3b3b3]">爵士 · 6.8km</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">爵士酒吧驻场</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[#1DB954] font-semibold text-sm">$12K / $40K</span>
+                                <span class="text-[#b3b3b3] text-xs">30%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧地图 -->
+                <div class="flex-1 map-container relative">
+                    <!-- 模拟地图 -->
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="relative w-full h-full">
+                            <!-- 网格背景 -->
+                            <div class="absolute inset-0 opacity-20" 
+                                style="background-image: linear-gradient(rgba(29,185,84,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(29,185,84,0.3) 1px, transparent 1px); background-size: 50px 50px;">
+                            </div>
+
+                            <!-- 当前位置 -->
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                <div class="w-6 h-6 bg-[#1DB954] rounded-full border-4 border-white shadow-lg"></div>
+                                <div class="absolute top-8 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black/80 px-3 py-1 rounded-full text-sm font-semibold">
+                                    你的位置
+                                </div>
+                            </div>
+
+                            <!-- 音乐人标记 1 -->
+                            <div class="absolute top-1/3 left-1/3 artist-marker cursor-pointer" onclick="showArtistDetail(1)">
+                                <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-lg">🎵</div>
+                                <div class="absolute top-12 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#181818] px-3 py-2 rounded-lg text-sm shadow-lg">
+                                    <div class="font-bold">林夕</div>
+                                    <div class="text-[#1DB954]">2.3km · $32.5K</div>
+                                </div>
+                            </div>
+
+                            <!-- 音乐人标记 2 -->
+                            <div class="absolute top-1/4 right-1/3 artist-marker cursor-pointer" onclick="showArtistDetail(2)">
+                                <div class="w-10 h-10 bg-gradient-to-br from-emerald-600 to-teal-600 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-lg">🎹</div>
+                                <div class="absolute top-12 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#181818] px-3 py-2 rounded-lg text-sm shadow-lg">
+                                    <div class="font-bold">陈默</div>
+                                    <div class="text-[#1DB954]">3.1km · $30K</div>
+                                </div>
+                            </div>
+
+                            <!-- 音乐人标记 3 -->
+                            <div class="absolute bottom-1/3 left-1/4 artist-marker cursor-pointer" onclick="showArtistDetail(3)">
+                                <div class="w-10 h-10 bg-gradient-to-br from-orange-600 to-red-600 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-lg">🎤</div>
+                                <div class="absolute top-12 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#181818] px-3 py-2 rounded-lg text-sm shadow-lg">
+                                    <div class="font-bold">MC 阿龙</div>
+                                    <div class="text-[#1DB954]">4.5km · $8.5K</div>
+                                </div>
+                            </div>
+
+                            <!-- 音乐人标记 4 -->
+                            <div class="absolute bottom-1/4 right-1/4 artist-marker cursor-pointer" onclick="showArtistDetail(4)">
+                                <div class="w-10 h-10 bg-gradient-to-br from-pink-600 to-rose-600 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-lg">🎸</div>
+                                <div class="absolute top-12 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#181818] px-3 py-2 rounded-lg text-sm shadow-lg">
+                                    <div class="font-bold">小雨</div>
+                                    <div class="text-[#1DB954]">5.2km · $15K</div>
+                                </div>
+                            </div>
+
+                            <!-- 音乐人标记 5 -->
+                            <div class="absolute top-2/3 right-1/5 artist-marker cursor-pointer" onclick="showArtistDetail(5)">
+                                <div class="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-lg">🎺</div>
+                                <div class="absolute top-12 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#181818] px-3 py-2 rounded-lg text-sm shadow-lg">
+                                    <div class="font-bold">爵士老王</div>
+                                    <div class="text-[#1DB954]">6.8km · $12K</div>
+                                </div>
+                            </div>
+
+                            <!-- 图例 -->
+                            <div class="absolute bottom-4 right-4 bg-[#181818]/90 backdrop-blur rounded-lg p-4">
+                                <h4 class="font-bold mb-3">图例</h4>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-4 h-4 bg-[#1DB954] rounded-full"></div>
+                                        <span>你的位置</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-4 h-4 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full"></div>
+                                        <span>融资中</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-4 h-4 bg-[#666] rounded-full"></div>
+                                        <span>已完成</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function focusArtist(id) {
+            console.log('Focus artist:', id);
+            // 在真实应用中，这里会移动地图中心到对应标记
+        }
+
+        function showArtistDetail(id) {
+            window.location.href = `project.html?id=${id}`;
+        }
+    </script>
+</body>
+</html>

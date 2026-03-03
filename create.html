@@ -8,180 +8,447 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        .sidebar-item:hover { background: rgba(255,255,255,0.1); }
         .step-active { background-color: #1DB954; color: black; }
-        .step-completed { background-color: #1DB954; color: black; }
-        .step-pending { background-color: #282828; color: #6a6a6a; }
+        .step-pending { background-color: #282828; color: #b3b3b3; }
         .step-line-active { background-color: #1DB954; }
         .step-line-pending { background-color: #282828; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-black text-white min-h-screen">
-    <!-- Header -->
-    <header class="border-b border-zinc-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <a href="index.html" class="text-white hover:text-zinc-400 transition-colors">
-                    <i class="fas fa-arrow-left"></i>
+<body class="bg-[#000000] text-white overflow-hidden">
+    <div class="flex h-screen">
+        <!-- 左侧导航栏 -->
+        <aside class="w-64 bg-[#000000] flex flex-col p-6 gap-6">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+                <div class="w-10 h-10 bg-[#1DB954] rounded-full flex items-center justify-center">
+                    <i class="fas fa-music text-black text-lg"></i>
+                </div>
+                <span class="text-2xl font-bold">XMUSIC</span>
+            </div>
+
+            <nav class="flex flex-col gap-2">
+                <a href="index.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-home text-xl w-6"></i>
+                    <span>首页</span>
                 </a>
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-music text-emerald-400"></i>
-                    <span class="font-bold">XMUSIC</span>
-                </div>
-            </div>
-            <button class="text-white font-medium">连接钱包</button>
-        </div>
-    </header>
+                <a href="explore.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-compass text-xl w-6"></i>
+                    <span>探索</span>
+                </a>
+                <a href="map.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-map-marker-alt text-xl w-6"></i>
+                    <span>附近音乐人</span>
+                </a>
+            </nav>
 
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Page Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold mb-2">发起新项目</h1>
-            <p class="text-zinc-400">创建你的音乐事业融资计划，让投资人和粉丝一起参与</p>
-        </div>
+            <div class="h-px bg-[#282828]"></div>
 
-        <!-- Steps -->
-        <div class="flex items-center justify-between mb-8">
-            <!-- Step 1 -->
-            <div class="flex items-center">
-                <div class="flex flex-col items-center">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-medium step-active">
-                        1
-                    </div>
-                    <div class="mt-2 text-center hidden sm:block">
-                        <p class="text-sm font-medium">基本信息</p>
-                        <p class="text-xs text-zinc-500">项目介绍</p>
-                    </div>
-                </div>
-                <div class="w-16 sm:w-24 h-px mx-2 sm:mx-4 step-line-pending"></div>
-            </div>
+            <nav class="flex flex-col gap-2">
+                <a href="dashboard.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-book text-xl w-6"></i>
+                    <span>我的投资</span>
+                </a>
+                <a href="create.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-white font-semibold transition-colors bg-[#282828]">
+                    <i class="fas fa-plus-circle text-xl w-6"></i>
+                    <span>发起融资</span>
+                </a>
+            </nav>
+        </aside>
 
-            <!-- Step 2 -->
-            <div class="flex items-center">
-                <div class="flex flex-col items-center">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-medium step-pending">
-                        2
-                    </div>
-                    <div class="mt-2 text-center hidden sm:block">
-                        <p class="text-sm font-medium text-zinc-500">融资设置</p>
-                        <p class="text-xs text-zinc-500">目标和份额</p>
-                    </div>
-                </div>
-                <div class="w-16 sm:w-24 h-px mx-2 sm:mx-4 step-line-pending"></div>
-            </div>
-
-            <!-- Step 3 -->
-            <div class="flex items-center">
-                <div class="flex flex-col items-center">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-medium step-pending">
-                        3
-                    </div>
-                    <div class="mt-2 text-center hidden sm:block">
-                        <p class="text-sm font-medium text-zinc-500">团队配置</p>
-                        <p class="text-xs text-zinc-500">添加成员</p>
-                    </div>
-                </div>
-                <div class="w-16 sm:w-24 h-px mx-2 sm:mx-4 step-line-pending"></div>
-            </div>
-
-            <!-- Step 4 -->
-            <div class="flex items-center">
-                <div class="flex flex-col items-center">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-medium step-pending">
-                        4
-                    </div>
-                    <div class="mt-2 text-center hidden sm:block">
-                        <p class="text-sm font-medium text-zinc-500">确认发布</p>
-                        <p class="text-xs text-zinc-500">审核上线</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Form Content -->
-        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg">
-            <div class="p-6 border-b border-zinc-800">
-                <h2 class="font-bold text-xl">基本信息</h2>
-                <p class="text-zinc-400 text-sm">项目介绍和艺人资料</p>
-            </div>
-            
-            <div class="p-6">
-                <div class="space-y-6">
-                    <!-- Cover Upload -->
-                    <div class="space-y-2">
-                        <label class="block font-medium">项目封面</label>
-                        <div class="border-2 border-dashed border-zinc-700 rounded-lg p-8 text-center hover:border-zinc-600 transition-colors cursor-pointer">
-                            <i class="fas fa-cloud-upload-alt text-zinc-500 text-3xl mb-2"></i>
-                            <p class="text-sm text-zinc-400">点击上传或拖拽图片到此处</p>
-                            <p class="text-xs text-zinc-600 mt-1">支持 JPG、PNG，建议尺寸 1200x600</p>
-                        </div>
-                    </div>
-
-                    <!-- Project Name -->
-                    <div class="space-y-2">
-                        <label class="block font-medium">项目名称 *</label>
-                        <input
-                            type="text"
-                            placeholder="例如：2025全国巡演计划"
-                            class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500"
-                        >
-                    </div>
-
-                    <!-- Description -->
-                    <div class="space-y-2">
-                        <label class="block font-medium">项目介绍 *</label>
-                        <textarea
-                            placeholder="介绍你的音乐项目、计划和愿景..."
-                            rows="4"
-                            class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500 resize-none"
-                        ></textarea>
-                    </div>
-
-                    <!-- Genre & Location -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <label class="block font-medium">音乐风格 *</label>
-                            <select class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-emerald-500">
-                                <option value="">选择风格</option>
-                                <option value="pop">流行</option>
-                                <option value="rock">摇滚</option>
-                                <option value="electronic">电子</option>
-                                <option value="folk">民谣</option>
-                                <option value="rap">说唱</option>
-                                <option value="indie">独立</option>
-                            </select>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="block font-medium">项目地点 *</label>
-                            <input
-                                type="text"
-                                placeholder="例如：全国巡演"
-                                class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500"
-                            >
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Navigation -->
-                <div class="flex justify-between mt-8 pt-6 border-t border-zinc-800">
-                    <button class="border border-zinc-700 rounded-lg px-6 py-3 text-zinc-400 cursor-not-allowed" disabled>
-                        上一步
+        <!-- 主内容区 -->
+        <main class="flex-1 bg-[#121212] rounded-lg m-2 overflow-hidden flex flex-col">
+            <!-- 顶部栏 -->
+            <header class="flex items-center justify-between px-8 py-4 bg-[#070707]">
+                <div class="flex items-center gap-4">
+                    <button onclick="history.back()" class="w-10 h-10 bg-[#282828] rounded-full flex items-center justify-center hover:bg-[#383838] transition-colors">
+                        <i class="fas fa-chevron-left"></i>
                     </button>
-                    
-                    <button class="bg-emerald-500 hover:bg-emerald-600 text-black font-bold rounded-lg px-6 py-3 transition-colors">
-                        下一步
-                    </button>
+                    <h1 class="text-xl font-bold">发起新项目</h1>
+                </div>
+
+                <button onclick="window.location.href='login.html'" class="bg-[#1DB954] text-black px-6 py-2 rounded-full font-bold hover:scale-105 transition-transform">
+                    连接钱包
+                </button>
+            </header>
+
+            <!-- 可滚动内容 -->
+            <div class="flex-1 overflow-y-auto scrollbar-hide px-8 py-8">
+                <div class="max-w-4xl mx-auto">
+                    <!-- 步骤指示器 -->
+                    <div class="flex items-center justify-between mb-10">
+                        <div class="flex items-center">
+                            <div class="flex flex-col items-center">
+                                <div id="step1-indicator" class="w-10 h-10 rounded-full flex items-center justify-center font-bold step-active">1</div>
+                                <span class="text-sm mt-2 font-medium">基本信息</span>
+                            </div>
+                            <div id="line1" class="w-24 h-1 mx-4 step-line-pending"></div>
+                        </div>
+
+                        <div class="flex items-center">
+                            <div class="flex flex-col items-center">
+                                <div id="step2-indicator" class="w-10 h-10 rounded-full flex items-center justify-center font-bold step-pending">2</div>
+                                <span class="text-sm mt-2 font-medium text-[#b3b3b3]">融资设置</span>
+                            </div>
+                            <div id="line2" class="w-24 h-1 mx-4 step-line-pending"></div>
+                        </div>
+
+                        <div class="flex items-center">
+                            <div class="flex flex-col items-center">
+                                <div id="step3-indicator" class="w-10 h-10 rounded-full flex items-center justify-center font-bold step-pending">3</div>
+                                <span class="text-sm mt-2 font-medium text-[#b3b3b3]">团队配置</span>
+                            </div>
+                            <div id="line3" class="w-24 h-1 mx-4 step-line-pending"></div>
+                        </div>
+
+                        <div class="flex flex-col items-center">
+                            <div id="step4-indicator" class="w-10 h-10 rounded-full flex items-center justify-center font-bold step-pending">4</div>
+                            <span class="text-sm mt-2 font-medium text-[#b3b3b3]">确认发布</span>
+                        </div>
+                    </div>
+
+                    <!-- 步骤 1: 基本信息 -->
+                    <div id="step1" class="bg-[#181818] rounded-lg p-8">
+                        <h2 class="text-2xl font-bold mb-2">基本信息</h2>
+                        <p class="text-[#b3b3b3] mb-8">介绍你的音乐项目和艺人资料</p>
+
+                        <div class="space-y-6">
+                            <!-- 项目封面 -->
+                            <div>
+                                <label class="block font-semibold mb-3">项目封面</label>
+                                <div class="border-2 border-dashed border-[#404040] rounded-lg p-12 text-center hover:border-[#1DB954] transition-colors cursor-pointer">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-[#404040] mb-4"></i>
+                                    <p class="text-[#b3b3b3] mb-2">点击上传或拖拽图片到此处</p>
+                                    <p class="text-sm text-[#666]">支持 JPG、PNG，建议尺寸 1200x600</p>
+                                </div>
+                            </div>
+
+                            <!-- 项目名称 -->
+                            <div>
+                                <label class="block font-semibold mb-3">项目名称 *</label>
+                                <input type="text" placeholder="例如：2025全国巡演计划" 
+                                    class="w-full bg-[#242424] text-white px-4 py-4 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors placeholder-[#757575]"
+                                >
+                            </div>
+
+                            <!-- 项目介绍 -->
+                            <div>
+                                <label class="block font-semibold mb-3">项目介绍 *</label>
+                                <textarea placeholder="介绍你的音乐项目、计划和愿景..." rows="4"
+                                    class="w-full bg-[#242424] text-white px-4 py-4 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors placeholder-[#757575] resize-none"
+                                ></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block font-semibold mb-3">音乐风格 *</label>
+                                    <select class="w-full bg-[#242424] text-white px-4 py-4 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none"
+                                    >
+                                        <option value="">选择风格</option>
+                                        <option>流行</option>
+                                        <option>摇滚</option>
+                                        <option>电子</option>
+                                        <option>民谣</option>
+                                        <option>说唱</option>
+                                        <option>爵士</option>
+                                        <option>古典</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block font-semibold mb-3">项目地点 *</label>
+                                    <input type="text" placeholder="例如：全国巡演" 
+                                        class="w-full bg-[#242424] text-white px-4 py-4 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors placeholder-[#757575]"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end mt-8">
+                            <button onclick="nextStep(2)" class="bg-[#1DB954] text-black font-bold py-3 px-8 rounded-full hover:scale-105 transition-transform">
+                                下一步
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 步骤 2: 融资设置 -->
+                    <div id="step2" class="bg-[#181818] rounded-lg p-8 hidden">
+                        <h2 class="text-2xl font-bold mb-2">融资设置</h2>
+                        <p class="text-[#b3b3b3] mb-8">设置融资目标和份额分配</p>
+
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block font-semibold mb-3">融资目标 (USDC) *</label>
+                                    <input type="number" placeholder="50000" 
+                                        class="w-full bg-[#242424] text-white px-4 py-4 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors placeholder-[#757575]"
+                                    >
+                                </div>
+
+                                <div>
+                                    <label class="block font-semibold mb-3">融资周期 (天) *</label>
+                                    <input type="number" placeholder="30" 
+                                        class="w-full bg-[#242424] text-white px-4 py-4 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors placeholder-[#757575]"
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block font-semibold mb-3">最低投资 (USDC) *</label>
+                                    <input type="number" placeholder="10" 
+                                        class="w-full bg-[#242424] text-white px-4 py-4 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors placeholder-[#757575]"
+                                    >
+                                </div>
+
+                                <div>
+                                    <label class="block font-semibold mb-3">每份价格 (USDC) *</label>
+                                    <input type="number" placeholder="0.5" 
+                                        class="w-full bg-[#242424] text-white px-4 py-4 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors placeholder-[#757575]"
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="border-t border-[#282828] pt-6">
+                                <h3 class="font-bold mb-4">收益分配结构</h3>
+                                
+                                <p class="text-sm text-[#b3b3b3] mb-4">设置项目收益的分配比例，总和必须等于 100%</p>
+
+                                <div class="space-y-4">
+                                    <div class="grid grid-cols-2 gap-6">
+                                        <div>
+                                            <label class="block text-sm text-[#b3b3b3] mb-2">艺人份额 (%)</label>
+                                            <input type="number" value="40" 
+                                                class="w-full bg-[#242424] text-white px-4 py-3 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none"
+                                            >
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-sm text-[#b3b3b3] mb-2">投资人份额 (%)</label>
+                                            <input type="number" value="35" 
+                                                class="w-full bg-[#242424] text-white px-4 py-3 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none"
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-6">
+                                        <div>
+                                            <label class="block text-sm text-[#b3b3b3] mb-2">经纪人份额 (%)</label>
+                                            <input type="number" value="15" 
+                                                class="w-full bg-[#242424] text-white px-4 py-3 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none"
+                                            >
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-sm text-[#b3b3b3] mb-2">社区份额 (%)</label>
+                                            <input type="number" value="10" 
+                                                class="w-full bg-[#242424] text-white px-4 py-3 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between mt-8">
+                            <button onclick="prevStep(1)" class="bg-[#282828] text-white font-bold py-3 px-8 rounded-full hover:bg-[#383838] transition-colors">
+                                上一步
+                            </button>
+                            
+                            <button onclick="nextStep(3)" class="bg-[#1DB954] text-black font-bold py-3 px-8 rounded-full hover:scale-105 transition-transform">
+                                下一步
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 步骤 3: 团队配置 -->
+                    <div id="step3" class="bg-[#181818] rounded-lg p-8 hidden">
+                        <h2 class="text-2xl font-bold mb-2">团队配置</h2>
+                        <p class="text-[#b3b3b3] mb-8">添加项目团队成员</p>
+
+                        <div class="space-y-6">
+                            <!-- 歌手（自己） -->
+                            <div class="bg-[#242424] rounded-lg p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-xl">🎤</div>
+                                        <div>
+                                            <h4 class="font-bold">歌手（你）</h4>
+                                            <p class="text-sm text-[#b3b3b3]">项目创始人</p>
+                                        </div>
+                                    </div>
+                                    <span class="bg-purple-500/20 text-purple-400 px-3 py-1 rounded-full text-sm font-semibold">40%</span>
+                                </div>
+                                
+                                <p class="text-sm text-[#b3b3b3]">作为项目创始人，你将拥有项目的主要决策权和收益权。</p>
+                            </div>
+
+                            <!-- 经纪人 -->
+                            <div class="bg-[#242424] rounded-lg p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="font-bold">运营合伙人（经纪人）</h4>
+                                    <span class="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm font-semibold">15%</span>
+                                </div>
+                                
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm text-[#b3b3b3] mb-2">钱包地址</label>
+                                        <input type="text" placeholder="0x..." 
+                                            class="w-full bg-[#181818] text-white px-4 py-3 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none placeholder-[#757575]"
+                                        >
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm text-[#b3b3b3] mb-2">姓名/艺名</label>
+                                        <input type="text" placeholder="例如：张经理" 
+                                            class="w-full bg-[#181818] text-white px-4 py-3 rounded-lg border border-transparent focus:border-[#1DB954] focus:outline-none placeholder-[#757575]"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="w-full border-2 border-dashed border-[#404040] rounded-lg p-4 text-[#b3b3b3] hover:border-[#1DB954] hover:text-[#1DB954] transition-colors">
+                                <i class="fas fa-plus mr-2"></i>添加团队成员
+                            </button>
+                        </div>
+
+                        <div class="flex justify-between mt-8">
+                            <button onclick="prevStep(2)" class="bg-[#282828] text-white font-bold py-3 px-8 rounded-full hover:bg-[#383838] transition-colors">
+                                上一步
+                            </button>
+                            
+                            <button onclick="nextStep(4)" class="bg-[#1DB954] text-black font-bold py-3 px-8 rounded-full hover:scale-105 transition-transform">
+                                下一步
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 步骤 4: 确认发布 -->
+                    <div id="step4" class="bg-[#181818] rounded-lg p-8 hidden">
+                        <h2 class="text-2xl font-bold mb-2">确认发布</h2>
+                        <p class="text-[#b3b3b3] mb-8">审核项目信息并发布</p>
+
+                        <div class="space-y-6">
+                            <div class="bg-[#242424] rounded-lg p-6">
+                                <h3 class="font-bold mb-4">项目预览</h3>
+                                
+                                <div class="space-y-3 text-sm">
+                                    <div class="flex justify-between py-2 border-b border-[#282828]">
+                                        <span class="text-[#b3b3b3]">项目名称</span>
+                                        <span>2025全国巡演计划</span>
+                                    </div>
+                                    
+                                    <div class="flex justify-between py-2 border-b border-[#282828]">
+                                        <span class="text-[#b3b3b3]">音乐风格</span>
+                                        <span>独立流行</span>
+                                    </div>
+                                    
+                                    <div class="flex justify-between py-2 border-b border-[#282828]">
+                                        <span class="text-[#b3b3b3]">融资目标</span>
+                                        <span>$50,000 USDC</span>
+                                    </div>
+                                    
+                                    <div class="flex justify-between py-2 border-b border-[#282828]">
+                                        <span class="text-[#b3b3b3]">融资周期</span>
+                                        <span>30 天</span>
+                                    </div>
+                                    
+                                    <div class="flex justify-between py-2 border-b border-[#282828]">
+                                        <span class="text-[#b3b3b3]">每份价格</span>
+                                        <span>$0.5 USDC</span>
+                                    </div>
+                                    
+                                    <div class="flex justify-between py-2">
+                                        <span class="text-[#b3b3b3]">平台手续费</span>
+                                        <span>2.5%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-[#1DB954]/10 border border-[#1DB954]/30 rounded-lg p-6">
+                                <div class="flex items-start gap-3">
+                                    <i class="fas fa-info-circle text-[#1DB954] mt-1"></i>
+                                    <div>
+                                        <h4 class="font-bold mb-2">上链提示</h4>
+                                        <p class="text-sm text-[#b3b3b3]">
+                                            发布后，项目信息将被写入区块链，无法修改。请确保所有信息准确无误。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" id="agree" class="w-5 h-5 accent-[#1DB954]">
+                                <label for="agree" class="text-sm text-[#b3b3b3]">我已阅读并同意<a href="#" class="text-[#1DB954] hover:underline">服务条款</a>和<a href="#" class="text-[#1DB954] hover:underline">隐私政策</a></label>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between mt-8">
+                            <button onclick="prevStep(3)" class="bg-[#282828] text-white font-bold py-3 px-8 rounded-full hover:bg-[#383838] transition-colors">
+                                上一步
+                            </button>
+                            
+                            <button onclick="publishProject()" class="bg-[#1DB954] text-black font-bold py-3 px-8 rounded-full hover:scale-105 transition-transform">
+                                确认并发布
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Preview: Step 2 Content -->
-        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg mt-8 opacity-50">
-            <div class="p-6 border-b border-zinc-800">
-                <h2 class="font-bold text-xl">融资设置</h2>
-                <p class="text-zinc-400 text-sm">目标和份额分配</p>
-            </div>
-        </div>
+        </main>
     </div>
+
+    <script>
+        let currentStep = 1;
+
+        function nextStep(step) {
+            // 隐藏当前步骤
+            document.getElementById(`step${currentStep}`).classList.add('hidden');
+            
+            // 更新指示器
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('step-active');
+            document.getElementById(`step${currentStep}-indicator`).classList.add('step-pending');
+            if (currentStep < 4) {
+                document.getElementById(`line${currentStep}`).classList.remove('step-line-pending');
+                document.getElementById(`line${currentStep}`).classList.add('step-line-active');
+            }
+            
+            // 显示下一步
+            currentStep = step;
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('step-pending');
+            document.getElementById(`step${currentStep}-indicator`).classList.add('step-active');
+        }
+
+        function prevStep(step) {
+            // 隐藏当前步骤
+            document.getElementById(`step${currentStep}`).classList.add('hidden');
+            
+            // 更新指示器
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('step-active');
+            document.getElementById(`step${currentStep}-indicator`).classList.add('step-pending');
+            if (step < 4) {
+                document.getElementById(`line${step}`).classList.remove('step-line-active');
+                document.getElementById(`line${step}`).classList.add('step-line-pending');
+            }
+            
+            // 显示上一步
+            currentStep = step;
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('step-pending');
+            document.getElementById(`step${currentStep}-indicator`).classList.add('step-active');
+        }
+
+        function publishProject() {
+            if (!document.getElementById('agree').checked) {
+                alert('请同意服务条款和隐私政策');
+                return;
+            }
+            alert('项目发布成功！');
+            window.location.href = 'index.html';
+        }
+    </script>
 </body>
 </html>
