@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发现 - XMUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        .sidebar-item:hover { background: rgba(255,255,255,0.1); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); background: rgba(255,255,255,0.1); }
+        .play-btn { opacity: 0; transform: translateY(8px); transition: all 0.3s ease; }
+        .card-hover:hover .play-btn { opacity: 1; transform: translateY(0); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .filter-active { background-color: #1DB954; color: black; }
+    </style>
+</head>
+<body class="bg-[#000000] text-white overflow-hidden">
+    <div class="flex h-screen">
+        <!-- 左侧导航栏 -->
+        <aside class="w-64 bg-[#000000] flex flex-col p-6 gap-6">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+                <div class="w-10 h-10 bg-[#1DB954] rounded-full flex items-center justify-center">
+                    <i class="fas fa-music text-black text-lg"></i>
+                </div>
+                <span class="text-2xl font-bold tracking-tight">XMUSIC</span>
+            </div>
+
+            <nav class="flex flex-col gap-2">
+                <a href="index.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-home text-xl w-6"></i>
+                    <span>首页</span>
+                </a>
+                <a href="discover.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-white font-semibold transition-colors bg-[#282828]">
+                    <i class="fas fa-compass text-xl w-6"></i>
+                    <span>发现</span>
+                </a>
+                <a href="map.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-map-marker-alt text-xl w-6"></i>
+                    <span>附近音乐人</span>
+                </a>
+            </nav>
+
+            <div class="h-px bg-[#282828]"></div>
+
+            <nav class="flex flex-col gap-2">
+                <a href="investments.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-book text-xl w-6"></i>
+                    <span>我的投资</span>
+                </a>
+                <a href="create.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                    <i class="fas fa-plus-circle text-xl w-6"></i>
+                    <span>发起融资</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="flex-1 bg-[#121212] rounded-lg m-2 overflow-hidden flex flex-col">
+            <!-- 顶部栏 -->
+            <header class="flex items-center justify-between px-8 py-4 bg-[#070707]">
+                <h1 class="text-2xl font-bold">发现音乐人</h1>
+                
+                <button onclick="window.location.href='login.html'" class="bg-[#1DB954] text-black px-6 py-2 rounded-full font-bold hover:scale-105 transition-transform">
+                    连接钱包
+                </button>
+            </header>
+
+            <!-- 可滚动内容 -->
+            <div class="flex-1 overflow-y-auto scrollbar-hide">
+                
+                <!-- 筛选栏 -->
+                <div class="px-8 py-6 border-b border-[#282828]">
+                    <div class="flex flex-wrap gap-3 mb-4">
+                        <button class="filter-active px-4 py-2 rounded-full font-semibold text-sm">全部</button>
+                        <button class="bg-[#282828] text-white px-4 py-2 rounded-full font-semibold text-sm hover:bg-[#383838] transition-colors">流行</button>
+                        <button class="bg-[#282828] text-white px-4 py-2 rounded-full font-semibold text-sm hover:bg-[#383838] transition-colors">摇滚</button>
+                        <button class="bg-[#282828] text-white px-4 py-2 rounded-full font-semibold text-sm hover:bg-[#383838] transition-colors">电子</button>
+                        <button class="bg-[#282828] text-white px-4 py-2 rounded-full font-semibold text-sm hover:bg-[#383838] transition-colors">民谣</button>
+                        <button class="bg-[#282828] text-white px-4 py-2 rounded-full font-semibold text-sm hover:bg-[#383838] transition-colors">说唱</button>
+                        <button class="bg-[#282828] text-white px-4 py-2 rounded-full font-semibold text-sm hover:bg-[#383838] transition-colors">爵士</button>
+                        <button class="bg-[#282828] text-white px-4 py-2 rounded-full font-semibold text-sm hover:bg-[#383838] transition-colors">古典</button>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <div class="relative flex-1 max-w-xs">
+                            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-[#757575]"></i>
+                            <input type="text" placeholder="搜索艺人、项目..." 
+                                class="w-full bg-[#242424] text-white pl-12 pr-4 py-3 rounded-full border border-transparent focus:border-white focus:outline-none transition-colors placeholder-[#757575]"
+                            >
+                        </div>
+
+                        <select class="bg-[#242424] text-white px-4 py-3 rounded-full border border-transparent focus:border-white focus:outline-none"
+                        >
+                            <option>最新发布</option>
+                            <option>融资进度</option>
+                            <option>预期回报</option>
+                            <option>投资人数</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 项目列表 -->
+                <div class="px-8 py-6">
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        <!-- 项目 1 -->
+                        <a href="project.html?id=1" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-purple-600 to-blue-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎵</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="font-bold text-white mb-1 truncate">林夕</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">2025巡演计划</p>
+                            
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$32.5K / $50K</span>
+                                <span class="text-[#b3b3b3]">65%</span>
+                            </div>
+                            
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
+                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 65%"></div>
+                            </div>
+                        </a>
+
+                        <!-- 项目 2 -->
+                        <a href="project.html?id=2" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-emerald-600 to-teal-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎹</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="font-bold text-white mb-1 truncate">陈默</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">新专辑《午夜飞行》</p>
+                            
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$30K / $30K</span>
+                                <span class="text-[#b3b3b3]">100%</span>
+                            </div>
+                            
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
+                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 100%"></div>
+                            </div>
+                        </a>
+
+                        <!-- 项目 3 -->
+                        <a href="project.html?id=3" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-orange-600 to-red-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎤</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="font-bold text-white mb-1 truncate">MC 阿龙</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">地下说唱联盟</p>
+                            
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$8.5K / $20K</span>
+                                <span class="text-[#b3b3b3]">42%</span>
+                            </div>
+                            
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
+                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 42%"></div>
+                            </div>
+                        </a>
+
+                        <!-- 项目 4-10 (更多示例) -->
+                        <a href="project.html?id=4" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-pink-600 to-rose-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎸</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="font-bold text-white mb-1 truncate">小雨</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">独立民谣EP</p>
+                            
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$15K / $25K</span>
+                                <span class="text-[#b3b3b3]">60%</span>
+                            </div>
+                            
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
+                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 60%"></div>
+                            </div>
+                        </a>
+
+                        <a href="project.html?id=5" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-indigo-600 to-purple-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎺</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="font-bold text-white mb-1 truncate">爵士老王</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">爵士酒吧驻场</p>
+                            
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$12K / $40K</span>
+                                <span class="text-[#b3b3b3]">30%</span>
+                            </div>
+                            
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
+                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 30%"></div>
+                            </div>
+                        </a>
+
+                        <a href="project.html?id=6" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-cyan-600 to-blue-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎻</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="font-bold text-white mb-1 truncate">弦乐四重奏</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">古典音乐巡演</p>
+                            
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$25K / $80K</span>
+                                <span class="text-[#b3b3b3]">31%</span>
+                            </div>
+                            
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
+                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 31%"></div>
+                            </div>
+                        </a>
+
+                        <a href="project.html?id=7" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-red-600 to-pink-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎸</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="font-bold text-white mb-1 truncate">摇滚青年</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">首张专辑录制</p>
+                            
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$18K / $35K</span>
+                                <span class="text-[#b3b3b3]">51%</span>
+                            </div>
+                            
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
+                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 51%"></div>
+                            </div>
+                        </a>
+
+                        <a href="project.html?id=8" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-yellow-600 to-orange-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎤</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="font-bold text-white mb-1 truncate">R&B天后</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">新单曲MV拍摄</p>
+                            
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$8K / $15K</span>
+                                <span class="text-[#b3b3b3]">53%</span>
+                            </div>
+                            
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
+                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 53%"></div>
+                            </div>
+                        </a>
+
+                        <a href="project.html?id=9" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-green-600 to-teal-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎹</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="font-bold text-white mb-1 truncate">电子制作人</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">音乐节演出</p>
+                            
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$22K / $45K</span>
+                                <span class="text-[#b3b3b3]">49%</span>
+                            </div>
+                            
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
+                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 49%"></div>
+                            </div>
+                        </a>
+
+                        <a href="project.html?id=10" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
+                            <div class="aspect-square rounded-md bg-gradient-to-br from-purple-600 to-pink-600 mb-4 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎵</div>
+                                <div class="play-btn absolute bottom-2 right-2">
+                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-play text-black ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="font-bold text-white mb-1 truncate">独立乐队</h3>
+                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">全国巡演</p>
+                            
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-[#1DB954]">$35K / $60K</span>
+                                <span class="text-[#b3b3b3]">58%</span>
+                            </div>
+                            
+                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
+                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 58%"></div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- 加载更多 -->
+                    <div class="text-center mt-8">
+                        <button class="bg-[#282828] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#383838] transition-colors">
+                            加载更多
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
