@@ -62,13 +62,21 @@
     </div>
 
     <div class="flex h-screen">
+        <!-- 移动端菜单按钮 -->
+        <button id="mobileMenuBtn" class="md:hidden fixed top-4 left-4 z-50 w-10 h-10 bg-[#1DB954] rounded-full flex items-center justify-center">
+            <i class="fas fa-bars text-black"></i>
+        </button>
+
         <!-- 左侧导航栏 -->
-        <aside class="w-64 bg-[#000000] flex flex-col p-6 gap-6">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+        <aside id="sidebar" class="hidden md:flex w-64 bg-[#000000] flex-col p-6 gap-6 fixed md:relative inset-0 z-40">
+            <div class="flex items-center justify-between md:justify-start gap-3 cursor-pointer" onclick="window.location.href='index.html'">
                 <div class="w-10 h-10 bg-[#1DB954] rounded-full flex items-center justify-center">
                     <i class="fas fa-music text-black text-lg"></i>
                 </div>
                 <span class="text-2xl font-bold tracking-tight">XMUSIC</span>
+                <button onclick="document.getElementById('sidebar').classList.add('hidden'); document.getElementById('sidebar').classList.remove('flex');" class="md:hidden text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
             </div>
 
             <nav class="flex flex-col gap-2">
@@ -112,7 +120,7 @@
         </aside>
 
         <!-- 主内容区 -->
-        <main class="flex-1 bg-[#121212] rounded-lg m-2 overflow-hidden flex flex-col">
+        <main class="flex-1 bg-[#121212] rounded-lg m-2 overflow-hidden flex flex-col md:ml-0">
             <!-- 顶部栏 -->
             <header class="flex items-center justify-between px-8 py-4 bg-[#070707]">
                 <div class="flex-1 max-w-md">
@@ -344,11 +352,13 @@
         </main>
     </div>
 
+    <script src="public/js/xmusic.js"></script>
     <script>
         // 语言切换
         function showLangModal() {
             document.getElementById('langModal').classList.remove('hidden');
             document.getElementById('langModal').classList.add('flex');
+            updateLangUI();
         }
 
         function closeLangModal() {
@@ -358,9 +368,45 @@
 
         function setLanguage(lang) {
             localStorage.setItem('xmusic-lang', lang);
-            alert('语言已切换为: ' + lang);
+            currentLang = lang;
+            
+            const langNames = {
+                'zh': '简体中文',
+                'zht': '繁體中文',
+                'en': 'English',
+                'ja': '日本語',
+                'ko': '한국어',
+                'es': 'Español',
+                'fr': 'Français',
+                'de': 'Deutsch',
+                'pt': 'Português',
+                'ru': 'Русский'
+            };
+            
+            const langDisplay = document.querySelector('button[onclick="showLangModal()"] span');
+            if (langDisplay) {
+                langDisplay.textContent = '语言: ' + langNames[lang];
+            }
+            
+            applyTranslations();
+            updateLangUI();
             closeLangModal();
-            location.reload();
+        }
+
+        function updateLangUI() {
+            const current = localStorage.getItem('xmusic-lang') || 'zh';
+            document.querySelectorAll('#langModal button').forEach(btn => {
+                const btnLang = btn.getAttribute('onclick')?.match(/setLanguage\('(\w+)'\)/)?.[1];
+                if (btnLang) {
+                    if (btnLang === current) {
+                        btn.classList.remove('bg-[#282828]', 'text-white');
+                        btn.classList.add('bg-[#1DB954]', 'text-black');
+                    } else {
+                        btn.classList.remove('bg-[#1DB954]', 'text-black');
+                        btn.classList.add('bg-[#282828]', 'text-white');
+                    }
+                }
+            });
         }
 
         // 货币切换
@@ -377,10 +423,11 @@
 
         function setCurrency(currency) {
             localStorage.setItem('xmusic-currency', currency);
+            currentCurrency = currency;
             document.getElementById('currentCurrency').textContent = currency;
             updateCurrencyUI();
             closeCurrencyModal();
-            alert('货币已切换为: ' + currency);
+            updateAllCurrencyDisplays();
         }
 
         function updateCurrencyUI() {
@@ -396,10 +443,31 @@
             });
         }
 
+        function updateAllCurrencyDisplays() {
+            // 更新页面上所有金额显示
+            document.querySelectorAll('[data-amount]').forEach(el => {
+                const amount = parseFloat(el.dataset.amount);
+                if (!isNaN(amount)) {
+                    el.textContent = formatCurrency(amount);
+                }
+            });
+        }
+
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
             const savedCurrency = localStorage.getItem('xmusic-currency') || 'USD';
             document.getElementById('currentCurrency').textContent = savedCurrency;
+            
+            const savedLang = localStorage.getItem('xmusic-lang') || 'zh';
+            const langNames = {
+                'zh': '简体中文', 'zht': '繁體中文', 'en': 'English', 'ja': '日本語',
+                'ko': '한국어', 'es': 'Español', 'fr': 'Français', 'de': 'Deutsch',
+                'pt': 'Português', 'ru': 'Русский'
+            };
+            const langDisplay = document.querySelector('button[onclick="showLangModal()"] span');
+            if (langDisplay) {
+                langDisplay.textContent = '语言: ' + (langNames[savedLang] || '简体中文');
+            }
         });
     </script>
 </body>
