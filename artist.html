@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Profile - XMUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xm-green': '#1DB954',
+                        'xm-green-light': '#1ED760',
+                        'xm-black': '#000000',
+                        'xm-dark': '#121212',
+                        'xm-card': '#181818',
+                        'xm-gray': '#282828',
+                        'xm-text': '#B3B3B3'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #1DB954 0%, #1ED760 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tab-active {
+            border-bottom: 2px solid #1DB954;
+            color: white;
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #1DB954, #1ED760);
+            border-radius: 999px;
+            transition: width 0.5s ease;
+        }
+
+        #sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 260px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 50;
+        }
+        #sidebar:hover, #sidebar.expanded {
+            transform: translateX(0);
+        }
+        
+        .sidebar-arrow {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 12px solid #1DB954;
+            cursor: pointer;
+            z-index: 40;
+        }
+        #sidebar:hover ~ .sidebar-arrow,
+        #sidebar.expanded ~ .sidebar-arrow {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        #mainContent {
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+        }
+        #sidebar:hover ~ #mainContent,
+        #sidebar.expanded ~ #mainContent {
+            margin-left: 260px;
+        }
+    </style>
+</head>
+<body class="bg-xm-black text-white">
+    <!-- Sidebar Trigger -->
+    <div class="sidebar-arrow" onclick="expandSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-xm-black flex flex-col p-6 gap-6 border-r border-white/5">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+            <div class="w-10 h-10 bg-xm-green rounded-full flex items-center justify-center">
+                <i class="fas fa-music text-black text-lg"></i>
+            </div>
+            <span class="text-2xl font-bold">XMUSIC</span>
+        </div>
+
+        <nav class="flex flex-col gap-2">
+            <a href="index.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-xm-text font-semibold hover:text-white hover:bg-white/10">
+                <i class="fas fa-home text-xl w-6 text-center"></i>
+                <span>Home</span>
+            </a>
+            <a href="discover.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-xm-text font-semibold hover:text-white hover:bg-white/10">
+                <i class="fas fa-compass text-xl w-6 text-center"></i>
+                <span>Discover</span>
+            </a>
+            <a href="map.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-xm-text font-semibold hover:text-white hover:bg-white/10">
+                <i class="fas fa-map-marker-alt text-xl w-6 text-center"></i>
+                <span>Nearby</span>
+            </a>
+        </nav>
+
+        <div class="h-px bg-xm-gray"></div>
+
+        <nav class="flex flex-col gap-2">
+            <a href="dashboard.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-xm-text font-semibold hover:text-white hover:bg-white/10">
+                <i class="fas fa-chart-pie text-xl w-6 text-center"></i>
+                <span>Investments</span>
+            </a>
+            <a href="create.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-xm-text font-semibold hover:text-white hover:bg-white/10">
+                <i class="fas fa-plus-circle text-xl w-6 text-center"></i>
+                <span>Create</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main id="mainContent" class="min-h-screen">
+        <!-- Hero Banner -->
+        <div class="relative h-80">
+            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200&h=400&fit=crop" 
+                alt="Cover" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-xm-black via-xm-black/50 to-transparent"></div>
+            
+            <div class="absolute bottom-0 left-0 right-0 px-8 pb-8">
+                <div class="flex items-end gap-6">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face" 
+                        alt="Artist" class="w-40 h-40 rounded-full border-4 border-xm-black shadow-2xl">
+                    
+                    <div class="flex-1 mb-4">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="px-3 py-1 bg-xm-green text-black text-sm font-bold rounded-full">Verified</span>
+                            <span class="text-xm-text">Indie Folk Artist</span>
+                        </div>
+                        <h1 class="text-5xl font-bold mb-2">Alex Chen</h1>
+                        <div class="flex items-center gap-6 text-xm-text">
+                            <span><i class="fas fa-map-marker-alt mr-2"></i>Los Angeles, CA</span>
+                            <span><i class="fas fa-users mr-2"></i>12.5K followers</span>
+                            <span><i class="fas fa-music mr-2"></i>8 releases</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3 mb-4">
+                        <button onclick="openInvestModal()" class="bg-xm-green text-black px-8 py-3 rounded-full font-bold hover:opacity-90 transition-opacity flex items-center gap-2">
+                            <i class="fas fa-coins"></i>
+                            Invest Now
+                        </button>
+                        <button onclick="openChatModal()" class="bg-xm-gray text-white px-6 py-3 rounded-full font-bold hover:bg-white/20 transition-colors">
+                            <i class="fas fa-comment"></i>
+                            Message
+                        </button>
+                        <button class="w-12 h-12 bg-xm-gray rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="px-8 py-8">
+            <!-- Tabs -->
+            <div class="flex gap-8 border-b border-white/10 mb-8">
+                <button onclick="switchTab('overview')" id="tab-overview" class="tab-active pb-4 font-semibold transition-colors">Overview</button>
+                <button onclick="switchTab('projects')" id="tab-projects" class="pb-4 text-xm-text font-semibold hover:text-white transition-colors">Projects</button>
+                <button onclick="switchTab('team')" id="tab-team" class="pb-4 text-xm-text font-semibold hover:text-white transition-colors">Team</button>
+                <button onclick="switchTab('music')" id="tab-music" class="pb-4 text-xm-text font-semibold hover:text-white transition-colors">Music</button>
+            </div>
+
+            <!-- Overview Tab -->
+            <div id="content-overview" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Left Column -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <!-- About -->
+                        <div class="bg-xm-card rounded-2xl p-6 border border-white/5">
+                            <h2 class="text-xl font-bold mb-4">About</h2>
+                            <p class="text-xm-text leading-relaxed">
+                                Alex Chen is an independent folk artist from Los Angeles, blending acoustic melodies with modern storytelling. 
+                                With over 5 years of experience in the music industry, Alex has released 3 albums and performed at venues across California.
+                                This funding round will support the production of the 4th studio album, including professional mixing, mastering, and marketing.
+                            </p>
+                        </div>
+
+                        <!-- Active Project -->
+                        <div class="bg-xm-card rounded-2xl p-6 border border-white/5">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="text-xl font-bold">Active Funding</h2>
+                                <span class="px-3 py-1 bg-xm-green/20 text-xm-green text-sm rounded-full">Active</span>
+                            </div>
+                            
+                            <div class="flex gap-6">
+                                <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300&h=300&fit=crop" 
+                                    alt="Album" class="w-32 h-32 rounded-xl object-cover">
+                                
+                                <div class="flex-1">
+                                    <h3 class="text-2xl font-bold mb-2">City Echo - 4th Album</h3>
+                                    <p class="text-xm-text mb-4">Help fund the production of my 4th studio album including mixing, mastering, and marketing.</p>
+                                    
+                                    <div class="flex items-center gap-8 mb-4">
+                                        <div>
+                                            <div class="text-2xl font-bold text-xm-green">$7,850</div>
+                                            <div class="text-sm text-xm-text">raised of $10,000</div>
+                                        </div>
+                                        <div>
+                                            <div class="text-2xl font-bold">82</div>
+                                            <div class="text-sm text-xm-text">investors</div>
+                                        </div>
+                                        <div>
+                                            <div class="text-2xl font-bold">15</div>
+                                            <div class="text-sm text-xm-text">days left</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="progress-bar h-3 mb-4">
+                                        <div class="progress-fill h-full" style="width: 78%"></div>
+                                    </div>
+                                    
+                                    <button onclick="openInvestModal()" class="bg-xm-green text-black px-6 py-3 rounded-full font-bold hover:opacity-90 transition-opacity">
+                                        Invest Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-6">
+                        <!-- Investment Tiers -->
+                        <div class="bg-xm-card rounded-2xl p-6 border border-white/5">
+                            <h2 class="text-xl font-bold mb-4">Investment Tiers</h2>
+                            
+                            <div class="space-y-3">
+                                <div class="p-4 border border-xm-green/30 rounded-xl bg-xm-green/5">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-bold">Supporter</span>
+                                        <span class="text-xm-green font-bold">$10+</span>
+                                    </div>
+                                    <p class="text-sm text-xm-text">Basic revenue share</p>
+                                </div>
+                                
+                                <div class="p-4 border border-white/10 rounded-xl">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-bold">Fan</span>
+                                        <span class="text-xm-green font-bold">$50+</span>
+                                    </div>
+                                    <p class="text-sm text-xm-text">Early access + revenue share</p>
+                                </div>
+                                
+                                <div class="p-4 border border-white/10 rounded-xl">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-bold">Collector</span>
+                                        <span class="text-xm-green font-bold">$200+</span>
+                                    </div>
+                                    <p class="text-sm text-xm-text">Exclusive content + all perks</p>
+                                </div>
+                                
+                                <div class="p-4 border border-white/10 rounded-xl">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-bold">Producer</span>
+                                        <span class="text-xm-green font-bold">$500+</span>
+                                    </div>
+                                    <p class="text-sm text-xm-text">Voting rights + all perks</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Social Links -->
+                        <div class="bg-xm-card rounded-2xl p-6 border border-white/5">
+                            <h2 class="text-xl font-bold mb-4">Connect</h2>
+                            
+                            <div class="flex gap-4">
+                                <a href="#" class="w-12 h-12 bg-xm-gray rounded-full flex items-center justify-center hover:bg-xm-green hover:text-black transition-colors">
+                                    <i class="fab fa-spotify text-xl"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 bg-xm-gray rounded-full flex items-center justify-center hover:bg-xm-green hover:text-black transition-colors">
+                                    <i class="fab fa-instagram text-xl"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 bg-xm-gray rounded-full flex items-center justify-center hover:bg-xm-green hover:text-black transition-colors">
+                                    <i class="fab fa-twitter text-xl"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 bg-xm-gray rounded-full flex items-center justify-center hover:bg-xm-green hover:text-black transition-colors">
+                                    <i class="fab fa-youtube text-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Tab -->
+            <div id="content-team" class="tab-content hidden">
+                <div class="bg-xm-card rounded-2xl p-6 border border-white/5">
+                    <h2 class="text-xl font-bold mb-6">Team Members</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Operations Team -->
+                        <div class="p-6 border border-xm-green/30 rounded-xl bg-xm-green/5">
+                            <div class="flex items-center gap-4 mb-4">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" 
+                                    alt="Team" class="w-16 h-16 rounded-full">
+                                <div>
+                                    <div class="font-bold">Michael Ross</div>
+                                    <div class="text-xm-green text-sm">Operations Lead</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-xm-text">Invested: $2,000</span>
+                                <span class="text-xm-green">5% share</span>
+                            </div>
+                        </div>
+
+                        <!-- Investor -->
+                        <div class="p-6 border border-white/10 rounded-xl">
+                            <div class="flex items-center gap-4 mb-4">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" 
+                                    alt="Team" class="w-16 h-16 rounded-full">
+                                <div>
+                                    <div class="font-bold">Sarah Johnson</div>
+                                    <div class="text-xm-text text-sm">Investor</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-xm-text">Invested: $500</span>
+                                <span class="text-xm-green">1.2% share</span>
+                            </div>
+                        </div>
+
+                        <!-- Agent -->
+                        <div class="p-6 border border-white/10 rounded-xl">
+                            <div class="flex items-center gap-4 mb-4">
+                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face" 
+                                    alt="Team" class="w-16 h-16 rounded-full">
+                                <div>
+                                    <div class="font-bold">David Kim</div>
+                                    <div class="text-xm-text text-sm">Agent</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-xm-text">Invested: $800</span>
+                                <span class="text-xm-green">3% share</span>
+                            </div>
+                        </div>
+
+                        <!-- Promoter -->
+                        <div class="p-6 border border-white/10 rounded-xl">
+                            <div class="flex items-center gap-4 mb-4">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face" 
+                                    alt="Team" class="w-16 h-16 rounded-full">
+                                <div>
+                                    <div class="font-bold">Emma Wilson</div>
+                                    <div class="text-xm-text text-sm">Promoter</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-xm-text">Invested: $300</span>
+                                <span class="text-xm-green">2% share</span>
+                            </div>
+                        </div>
+
+                        <!-- Fan -->
+                        <div class="p-6 border border-white/10 rounded-xl">
+                            <div class="flex items-center gap-4 mb-4">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" 
+                                    alt="Team" class="w-16 h-16 rounded-full">
+                                <div>
+                                    <div class="font-bold">James Lee</div>
+                                    <div class="text-xm-text text-sm">Fan</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-xm-text">Invested: $50</span>
+                                <span class="text-xm-green">0.5% share</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-6 bg-xm-green/10 border border-xm-green/30 rounded-xl">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-bold text-lg mb-1">Want to join the team?</h3>
+                                <p class="text-xm-text">Invest in this project to become part of the team and earn revenue share.</p>
+                            </div>
+                            <button onclick="openInvestModal()" class="bg-xm-green text-black px-6 py-3 rounded-full font-bold hover:opacity-90 transition-opacity">
+                                Invest Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Tab -->
+            <div id="content-projects" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-xm-card rounded-2xl overflow-hidden border border-white/5">
+                        <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&h=300&fit=crop" 
+                            alt="Project" class="w-full h-48 object-cover">
+                        
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="px-3 py-1 bg-xm-green/20 text-xm-green text-xs rounded-full">Active</span>
+                                <span class="text-xm-text text-sm">15 days left</span>
+                            </div>
+                            
+                            <h3 class="text-xl font-bold mb-2">City Echo - 4th Album</h3>
+                            <p class="text-xm-text text-sm mb-4">Help fund the production of my 4th studio album.</p>
+                            
+                            <div class="progress-bar h-2 mb-4">
+                                <div class="progress-fill h-full" style="width: 78%"></div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <span class="text-xm-green font-bold">$7,850 raised</span>
+                                <span class="text-xm-text text-sm">of $10,000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-xm-card rounded-2xl overflow-hidden border border-white/5">
+                        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&h=300&fit=crop" 
+                            alt="Project" class="w-full h-48 object-cover">
+                        
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="px-3 py-1 bg-xm-gray text-xm-text text-xs rounded-full">Completed</span>
+                                <span class="text-xm-text text-sm">2025</span>
+                            </div>
+                            
+                            <h3 class="text-xl font-bold mb-2">Midnight Dreams - 3rd Album</h3>
+                            <p class="text-xm-text text-sm mb-4">My third studio album exploring themes of night and dreams.</p>
+                            
+                            <div class="progress-bar h-2 mb-4">
+                                <div class="progress-fill h-full" style="width: 100%"></div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <span class="text-xm-green font-bold">$15,000 raised</span>
+                                <span class="text-xm-text text-sm">of $12,000 goal</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Music Tab -->
+            <div id="content-music" class="tab-content hidden">
+                <div class="bg-xm-card rounded-2xl p-6 border border-white/5">
+                    <div class="space-y-4">
+                        <!-- Track 1 -->
+                        <div class="flex items-center gap-4 p-4 hover:bg-white/5 rounded-xl transition-colors group">
+                            <button class="w-12 h-12 bg-xm-green rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fas fa-play text-black ml-1"></i>
+                            </button>
+                            <div class="w-12 h-12 bg-xm-gray rounded-lg flex items-center justify-center text-xm-text group-hover:hidden">1</div>
+                            
+                            <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=100&h=100&fit=crop" 
+                                alt="Album" class="w-12 h-12 rounded-lg object-cover">
+                            
+                            <div class="flex-1">
+                                <div class="font-semibold">City Lights</div>
+                                <div class="text-sm text-xm-text">City Echo</div>
+                            </div>
+                            
+                            <div class="text-xm-text">3:45</div>
+                        </div>
+
+                        <!-- Track 2 -->
+                        <div class="flex items-center gap-4 p-4 hover:bg-white/5 rounded-xl transition-colors group">
+                            <button class="w-12 h-12 bg-xm-green rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fas fa-play text-black ml-1"></i>
+                            </button>
+                            <div class="w-12 h-12 bg-xm-gray rounded-lg flex items-center justify-center text-xm-text group-hover:hidden">2</div>
+                            
+                            <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=100&h=100&fit=crop" 
+                                alt="Album" class="w-12 h-12 rounded-lg object-cover">
+                            
+                            <div class="flex-1">
+                                <div class="font-semibold">Echoes of You</div>
+                                <div class="text-sm text-xm-text">City Echo</div>
+                            </div>
+                            
+                            <div class="text-xm-text">4:12</div>
+                        </div>
+
+                        <!-- Track 3 -->
+                        <div class="flex items-center gap-4 p-4 hover:bg-white/5 rounded-xl transition-colors group">
+                            <button class="w-12 h-12 bg-xm-green rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fas fa-play text-black ml-1"></i>
+                            </button>
+                            <div class="w-12 h-12 bg-xm-gray rounded-lg flex items-center justify-center text-xm-text group-hover:hidden">3</div>
+                            
+                            <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=100&h=100&fit=crop" 
+                                alt="Album" class="w-12 h-12 rounded-lg object-cover">
+                            
+                            <div class="flex-1">
+                                <div class="font-semibold">Midnight Dreams</div>
+                                <div class="text-sm text-xm-text">Midnight Dreams</div>
+                            </div>
+                            
+                            <div class="text-xm-text">3:28</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Invest Modal -->
+    <div id="investModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+        <div class="bg-xm-card rounded-2xl p-6 max-w-md w-full mx-4 border border-white/10">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold">Invest in Alex Chen</h2>
+                <button onclick="closeInvestModal()" class="text-xm-text hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="selectTier('supporter', 10)" id="tier-supporter" class="tier-btn p-4 border border-white/10 rounded-xl text-left hover:border-xm-green transition-colors">
+                        <div class="font-bold mb-1">Supporter</div>
+                        <div class="text-xm-green">$10+</div>
+                    </button>
+                    
+                    <button onclick="selectTier('fan', 50)" id="tier-fan" class="tier-btn p-4 border border-white/10 rounded-xl text-left hover:border-xm-green transition-colors">
+                        <div class="font-bold mb-1">Fan</div>
+                        <div class="text-xm-green">$50+</div>
+                    </button>
+                    
+                    <button onclick="selectTier('collector', 200)" id="tier-collector" class="tier-btn p-4 border border-white/10 rounded-xl text-left hover:border-xm-green transition-colors">
+                        <div class="font-bold mb-1">Collector</div>
+                        <div class="text-xm-green">$200+</div>
+                    </button>
+                    
+                    <button onclick="selectTier('producer', 500)" id="tier-producer" class="tier-btn p-4 border border-white/10 rounded-xl text-left hover:border-xm-green transition-colors">
+                        <div class="font-bold mb-1">Producer</div>
+                        <div class="text-xm-green">$500+</div>
+                    </button>
+                </div>
+                
+                <div>
+                    <label class="block text-sm text-xm-text mb-2">Investment Amount (USD)</label>
+                    <input type="number" id="investAmount" min="10" value="50" 
+                        class="w-full bg-xm-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-xm-green focus:outline-none">
+                </div>
+                
+                <button onclick="processInvestment()" class="w-full bg-xm-green text-black py-4 rounded-xl font-bold hover:opacity-90 transition-opacity">
+                    Confirm Investment
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div id="chatModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+        <div class="bg-xm-card rounded-2xl w-full max-w-lg mx-4 h-[600px] flex flex-col border border-white/10">
+            <div class="flex items-center justify-between p-4 border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" 
+                        alt="Artist" class="w-10 h-10 rounded-full">
+                    <div>
+                        <div class="font-bold">Alex Chen</div>
+                        <div class="text-xs text-xm-green">Online</div>
+                    </div>
+                </div>
+                <button onclick="closeChatModal()" class="text-xm-text hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-4 space-y-4">
+                <div class="flex gap-3">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" 
+                        alt="Artist" class="w-8 h-8 rounded-full">
+                    <div class="bg-xm-gray rounded-2xl rounded-tl-none px-4 py-3 max-w-[80%]">
+                        <p>Hi! Thanks for your interest in my project. Feel free to ask me anything! 🎵</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-4 border-t border-white/10">
+                <div class="flex gap-3">
+                    <input type="text" placeholder="Type a message..." 
+                        class="flex-1 bg-xm-black border border-white/10 rounded-full px-4 py-3 text-white focus:border-xm-green focus:outline-none">
+                    <button class="w-12 h-12 bg-xm-green rounded-full flex items-center justify-center hover:opacity-90 transition-opacity">
+                        <i class="fas fa-paper-plane text-black"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Show selected tab
+            document.getElementById(`content-${tabName}`).classList.remove('hidden');
+            
+            // Update tab styles
+            document.querySelectorAll('[id^="tab-"]').forEach(tab => {
+                tab.classList.remove('tab-active');
+                tab.classList.add('text-xm-text');
+            });
+            
+            document.getElementById(`tab-${tabName}`).classList.add('tab-active');
+            document.getElementById(`tab-${tabName}`).classList.remove('text-xm-text');
+        }
+
+        // Sidebar
+        function expandSidebar() {
+            document.getElementById('sidebar').classList.add('expanded');
+        }
+
+        function collapseSidebar() {
+            document.getElementById('sidebar').classList.remove('expanded');
+        }
+
+        // Invest Modal
+        function openInvestModal() {
+            document.getElementById('investModal').classList.remove('hidden');
+            document.getElementById('investModal').classList.add('flex');
+        }
+
+        function closeInvestModal() {
+            document.getElementById('investModal').classList.add('hidden');
+            document.getElementById('investModal').classList.remove('flex');
+        }
+
+        let selectedTier = 'fan';
+        let selectedAmount = 50;
+
+        function selectTier(tier, minAmount) {
+            selectedTier = tier;
+            selectedAmount = minAmount;
+            document.getElementById('investAmount').value = minAmount;
+            
+            document.querySelectorAll('.tier-btn').forEach(btn => {
+                btn.classList.remove('border-xm-green', 'bg-xm-green/10');
+                btn.classList.add('border-white/10');
+            });
+            
+            document.getElementById(`tier-${tier}`).classList.remove('border-white/10');
+            document.getElementById(`tier-${tier}`).classList.add('border-xm-green', 'bg-xm-green/10');
+        }
+
+        function processInvestment() {
+            const amount = parseInt(document.getElementById('investAmount').value);
+            if (amount < selectedAmount) {
+                alert(`Minimum investment for ${selectedTier} tier is $${selectedAmount}`);
+                return;
+            }
+            
+            // Check if wallet is connected
+            const wallet = localStorage.getItem('xmusic-wallet');
+            if (!wallet) {
+                alert('Please connect your wallet first');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            alert(`Investment of $${amount} processed successfully!`);
+            closeInvestModal();
+        }
+
+        // Chat Modal
+        function openChatModal() {
+            document.getElementById('chatModal').classList.remove('hidden');
+            document.getElementById('chatModal').classList.add('flex');
+        }
+
+        function closeChatModal() {
+            document.getElementById('chatModal').classList.add('hidden');
+            document.getElementById('chatModal').classList.remove('flex');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            selectTier('fan', 50);
+        });
+
+        // Close modals on outside click
+        window.onclick = function(event) {
+            if (event.target.classList.contains('fixed')) {
+                event.target.classList.add('hidden');
+                event.target.classList.remove('flex');
+            }
+        }
+    </script>
+</body>
+</html>

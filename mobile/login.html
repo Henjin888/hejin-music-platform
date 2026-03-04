@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <title>登录 - XMUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        body { -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; }
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        .input-field {
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            border-color: #1DB954;
+            box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.2);
+        }
+        .social-btn {
+            transition: all 0.2s ease;
+        }
+        .social-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col">
+    <!-- 顶部返回 -->
+    <header class="px-4 py-4">
+        <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/5">
+            <i class="fas fa-arrow-left text-white/80"></i>
+        </button>
+    </header>
+
+    <!-- 主内容 -->
+    <main class="flex-1 px-6 py-4">
+        <!-- Logo -->
+        <div class="flex items-center gap-3 mb-8">
+            <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center">
+                <i class="fas fa-music text-black text-xl"></i>
+            </div>
+            <span class="text-2xl font-bold">XMUSIC</span>
+        </div>
+
+        <!-- 标题 -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold mb-2">欢迎回来</h1>
+            <p class="text-white/50">登录您的账户继续探索音乐投资世界</p>
+        </div>
+
+        <!-- 登录表单 -->
+        <form id="loginForm" class="space-y-4">
+            <div>
+                <label class="text-sm text-white/70 mb-2 block">手机号</label>
+                <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-white/50">+86</span>
+                    <input type="tel" id="phone" placeholder="请输入手机号" maxlength="11"
+                        class="input-field w-full bg-white/10 text-white pl-14 pr-4 py-4 rounded-xl border border-white/10 focus:outline-none"
+                        oninput="validatePhone()">
+                </div>
+                <p id="phoneError" class="text-xs text-red-500 mt-1 hidden">请输入正确的手机号</p>
+            </div>
+
+            <div>
+                <label class="text-sm text-white/70 mb-2 block">验证码</label>
+                <div class="flex gap-3">
+                    <input type="text" id="code" placeholder="请输入验证码" maxlength="6"
+                        class="input-field flex-1 bg-white/10 text-white px-4 py-4 rounded-xl border border-white/10 focus:outline-none"
+                        oninput="validateCode()">
+                    <button type="button" id="sendCodeBtn" onclick="sendCode()" 
+                        class="px-4 py-2 bg-white/10 rounded-xl text-sm font-medium whitespace-nowrap disabled:opacity-50"
+                        disabled>
+                        获取验证码
+                    </button>
+                </div>
+                <p id="codeError" class="text-xs text-red-500 mt-1 hidden">请输入6位验证码</p>
+            </div>
+
+            <button type="submit" id="loginBtn" 
+                class="w-full py-4 bg-[#1DB954] text-black rounded-xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled>
+                登录
+            </button>
+        </form>
+
+        <!-- 其他登录方式 -->
+        <div class="mt-8">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="flex-1 h-px bg-white/10"></div>
+                <span class="text-xs text-white/50">其他登录方式</span>
+                <div class="flex-1 h-px bg-white/10"></div>
+            </div>
+
+            <div class="flex justify-center gap-6">
+                <button class="social-btn w-14 h-14 bg-white/10 rounded-full flex items-center justify-center">
+                    <i class="fab fa-weixin text-green-500 text-2xl"></i>
+                </button>
+                <button class="social-btn w-14 h-14 bg-white/10 rounded-full flex items-center justify-center">
+                    <i class="fab fa-apple text-white text-2xl"></i>
+                </button>
+                <button class="social-btn w-14 h-14 bg-white/10 rounded-full flex items-center justify-center">
+                    <i class="fab fa-google text-red-500 text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 注册提示 -->
+        <div class="mt-8 text-center">
+            <p class="text-sm text-white/50">
+                还没有账户？
+                <a href="#" class="text-[#1DB954] font-medium">立即注册</a>
+            </p>
+        </div>
+    </main>
+
+    <script src="../public/js/xmusic.js"></script>
+    <script src="../public/js/security-utils.js"></script>
+    <script>
+        let countdown = 0;
+        let timer = null;
+
+        function validatePhone() {
+            const phone = document.getElementById('phone').value;
+            const isValid = /^1[3-9]\d{9}$/.test(phone);
+            
+            document.getElementById('phoneError').classList.toggle('hidden', isValid || phone.length === 0);
+            document.getElementById('sendCodeBtn').disabled = !isValid || countdown > 0;
+            
+            checkFormValid();
+        }
+
+        function validateCode() {
+            const code = document.getElementById('code').value;
+            const isValid = /^\d{6}$/.test(code);
+            
+            document.getElementById('codeError').classList.toggle('hidden', isValid || code.length === 0);
+            checkFormValid();
+        }
+
+        function checkFormValid() {
+            const phone = document.getElementById('phone').value;
+            const code = document.getElementById('code').value;
+            const isValid = /^1[3-9]\d{9}$/.test(phone) && /^\d{6}$/.test(code);
+            
+            document.getElementById('loginBtn').disabled = !isValid;
+        }
+
+        function sendCode() {
+            const phone = document.getElementById('phone').value;
+            if (!/^1[3-9]\d{9}$/.test(phone)) {
+                alert('请输入正确的手机号');
+                return;
+            }
+
+            countdown = 60;
+            const btn = document.getElementById('sendCodeBtn');
+            btn.disabled = true;
+            btn.textContent = `${countdown}s`;
+
+            timer = setInterval(() => {
+                countdown--;
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    btn.disabled = false;
+                    btn.textContent = '获取验证码';
+                } else {
+                    btn.textContent = `${countdown}s`;
+                }
+            }, 1000);
+
+            // 模拟发送验证码
+            setTimeout(() => {
+                alert('验证码已发送：123456');
+            }, 500);
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const phone = document.getElementById('phone').value;
+            const code = document.getElementById('code').value;
+
+            if (code !== '123456') {
+                alert('验证码错误');
+                return;
+            }
+
+            // 保存登录状态
+            try {
+                localStorage.setItem('xmusic-user', JSON.stringify({ phone, loginTime: Date.now() }));
+            } catch (e) {
+                console.warn('localStorage not available:', e);
+            }
+
+            alert('登录成功！');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>探索项目 - X-Music-Brand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', sans-serif; }
+        body { background: #0a0a0a; color: white; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(74, 222, 128, 0.1); }
+        .nav-link { position: relative; }
+        .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #4ade80; transition: width 0.3s ease; }
+        .nav-link:hover::after { width: 100%; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-[#4ade80] to-[#22c55e] rounded-xl flex items-center justify-center">
+                        <i class="fas fa-music text-black"></i>
+                    </div>
+                    <span class="font-bold text-xl">X-Music-Brand</span>
+                </a>
+
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="index.html" class="nav-link text-white/80 hover:text-white transition-colors">首页</a>
+                    <a href="explore.html" class="nav-link text-white hover:text-white transition-colors">探索</a>
+                    <a href="nearby.html" class="nav-link text-white/80 hover:text-white transition-colors">附近艺人</a>
+                    <a href="crypto.html" class="nav-link text-white/80 hover:text-white transition-colors">加密支付</a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <a href="login.html" class="hidden sm:block px-4 py-2 text-white/80 hover:text-white">登录</a>
+                    <a href="login.html" class="px-6 py-2.5 bg-gradient-to-r from-[#4ade80] to-[#22c55e] text-black font-semibold rounded-full hover:opacity-90 transition-opacity">注册</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-20">
+        <!-- Header -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">探索项目</h1>
+                <p class="text-lg text-white/60">发现最有潜力的独立音乐人，成为他们成功的一部分</p>
+            </div>
+
+            <!-- Filters -->
+            <div class="flex flex-wrap justify-center gap-3 mb-12">
+                <button class="px-6 py-2 bg-[#4ade80] text-black rounded-full font-medium">全部</button>
+                <button class="px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white/70 transition-colors">流行</button>
+                <button class="px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white/70 transition-colors">摇滚</button>
+                <button class="px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white/70 transition-colors">电子</button>
+                <button class="px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white/70 transition-colors">说唱</button>
+                <button class="px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white/70 transition-colors">民谣</button>
+                <button class="px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white/70 transition-colors">爵士</button>
+            </div>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <a href="project.html?id=1" class="card-hover bg-[#1a1a1a] rounded-2xl overflow-hidden border border-white/5">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=400&fit=crop" alt="" class="w-full h-full object-cover">
+                        <div class="absolute top-3 right-3 bg-[#4ade80] text-black px-3 py-1 rounded-full text-sm font-bold">78%</div>
+                        <div class="absolute top-3 left-3 bg-black/50 backdrop-blur text-white px-3 py-1 rounded-full text-xs font-semibold">Indie Folk</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-xl mb-2">City Echo</h3>
+                        <p class="text-white/50 mb-4">by Alex</p>
+
+                        <div class="h-2 bg-white/10 rounded-full overflow-hidden mb-4">
+                            <div class="h-full bg-gradient-to-r from-[#4ade80] to-[#22c55e] rounded-full" style="width: 78%"></div>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-[#4ade80] font-bold">$7,850</div>
+                                <div class="text-white/50 text-sm">已筹集</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold">82</div>
+                                <div class="text-white/50 text-sm">投资人</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 2 -->
+                <a href="project.html?id=2" class="card-hover bg-[#1a1a1a] rounded-2xl overflow-hidden border border-white/5">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&h=400&fit=crop" alt="" class="w-full h-full object-cover">
+                        <div class="absolute top-3 right-3 bg-[#4ade80] text-black px-3 py-1 rounded-full text-sm font-bold">64%</div>
+                        <div class="absolute top-3 left-3 bg-black/50 backdrop-blur text-white px-3 py-1 rounded-full text-xs font-semibold">Electronic</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-xl mb-2">Deep Sea Whisper</h3>
+                        <p class="text-white/50 mb-4">by Luna</p>
+
+                        <div class="h-2 bg-white/10 rounded-full overflow-hidden mb-4">
+                            <div class="h-full bg-gradient-to-r from-[#4ade80] to-[#22c55e] rounded-full" style="width: 64%"></div>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-[#4ade80] font-bold">$3,200</div>
+                                <div class="text-white/50 text-sm">已筹集</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold">45</div>
+                                <div class="text-white/50 text-sm">投资人</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 3 -->
+                <a href="project.html?id=3" class="card-hover bg-[#1a1a1a] rounded-2xl overflow-hidden border border-white/5">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&h=400&fit=crop" alt="" class="w-full h-full object-cover">
+                        <div class="absolute top-3 right-3 bg-[#4ade80] text-black px-3 py-1 rounded-full text-sm font-bold">57%</div>
+                        <div class="absolute top-3 left-3 bg-black/50 backdrop-blur text-white px-3 py-1 rounded-full text-xs font-semibold">Rock</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-xl mb-2">Highway Poems</h3>
+                        <p class="text-white/50 mb-4">by Sam</p>
+
+                        <div class="h-2 bg-white/10 rounded-full overflow-hidden mb-4">
+                            <div class="h-full bg-gradient-to-r from-[#4ade80] to-[#22c55e] rounded-full" style="width: 57%"></div>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-[#4ade80] font-bold">$11,500</div>
+                                <div class="text-white/50 text-sm">已筹集</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold">112</div>
+                                <div class="text-white/50 text-sm">投资人</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 4 -->
+                <a href="project.html?id=4" class="card-hover bg-[#1a1a1a] rounded-2xl overflow-hidden border border-white/5">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&h=400&fit=crop" alt="" class="w-full h-full object-cover">
+                        <div class="absolute top-3 right-3 bg-[#4ade80] text-black px-3 py-1 rounded-full text-sm font-bold">42%</div>
+                        <div class="absolute top-3 left-3 bg-black/50 backdrop-blur text-white px-3 py-1 rounded-full text-xs font-semibold">Folk</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-xl mb-2">Folk Heart</h3>
+                        <p class="text-white/50 mb-4">by Lee</p>
+
+                        <div class="h-2 bg-white/10 rounded-full overflow-hidden mb-4">
+                            <div class="h-full bg-gradient-to-r from-[#4ade80] to-[#22c55e] rounded-full" style="width: 42%"></div>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-[#4ade80] font-bold">$4,200</div>
+                                <div class="text-white/50 text-sm">已筹集</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold">35</div>
+                                <div class="text-white/50 text-sm">投资人</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 5 -->
+                <a href="project.html?id=5" class="card-hover bg-[#1a1a1a] rounded-2xl overflow-hidden border border-white/5">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=600&h=400&fit=crop" alt="" class="w-full h-full object-cover">
+                        <div class="absolute top-3 right-3 bg-[#4ade80] text-black px-3 py-1 rounded-full text-sm font-bold">65%</div>
+                        <div class="absolute top-3 left-3 bg-black/50 backdrop-blur text-white px-3 py-1 rounded-full text-xs font-semibold">Jazz</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-xl mb-2">Jazz Nights</h3>
+                        <p class="text-white/50 mb-4">by Jazz Trio</p>
+
+                        <div class="h-2 bg-white/10 rounded-full overflow-hidden mb-4">
+                            <div class="h-full bg-gradient-to-r from-[#4ade80] to-[#22c55e] rounded-full" style="width: 65%"></div>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-[#4ade80] font-bold">$9,800</div>
+                                <div class="text-white/50 text-sm">已筹集</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold">68</div>
+                                <div class="text-white/50 text-sm">投资人</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 6 -->
+                <a href="project.html?id=6" class="card-hover bg-[#1a1a1a] rounded-2xl overflow-hidden border border-white/5">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=400&fit=crop" alt="" class="w-full h-full object-cover">
+                        <div class="absolute top-3 right-3 bg-[#4ade80] text-black px-3 py-1 rounded-full text-sm font-bold">54%</div>
+                        <div class="absolute top-3 left-3 bg-black/50 backdrop-blur text-white px-3 py-1 rounded-full text-xs font-semibold">Rock</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-xl mb-2">Rock Dreams</h3>
+                        <p class="text-white/50 mb-4">by Rock Band</p>
+
+                        <div class="h-2 bg-white/10 rounded-full overflow-hidden mb-4">
+                            <div class="h-full bg-gradient-to-r from-[#4ade80] to-[#22c55e] rounded-full" style="width: 54%"></div>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-[#4ade80] font-bold">$6,500</div>
+                                <div class="text-white/50 text-sm">已筹集</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold">55</div>
+                                <div class="text-white/50 text-sm">投资人</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Load More -->
+            <div class="text-center mt-12">
+                <button class="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-full font-medium transition-colors">加载更多</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center gap-3 mb-4 md:mb-0">
+                    <div class="w-8 h-8 bg-gradient-to-br from-[#4ade80] to-[#22c55e] rounded-lg flex items-center justify-center">
+                        <i class="fas fa-music text-black text-sm"></i>
+                    </div>
+                    <span class="font-bold">X-Music-Brand</span>
+                </div>
+                <div class="text-white/50 text-sm">© 2026 X-Music-Brand. All rights reserved.</div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

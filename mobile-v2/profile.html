@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>我的 - X-Music-Brand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xm-bg': '#0a0a0a',
+                        'xm-card': '#1a1a1a',
+                        'xm-green': '#4ade80',
+                        'xm-green-dark': '#22c55e',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #0a0a0a; color: white; -webkit-tap-highlight-color: transparent; }
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 20px); }
+    </style>
+</head>
+<body class="min-h-screen pb-20">
+    <header class="sticky top-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5">
+        <div class="flex items-center justify-between px-4 py-3">
+            <span class="text-lg font-bold">我的</span>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5">
+                <i class="fas fa-cog text-white/70"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="px-4 py-4">
+        <!-- User Info -->
+        <div class="flex items-center gap-4 mb-6">
+            <div class="w-16 h-16 bg-gradient-to-br from-[#4ade80] to-[#22c55e] rounded-full flex items-center justify-center text-2xl">
+                👤
+            </div>
+            <div class="flex-1">
+                <div class="font-bold text-lg">MusicInvestor</div>
+                <div class="text-sm text-white/50"> Premium Member</div>
+            </div>
+            <button onclick="logout()" class="px-4 py-2 bg-white/10 rounded-xl text-sm">退出</button>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-3 mb-6">
+            <div class="bg-[#1a1a1a] rounded-2xl p-4 text-center border border-white/5">
+                <div class="text-xl font-bold">12</div>
+                <div class="text-xs text-white/50">投资项目</div>
+            </div>
+            <div class="bg-[#1a1a1a] rounded-2xl p-4 text-center border border-white/5">
+                <div class="text-xl font-bold text-[#4ade80]">$12.5K</div>
+                <div class="text-xs text-white/50">总投资</div>
+            </div>
+            <div class="bg-[#1a1a1a] rounded-2xl p-4 text-center border border-white/5">
+                <div class="text-xl font-bold">8</div>
+                <div class="text-xs text-white/50">关注艺人</div>
+            </div>
+        </div>
+
+        <!-- Menu -->
+        <div class="space-y-2">
+            <a href="dashboard.html" class="flex items-center gap-4 p-4 bg-[#1a1a1a] rounded-2xl border border-white/5">
+                <div class="w-10 h-10 bg-[#4ade80]/10 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-chart-pie text-[#4ade80]"></i>
+                </div>
+                <span class="flex-1">我的投资</span>
+                <i class="fas fa-chevron-right text-white/30"></i>
+            </a>
+
+            <a href="#" class="flex items-center gap-4 p-4 bg-[#1a1a1a] rounded-2xl border border-white/5">
+                <div class="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-wallet text-blue-500"></i>
+                </div>
+                <span class="flex-1">钱包</span>
+                <i class="fas fa-chevron-right text-white/30"></i>
+            </a>
+
+            <a href="#" class="flex items-center gap-4 p-4 bg-[#1a1a1a] rounded-2xl border border-white/5">
+                <div class="w-10 h-10 bg-purple-500/10 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-heart text-purple-500"></i>
+                </div>
+                <span class="flex-1">收藏</span>
+                <i class="fas fa-chevron-right text-white/30"></i>
+            </a>
+
+            <a href="#" class="flex items-center gap-4 p-4 bg-[#1a1a1a] rounded-2xl border border-white/5">
+                <div class="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-history text-amber-500"></i>
+                </div>
+                <span class="flex-1">浏览历史</span>
+                <i class="fas fa-chevron-right text-white/30"></i>
+            </a>
+
+            <a href="#" class="flex items-center gap-4 p-4 bg-[#1a1a1a] rounded-2xl border border-white/5">
+                <div class="w-10 h-10 bg-gray-500/10 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-headset text-gray-500"></i>
+                </div>
+                <span class="flex-1">客服支持</span>
+                <i class="fas fa-chevron-right text-white/30"></i>
+            </a>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-[#0a0a0a]/95 backdrop-blur-xl border-t border-white/5 safe-bottom z-50">
+        <div class="flex items-center justify-around py-2">
+            <a href="index.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[10px]">首页</span>
+            </a>
+            <a href="explore.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-compass text-lg"></i>
+                <span class="text-[10px]">探索</span>
+            </a>
+            <a href="create.html" class="flex flex-col items-center -mt-6">
+                <div class="w-14 h-14 bg-gradient-to-r from-[#4ade80] to-[#22c55e] rounded-full flex items-center justify-center">
+                    <i class="fas fa-plus text-black text-xl"></i>
+                </div>
+                <span class="text-[10px] text-white/50 mt-1">发起</span>
+            </a>
+            <a href="dashboard.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-chart-pie text-lg"></i>
+                <span class="text-[10px]">投资</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center gap-1 py-2 px-4 text-[#4ade80]">
+                <i class="fas fa-user text-lg"></i>
+                <span class="text-[10px]">我的</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        function logout() {
+            localStorage.removeItem('xmusic_user');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <title>发起融资 - XMUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        body { -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; }
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        .step-content { display: none; }
+        .step-content.active { display: block; }
+        .step-indicator.active { background: #1DB954; color: black; }
+        .step-indicator.completed { background: #1DB954; color: black; }
+        .step-line.active { background: #1DB954; }
+        .input-field:focus { border-color: #1DB954; }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col">
+    <!-- 顶部导航 -->
+    <header class="sticky top-0 z-40 bg-black/95 backdrop-blur-md border-b border-white/10">
+        <div class="flex items-center justify-between px-4 py-3">
+            <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/5">
+                <i class="fas fa-arrow-left text-white/80"></i>
+            </button>
+            <span class="text-lg font-bold">发起融资</span>
+            <div class="w-10"></div>
+        </div>
+
+        <!-- 步骤指示器 -->
+        <div class="flex items-center justify-center px-8 py-4">
+            <div class="flex items-center w-full max-w-xs">
+                <div class="step-indicator active w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold transition-colors" data-step="1">1</div>
+                <div class="step-line flex-1 h-0.5 bg-white/20 mx-2 transition-colors" data-line="1"></div>
+                <div class="step-indicator w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold transition-colors" data-step="2">2</div>
+                <div class="step-line flex-1 h-0.5 bg-white/20 mx-2 transition-colors" data-line="2"></div>
+                <div class="step-indicator w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold transition-colors" data-step="3">3</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容 -->
+    <main class="flex-1 px-4 py-4">
+        <!-- 步骤 1: 基本信息 -->
+        <div id="step1" class="step-content active">
+            <div class="mb-6">
+                <h2 class="text-xl font-bold mb-2">项目基本信息</h2>
+                <p class="text-sm text-white/50">让我们了解您的音乐项目</p>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="text-sm text-white/70 mb-2 block">项目标题 *</label>
+                    <input type="text" placeholder="例如：2025全国巡演计划" 
+                        class="input-field w-full bg-white/10 text-white px-4 py-4 rounded-xl border border-white/10 focus:outline-none transition-colors"
+                        id="projectTitle">
+                </div>
+
+                <div>
+                    <label class="text-sm text-white/70 mb-2 block">音乐类型 *</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" class="category-select py-3 bg-white/10 rounded-xl text-sm border border-transparent hover:border-[#1DB954] transition-colors" onclick="selectCategory(this)">流行</button>
+                        <button type="button" class="category-select py-3 bg-white/10 rounded-xl text-sm border border-transparent hover:border-[#1DB954] transition-colors" onclick="selectCategory(this)">摇滚</button>
+                        <button type="button" class="category-select py-3 bg-white/10 rounded-xl text-sm border border-transparent hover:border-[#1DB954] transition-colors" onclick="selectCategory(this)">电子</button>
+                        <button type="button" class="category-select py-3 bg-white/10 rounded-xl text-sm border border-transparent hover:border-[#1DB954] transition-colors" onclick="selectCategory(this)">说唱</button>
+                        <button type="button" class="category-select py-3 bg-white/10 rounded-xl text-sm border border-transparent hover:border-[#1DB954] transition-colors" onclick="selectCategory(this)">民谣</button>
+                        <button type="button" class="category-select py-3 bg-white/10 rounded-xl text-sm border border-transparent hover:border-[#1DB954] transition-colors" onclick="selectCategory(this)">爵士</button>
+                        <button type="button" class="category-select py-3 bg-white/10 rounded-xl text-sm border border-transparent hover:border-[#1DB954] transition-colors" onclick="selectCategory(this)">古典</button>
+                        <button type="button" class="category-select py-3 bg-white/10 rounded-xl text-sm border border-transparent hover:border-[#1DB954] transition-colors" onclick="selectCategory(this)">R&B</button>
+                        <button type="button" class="category-select py-3 bg-white/10 rounded-xl text-sm border border-transparent hover:border-[#1DB954] transition-colors" onclick="selectCategory(this)">其他</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-sm text-white/70 mb-2 block">项目简介 *</label>
+                    <textarea placeholder="介绍您的音乐项目，让投资人了解您的计划..." rows="4"
+                        class="input-field w-full bg-white/10 text-white px-4 py-4 rounded-xl border border-white/10 focus:outline-none transition-colors resize-none"
+                        id="projectDesc"></textarea>
+                </div>
+
+                <div>
+                    <label class="text-sm text-white/70 mb-2 block">封面图片</label>
+                    <div class="aspect-video bg-white/5 rounded-xl border-2 border-dashed border-white/20 flex flex-col items-center justify-center cursor-pointer hover:border-[#1DB954] transition-colors"
+                        onclick="document.getElementById('coverImage').click()">
+                        <i class="fas fa-cloud-upload-alt text-3xl text-white/30 mb-2"></i>
+                        <span class="text-sm text-white/50">点击上传封面</span>
+                        <span class="text-xs text-white/30 mt-1">建议尺寸 1200x630</span>
+                    </div>
+                    <input type="file" id="coverImage" accept="image/*" class="hidden">
+                </div>
+            </div>
+        </div>
+
+        <!-- 步骤 2: 融资信息 -->
+        <div id="step2" class="step-content">
+            <div class="mb-6">
+                <h2 class="text-xl font-bold mb-2">融资设置</h2>
+                <p class="text-sm text-white/50">设置您的融资目标和回报方案</p>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="text-sm text-white/70 mb-2 block">融资目标 (USD) *</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 text-lg">$</span>
+                        <input type="number" placeholder="10000" min="1000" max="10000000"
+                            class="input-field w-full bg-white/10 text-white pl-10 pr-4 py-4 rounded-xl border border-white/10 focus:outline-none transition-colors text-lg"
+                            id="fundingGoal">
+                    </div>
+                    <p class="text-xs text-white/50 mt-1">最低 $1,000，最高 $10,000,000</p>
+                </div>
+
+                <div>
+                    <label class="text-sm text-white/70 mb-2 block">融资期限 *</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <button type="button" class="duration-select py-3 bg-[#1DB954] text-black rounded-xl text-sm font-medium border-2 border-[#1DB954]" onclick="selectDuration(this, 15)">15 天</button>
+                        <button type="button" class="duration-select py-3 bg-white/10 rounded-xl text-sm border-2 border-transparent" onclick="selectDuration(this, 30)">30 天</button>
+                        <button type="button" class="duration-select py-3 bg-white/10 rounded-xl text-sm border-2 border-transparent" onclick="selectDuration(this, 60)">60 天</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-sm text-white/70 mb-2 block">预期年化回报率 *</label>
+                    <div class="relative">
+                        <input type="number" placeholder="15" min="1" max="100"
+                            class="input-field w-full bg-white/10 text-white px-4 pr-10 py-4 rounded-xl border border-white/10 focus:outline-none transition-colors text-lg"
+                            id="expectedReturn">
+                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-white/50">%</span>
+                    </div>
+                </div>
+
+                <div class="bg-white/5 rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm font-medium">投资人回报方案</span>
+                        <button type="button" class="text-xs text-[#1DB954]">+ 添加方案</button>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" checked class="w-5 h-5 accent-[#1DB954]">
+                            <div class="flex-1">
+                                <div class="text-sm">门票优先购买权</div>
+                                <div class="text-xs text-white/50">所有投资人</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" checked class="w-5 h-5 accent-[#1DB954]">
+                            <div class="flex-1">
+                                <div class="text-sm">收益分红</div>
+                                <div class="text-xs text-white/50">按投资比例分配</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" class="w-5 h-5 accent-[#1DB954]">
+                            <div class="flex-1">
+                                <div class="text-sm">后台见面机会</div>
+                                <div class="text-xs text-white/50">投资 $500 以上</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 步骤 3: 确认提交 -->
+        <div id="step3" class="step-content">
+            <div class="mb-6">
+                <h2 class="text-xl font-bold mb-2">确认信息</h2>
+                <p class="text-sm text-white/50">请确认您的项目信息</p>
+            </div>
+
+            <div class="bg-white/5 rounded-2xl p-4 space-y-4">
+                <div class="flex items-start gap-3">
+                    <div class="w-20 h-20 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-3xl flex-shrink-0">🎵</div>
+                    <div class="flex-1">
+                        <div class="font-bold mb-1" id="previewTitle">2025全国巡演计划</div>
+                        <div class="text-xs text-white/50" id="previewCategory">流行</div>
+                    </div>
+                </div>
+
+                <div class="h-px bg-white/10"></div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="text-xs text-white/50 mb-1">融资目标</div>
+                        <div class="text-lg font-bold text-[#1DB954]" id="previewGoal">$10,000</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-white/50 mb-1">融资期限</div>
+                        <div class="text-lg font-bold" id="previewDuration">15 天</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-white/50 mb-1">预期回报</div>
+                        <div class="text-lg font-bold text-[#1DB954]" id="previewReturn">15%</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-white/50 mb-1">平台服务费</div>
+                        <div class="text-lg font-bold">5%</div>
+                    </div>
+                </div>
+
+                <div class="h-px bg-white/10"></div>
+
+                <div>
+                    <div class="text-xs text-white/50 mb-2">项目简介</div>
+                    <p class="text-sm text-white/70" id="previewDesc">介绍您的音乐项目...</p>
+                </div>
+            </div>
+
+            <div class="mt-6 bg-amber-500/10 border border-amber-500/20 rounded-xl p-4">
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-exclamation-triangle text-amber-500 mt-0.5"></i>
+                    <div class="text-sm text-white/70">
+                        提交后项目将进入审核阶段，审核通过后将正式上线。请确保所有信息真实有效。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部按钮 -->
+    <div class="px-4 py-4 border-t border-white/10 safe-bottom">
+        <div class="flex gap-3">
+            <button id="prevBtn" onclick="prevStep()" class="flex-1 py-4 bg-white/10 rounded-xl font-medium hidden">
+                上一步
+            </button>
+            <button id="nextBtn" onclick="nextStep()" class="flex-1 py-4 bg-[#1DB954] text-black rounded-xl font-bold">
+                下一步
+            </button>
+        </div>
+    </div>
+
+    <script src="../public/js/xmusic.js"></script>
+    <script src="../public/js/security-utils.js"></script>
+    <script>
+        let currentStep = 1;
+        let selectedCategory = '';
+        let selectedDuration = 15;
+
+        function selectCategory(btn) {
+            document.querySelectorAll('.category-select').forEach(b => {
+                b.classList.remove('bg-[#1DB954]', 'text-black');
+                b.classList.add('bg-white/10');
+            });
+            btn.classList.remove('bg-white/10');
+            btn.classList.add('bg-[#1DB954]', 'text-black');
+            selectedCategory = btn.textContent;
+        }
+
+        function selectDuration(btn, days) {
+            document.querySelectorAll('.duration-select').forEach(b => {
+                b.classList.remove('bg-[#1DB954]', 'text-black', 'border-[#1DB954]');
+                b.classList.add('bg-white/10', 'border-transparent');
+            });
+            btn.classList.remove('bg-white/10', 'border-transparent');
+            btn.classList.add('bg-[#1DB954]', 'text-black', 'border-[#1DB954]');
+            selectedDuration = days;
+        }
+
+        function nextStep() {
+            if (currentStep === 1) {
+                const title = document.getElementById('projectTitle').value;
+                const desc = document.getElementById('projectDesc').value;
+                if (!title || !selectedCategory || !desc) {
+                    alert('请填写完整信息');
+                    return;
+                }
+            }
+
+            if (currentStep === 2) {
+                const goal = document.getElementById('fundingGoal').value;
+                const ret = document.getElementById('expectedReturn').value;
+                if (!goal || !ret) {
+                    alert('请填写完整信息');
+                    return;
+                }
+                updatePreview();
+            }
+
+            if (currentStep === 3) {
+                alert('项目提交成功！我们将尽快审核您的项目。');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            document.querySelector(`.step-indicator[data-step="${currentStep}"]`).classList.add('completed');
+            document.querySelector(`.step-indicator[data-step="${currentStep}"]`).textContent = '✓';
+            
+            currentStep++;
+            
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            document.querySelector(`.step-indicator[data-step="${currentStep}"]`).classList.add('active');
+            document.querySelector(`.step-line[data-line="${currentStep-1}"]`).classList.add('active');
+            
+            document.getElementById('prevBtn').classList.remove('hidden');
+            
+            if (currentStep === 3) {
+                document.getElementById('nextBtn').textContent = '提交审核';
+            }
+        }
+
+        function prevStep() {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            
+            if (currentStep === 3) {
+                document.querySelector(`.step-indicator[data-step="${currentStep}"]`).classList.remove('active');
+            }
+            
+            currentStep--;
+            
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            document.querySelector(`.step-indicator[data-step="${currentStep}"]`).classList.remove('completed');
+            document.querySelector(`.step-indicator[data-step="${currentStep}"]`).textContent = currentStep;
+            document.querySelector(`.step-line[data-line="${currentStep}"]`).classList.remove('active');
+            
+            if (currentStep === 1) {
+                document.getElementById('prevBtn').classList.add('hidden');
+            }
+            
+            document.getElementById('nextBtn').textContent = '下一步';
+        }
+
+        function updatePreview() {
+            document.getElementById('previewTitle').textContent = document.getElementById('projectTitle').value;
+            document.getElementById('previewCategory').textContent = selectedCategory;
+            document.getElementById('previewGoal').textContent = '$' + parseInt(document.getElementById('fundingGoal').value).toLocaleString();
+            document.getElementById('previewDuration').textContent = selectedDuration + ' 天';
+            document.getElementById('previewReturn').textContent = document.getElementById('expectedReturn').value + '%';
+            document.getElementById('previewDesc').textContent = document.getElementById('projectDesc').value;
+        }
+    </script>
+</body>
+</html>

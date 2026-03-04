@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <title>项目详情 - XMUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        body { -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; }
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-btn.active { color: #1DB954; border-bottom-color: #1DB954; }
+        .invest-modal { transition: transform 0.3s ease; }
+        .invest-modal.hidden { transform: translateY(100%); }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen">
+    <!-- 顶部导航 -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-gradient-to-b from-black/80 to-transparent">
+        <div class="flex items-center justify-between px-4 py-3">
+            <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center rounded-full bg-black/50 backdrop-blur">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="flex items-center gap-2">
+                <button class="w-10 h-10 flex items-center justify-center rounded-full bg-black/50 backdrop-blur">
+                    <i class="far fa-heart"></i>
+                </button>
+                <button class="w-10 h-10 flex items-center justify-center rounded-full bg-black/50 backdrop-blur">
+                    <i class="fas fa-share-alt"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容 -->
+    <main class="pb-24">
+        <!-- 项目封面 -->
+        <div class="relative h-72 bg-gradient-to-br from-purple-600 to-blue-600">
+            <div class="absolute inset-0 flex items-center justify-center text-8xl">🎵</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] bg-[#1DB954] text-black px-2 py-0.5 rounded-full font-bold">进行中</span>
+                    <span class="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded-full">流行</span>
+                </div>
+                <h1 class="text-2xl font-bold mb-1">林夕</h1>
+                <p class="text-sm text-white/70">2025巡演计划</p>
+            </div>
+        </div>
+
+        <!-- 融资进度 -->
+        <div class="px-4 py-4 border-b border-white/10">
+            <div class="flex items-end justify-between mb-2">
+                <div>
+                    <div class="text-xs text-white/50 mb-1">已筹集</div>
+                    <div class="text-2xl font-bold text-[#1DB954]">$32,500</div>
+                </div>
+                <div class="text-right">
+                    <div class="text-xs text-white/50 mb-1">目标</div>
+                    <div class="text-lg font-bold">$50,000</div>
+                </div>
+            </div>
+            
+            <div class="h-3 bg-white/10 rounded-full overflow-hidden mb-3">
+                <div class="h-full bg-gradient-to-r from-[#1DB954] to-[#1ed760] rounded-full" style="width: 65%"></div>
+            </div>
+            
+            <div class="flex items-center justify-between text-sm">
+                <span class="text-white/50"><i class="fas fa-users mr-1"></i> 234 位投资人</span>
+                <span class="text-white/50"><i class="fas fa-clock mr-1"></i> 剩余 15 天</span>
+            </div>
+        </div>
+
+        <!-- 标签页 -->
+        <div class="sticky top-0 bg-black/95 backdrop-blur-md z-30 border-b border-white/10">
+            <div class="flex">
+                <button class="tab-btn active flex-1 py-3 text-sm font-medium border-b-2 border-transparent" onclick="switchTab('overview')">概览</button>
+                <button class="tab-btn flex-1 py-3 text-sm font-medium border-b-2 border-transparent text-white/50" onclick="switchTab('details')">详情</button>
+                <button class="tab-btn flex-1 py-3 text-sm font-medium border-b-2 border-transparent text-white/50" onclick="switchTab('updates')">动态</button>
+                <button class="tab-btn flex-1 py-3 text-sm font-medium border-b-2 border-transparent text-white/50" onclick="switchTab('investors')">投资人</button>
+            </div>
+        </div>
+
+        <!-- 概览内容 -->
+        <div id="overview" class="tab-content active px-4 py-4">
+            <!-- 艺人信息 -->
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-2xl">
+                    👩‍🎤
+                </div>
+                <div class="flex-1">
+                    <div class="font-bold">林夕</div>
+                    <div class="text-sm text-white/50">独立音乐人 · 北京</div>
+                    <div class="flex items-center gap-3 mt-1">
+                        <span class="text-xs text-white/50"><i class="fas fa-music mr-1"></i>12 首作品</span>
+                        <span class="text-xs text-white/50"><i class="fas fa-heart mr-1"></i>8.5K 粉丝</span>
+                    </div>
+                </div>
+                <button class="px-4 py-2 bg-white/10 rounded-full text-sm font-medium">关注</button>
+            </div>
+
+            <!-- 项目介绍 -->
+            <div class="mb-6">
+                <h3 class="font-bold mb-3">项目介绍</h3>
+                <p class="text-sm text-white/70 leading-relaxed">
+                    大家好，我是林夕。这次我想通过 XMUSIC 平台为我的 2025 全国巡演计划筹集资金。巡演将覆盖 15 个城市，包括北京、上海、广州、深圳、成都、杭州等。
+                </p>
+                <p class="text-sm text-white/70 leading-relaxed mt-2">
+                    筹集的资金将用于场地租赁、音响设备、宣传制作和团队差旅。作为回报，投资人将获得巡演门票优先购买权、后台见面机会以及巡演收益的 15% 分红。
+                </p>
+            </div>
+
+            <!-- 融资用途 -->
+            <div class="mb-6">
+                <h3 class="font-bold mb-3">资金用途</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                            <i class="fas fa-building text-blue-500"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">场地租赁</span>
+                                <span class="text-sm font-medium">40%</span>
+                            </div>
+                            <div class="h-1.5 bg-white/10 rounded-full mt-1 overflow-hidden">
+                                <div class="h-full bg-blue-500 rounded-full" style="width: 40%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                            <i class="fas fa-volume-up text-purple-500"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">音响设备</span>
+                                <span class="text-sm font-medium">25%</span>
+                            </div>
+                            <div class="h-1.5 bg-white/10 rounded-full mt-1 overflow-hidden">
+                                <div class="h-full bg-purple-500 rounded-full" style="width: 25%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                            <i class="fas fa-bullhorn text-amber-500"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">宣传推广</span>
+                                <span class="text-sm font-medium">20%</span>
+                            </div>
+                            <div class="h-1.5 bg-white/10 rounded-full mt-1 overflow-hidden">
+                                <div class="h-full bg-amber-500 rounded-full" style="width: 20%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+                            <i class="fas fa-plane text-emerald-500"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">团队差旅</span>
+                                <span class="text-sm font-medium">15%</span>
+                            </div>
+                            <div class="h-1.5 bg-white/10 rounded-full mt-1 overflow-hidden">
+                                <div class="h-full bg-emerald-500 rounded-full" style="width: 15%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 投资回报 -->
+            <div class="mb-6">
+                <h3 class="font-bold mb-3">投资回报</h3>
+                <div class="bg-gradient-to-r from-[#1DB954]/20 to-[#1DB954]/5 rounded-2xl p-4 border border-[#1DB954]/20">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <div class="text-xs text-white/50">预期年化回报</div>
+                            <div class="text-2xl font-bold text-[#1DB954]">15-25%</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs text-white/50">投资期限</div>
+                            <div class="text-lg font-bold">12 个月</div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-[#1DB954]"></i>
+                            <span class="text-white/70">巡演门票优先购买权</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-[#1DB954]"></i>
+                            <span class="text-white/70">后台见面机会</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-[#1DB954]"></i>
+                            <span class="text-white/70">巡演收益 15% 分红</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-[#1DB954]"></i>
+                            <span class="text-white/70">限量版周边礼品</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 详情内容 -->
+        <div id="details" class="tab-content px-4 py-4">
+            <div class="mb-6">
+                <h3 class="font-bold mb-3">巡演城市</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1.5 bg-white/10 rounded-lg text-sm">北京</span>
+                    <span class="px-3 py-1.5 bg-white/10 rounded-lg text-sm">上海</span>
+                    <span class="px-3 py-1.5 bg-white/10 rounded-lg text-sm">广州</span>
+                    <span class="px-3 py-1.5 bg-white/10 rounded-lg text-sm">深圳</span>
+                    <span class="px-3 py-1.5 bg-white/10 rounded-lg text-sm">成都</span>
+                    <span class="px-3 py-1.5 bg-white/10 rounded-lg text-sm">杭州</span>
+                    <span class="px-3 py-1.5 bg-white/10 rounded-lg text-sm">南京</span>
+                    <span class="px-3 py-1.5 bg-white/10 rounded-lg text-sm">武汉</span>
+                    <span class="px-3 py-1.5 bg-white/10 rounded-lg text-sm">西安</span>
+                    <span class="px-3 py-1.5 bg-white/10 rounded-lg text-sm">+6 城</span>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="font-bold mb-3">时间安排</h3>
+                <div class="space-y-3">
+                    <div class="flex gap-3">
+                        <div class="w-2 h-2 rounded-full bg-[#1DB954] mt-2"></div>
+                        <div>
+                            <div class="text-sm font-medium">融资阶段</div>
+                            <div class="text-xs text-white/50">2025.01.01 - 2025.01.31</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-2 h-2 rounded-full bg-white/30 mt-2"></div>
+                        <div>
+                            <div class="text-sm font-medium">筹备阶段</div>
+                            <div class="text-xs text-white/50">2025.02.01 - 2025.03.31</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-2 h-2 rounded-full bg-white/30 mt-2"></div>
+                        <div>
+                            <div class="text-sm font-medium">巡演阶段</div>
+                            <div class="text-xs text-white/50">2025.04.01 - 2025.06.30</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="font-bold mb-3">风险提示</h3>
+                <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-exclamation-triangle text-amber-500 mt-0.5"></i>
+                        <div class="text-sm text-white/70">
+                            投资有风险，过往业绩不代表未来表现。请仔细阅读项目详情和风险提示，根据自身风险承受能力谨慎投资。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 动态内容 -->
+        <div id="updates" class="tab-content px-4 py-4">
+            <div class="space-y-4">
+                <div class="bg-white/5 rounded-2xl p-4">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+                            👩‍🎤
+                        </div>
+                        <div>
+                            <div class="font-medium text-sm">林夕</div>
+                            <div class="text-xs text-white/50">2 天前</div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-white/70">
+                        感谢大家的支持！目前融资进度已经达到 65%，距离目标越来越近了。我已经开始联系场地，预计下周会有更多好消息分享给大家。
+                    </p>
+                </div>
+
+                <div class="bg-white/5 rounded-2xl p-4">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+                            👩‍🎤
+                        </div>
+                        <div>
+                            <div class="font-medium text-sm">林夕</div>
+                            <div class="text-xs text-white/50">1 周前</div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-white/70">
+                        项目正式上线！这是我第一次尝试通过 XMUSIC 平台进行融资，希望能得到大家的支持。巡演的歌单已经在筹备中，会包含新专辑的歌曲。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 投资人内容 -->
+        <div id="investors" class="tab-content px-4 py-4">
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-sm text-white/50">共 234 位投资人</span>
+                <button class="text-xs text-[#1DB954]">查看全部</button>
+            </div>
+
+            <div class="space-y-3">
+                <div class="flex items-center gap-3 bg-white/5 rounded-xl p-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-sm">🦁</div>
+                    <div class="flex-1">
+                        <div class="font-medium text-sm">MusicLover_01</div>
+                        <div class="text-xs text-white/50">投资 $5,000 · 2 天前</div>
+                    </div>
+                    <span class="text-xs bg-[#1DB954]/20 text-[#1DB954] px-2 py-1 rounded-full">大额</span>
+                </div>
+
+                <div class="flex items-center gap-3 bg-white/5 rounded-xl p-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-sm">🐋</div>
+                    <div class="flex-1">
+                        <div class="font-medium text-sm">CryptoWhale</div>
+                        <div class="text-xs text-white/50">投资 $3,000 · 3 天前</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 bg-white/5 rounded-xl p-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center text-sm">🦊</div>
+                    <div class="flex-1">
+                        <div class="font-medium text-sm">IndieFan</div>
+                        <div class="text-xs text-white/50">投资 $500 · 5 天前</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部投资栏 -->
+    <div class="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-md border-t border-white/10 safe-bottom z-40">
+        <div class="flex items-center gap-3 px-4 py-3">
+            <div class="flex-1">
+                <div class="text-xs text-white/50">最低投资 $10</div>
+                <div class="text-lg font-bold text-[#1DB954]">预期回报 15-25%</div>
+            </div>
+            <button onclick="showInvestModal()" class="px-8 py-3 bg-[#1DB954] text-black rounded-xl font-bold">
+                立即投资
+            </button>
+        </div>
+    </div>
+
+    <!-- 投资弹窗 -->
+    <div id="investModal" class="fixed inset-0 bg-black/80 z-50 hidden items-end">
+        <div class="w-full bg-[#121212] rounded-t-3xl invest-modal">
+            <div class="flex items-center justify-between px-4 py-4 border-b border-white/10">
+                <h3 class="text-lg font-bold">投资</h3>
+                <button onclick="hideInvestModal()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="p-4">
+                <div class="bg-white/5 rounded-2xl p-4 mb-4">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-xl">🎵</div>
+                        <div>
+                            <div class="font-bold">林夕</div>
+                            <div class="text-xs text-white/50">2025巡演计划</div>
+                        </div>
+                    </div>
+                    <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-[#1DB954] rounded-full" style="width: 65%"></div>
+                    </div>
+                    <div class="flex items-center justify-between mt-2 text-xs">
+                        <span class="text-white/50">已筹集 $32.5K</span>
+                        <span class="text-white/50">目标 $50K</span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="text-sm text-white/70 mb-2 block">投资金额 (USD)</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-white/50">$</span>
+                        <input type="number" id="investAmount" placeholder="100" min="10" max="1000000"
+                            class="w-full bg-white/10 text-white pl-8 pr-4 py-4 rounded-xl border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors text-lg font-bold"
+                            oninput="calculateReturn()">
+                    </div>
+                    <div class="flex gap-2 mt-3">
+                        <button onclick="setAmount(100)" class="flex-1 py-2 bg-white/10 rounded-lg text-sm">$100</button>
+                        <button onclick="setAmount(500)" class="flex-1 py-2 bg-white/10 rounded-lg text-sm">$500</button>
+                        <button onclick="setAmount(1000)" class="flex-1 py-2 bg-white/10 rounded-lg text-sm">$1K</button>
+                        <button onclick="setAmount(5000)" class="flex-1 py-2 bg-white/10 rounded-lg text-sm">$5K</button>
+                    </div>
+                </div>
+
+                <div class="bg-[#1DB954]/10 rounded-xl p-4 mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm text-white/70">预期回报</span>
+                        <span class="text-lg font-bold text-[#1DB954]" id="expectedReturn">$0</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-white/50">年化收益率</span>
+                        <span class="text-[#1DB954]">15-25%</span>
+                    </div>
+                </div>
+
+                <button onclick="confirmInvest()" class="w-full py-4 bg-[#1DB954] text-black rounded-xl font-bold text-lg">
+                    确认投资
+                </button>
+                
+                <p class="text-xs text-white/50 text-center mt-3">
+                    点击确认即表示您同意<a href="#" class="text-[#1DB954]">投资协议</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../public/js/xmusic.js"></script>
+    <script src="../public/js/security-utils.js"></script>
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('text-white/50');
+            });
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            event.target.classList.remove('text-white/50');
+        }
+
+        function showInvestModal() {
+            document.getElementById('investModal').classList.remove('hidden');
+            document.getElementById('investModal').classList.add('flex');
+        }
+
+        function hideInvestModal() {
+            document.getElementById('investModal').classList.add('hidden');
+            document.getElementById('investModal').classList.remove('flex');
+        }
+
+        function setAmount(amount) {
+            document.getElementById('investAmount').value = amount;
+            calculateReturn();
+        }
+
+        function calculateReturn() {
+            const amount = parseFloat(document.getElementById('investAmount').value) || 0;
+            const minReturn = amount * 0.15;
+            const maxReturn = amount * 0.25;
+            document.getElementById('expectedReturn').textContent = '$' + minReturn.toFixed(0) + ' - $' + maxReturn.toFixed(0);
+        }
+
+        function confirmInvest() {
+            const amount = document.getElementById('investAmount').value;
+            if (!amount || amount < 10) {
+                alert('请输入有效的投资金额（最低 $10）');
+                return;
+            }
+            alert('投资成功！感谢您的支持。');
+            hideInvestModal();
+        }
+    </script>
+</body>
+</html>

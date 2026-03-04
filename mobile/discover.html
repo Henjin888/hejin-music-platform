@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <title>发现 - XMUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        body { -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; }
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .pulse-btn { animation: pulse-green 2s infinite; }
+        @keyframes pulse-green {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(29, 185, 84, 0); }
+        }
+        .category-tab { transition: all 0.3s ease; }
+        .category-tab.active { background: #1DB954; color: black; }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen pb-20">
+    <header class="sticky top-0 z-40 bg-black/95 backdrop-blur-md border-b border-white/5">
+        <div class="flex items-center justify-between px-4 py-3">
+            <div class="flex items-center gap-3">
+                <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/5">
+                    <i class="fas fa-arrow-left text-white/80"></i>
+                </button>
+                <span class="text-xl font-bold">发现</span>
+            </div>
+            <button onclick="showFilter()" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/5">
+                <i class="fas fa-sliders-h text-white/80"></i>
+            </button>
+        </div>
+        <div class="flex gap-2 px-4 pb-3 overflow-x-auto hide-scrollbar">
+            <button class="category-tab active px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10">全部</button>
+            <button class="category-tab px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10 text-white/70">流行</button>
+            <button class="category-tab px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10 text-white/70">摇滚</button>
+            <button class="category-tab px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10 text-white/70">电子</button>
+            <button class="category-tab px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10 text-white/70">说唱</button>
+            <button class="category-tab px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10 text-white/70">民谣</button>
+            <button class="category-tab px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10 text-white/70">爵士</button>
+            <button class="category-tab px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10 text-white/70">古典</button>
+        </div>
+    </header>
+
+    <main class="px-4 py-4">
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-sm text-white/50">共 128 个项目</span>
+            <div class="flex items-center gap-2">
+                <button class="flex items-center gap-1 text-sm text-white/70 px-3 py-1.5 rounded-lg bg-white/5">
+                    <span>热度</span>
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+            <a href="project.html?id=1" class="block bg-white/5 rounded-2xl overflow-hidden border border-white/10">
+                <div class="aspect-square bg-gradient-to-br from-purple-600 to-blue-600 relative">
+                    <div class="absolute inset-0 flex items-center justify-center text-5xl">🎵</div>
+                    <div class="absolute top-2 left-2">
+                        <span class="text-[10px] bg-[#1DB954] text-black px-2 py-0.5 rounded-full font-bold">热门</span>
+                    </div>
+                </div>
+                <div class="p-3">
+                    <h3 class="font-bold text-sm mb-1 truncate">林夕</h3>
+                    <p class="text-xs text-white/50 mb-2 truncate">2025巡演计划</p>
+                    <div class="flex items-center justify-between text-xs mb-1.5">
+                        <span class="text-[#1DB954] font-medium">$32.5K</span>
+                        <span class="text-white/30">65%</span>
+                    </div>
+                    <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-[#1DB954] rounded-full" style="width: 65%"></div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="project.html?id=2" class="block bg-white/5 rounded-2xl overflow-hidden border border-white/10">
+                <div class="aspect-square bg-gradient-to-br from-emerald-600 to-teal-600 relative">
+                    <div class="absolute inset-0 flex items-center justify-center text-5xl">🎹</div>
+                    <div class="absolute top-2 left-2">
+                        <span class="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded-full">已完成</span>
+                    </div>
+                </div>
+                <div class="p-3">
+                    <h3 class="font-bold text-sm mb-1 truncate">陈默</h3>
+                    <p class="text-xs text-white/50 mb-2 truncate">新专辑《午夜飞行》</p>
+                    <div class="flex items-center justify-between text-xs mb-1.5">
+                        <span class="text-[#1DB954] font-medium">$30K</span>
+                        <span class="text-white/30">100%</span>
+                    </div>
+                    <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-[#1DB954] rounded-full" style="width: 100%"></div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="project.html?id=3" class="block bg-white/5 rounded-2xl overflow-hidden border border-white/10">
+                <div class="aspect-square bg-gradient-to-br from-orange-600 to-red-600 relative">
+                    <div class="absolute inset-0 flex items-center justify-center text-5xl">🎤</div>
+                </div>
+                <div class="p-3">
+                    <h3 class="font-bold text-sm mb-1 truncate">MC 阿龙</h3>
+                    <p class="text-xs text-white/50 mb-2 truncate">地下说唱联盟</p>
+                    <div class="flex items-center justify-between text-xs mb-1.5">
+                        <span class="text-[#1DB954] font-medium">$8.5K</span>
+                        <span class="text-white/30">42%</span>
+                    </div>
+                    <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-[#1DB954] rounded-full" style="width: 42%"></div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="project.html?id=4" class="block bg-white/5 rounded-2xl overflow-hidden border border-white/10">
+                <div class="aspect-square bg-gradient-to-br from-pink-600 to-rose-600 relative">
+                    <div class="absolute inset-0 flex items-center justify-center text-5xl">🎸</div>
+                </div>
+                <div class="p-3">
+                    <h3 class="font-bold text-sm mb-1 truncate">小雨</h3>
+                    <p class="text-xs text-white/50 mb-2 truncate">独立民谣EP</p>
+                    <div class="flex items-center justify-between text-xs mb-1.5">
+                        <span class="text-[#1DB954] font-medium">$15K</span>
+                        <span class="text-white/30">60%</span>
+                    </div>
+                    <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-[#1DB954] rounded-full" style="width: 60%"></div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="project.html?id=5" class="block bg-white/5 rounded-2xl overflow-hidden border border-white/10">
+                <div class="aspect-square bg-gradient-to-br from-indigo-600 to-purple-600 relative">
+                    <div class="absolute inset-0 flex items-center justify-center text-5xl">🎺</div>
+                </div>
+                <div class="p-3">
+                    <h3 class="font-bold text-sm mb-1 truncate">爵士老王</h3>
+                    <p class="text-xs text-white/50 mb-2 truncate">爵士酒吧驻场</p>
+                    <div class="flex items-center justify-between text-xs mb-1.5">
+                        <span class="text-[#1DB954] font-medium">$12K</span>
+                        <span class="text-white/30">30%</span>
+                    </div>
+                    <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-[#1DB954] rounded-full" style="width: 30%"></div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="project.html?id=6" class="block bg-white/5 rounded-2xl overflow-hidden border border-white/10">
+                <div class="aspect-square bg-gradient-to-br from-cyan-600 to-blue-600 relative">
+                    <div class="absolute inset-0 flex items-center justify-center text-5xl">🎧</div>
+                    <div class="absolute top-2 left-2">
+                        <span class="text-[10px] bg-[#1DB954] text-black px-2 py-0.5 rounded-full font-bold">新上线</span>
+                    </div>
+                </div>
+                <div class="p-3">
+                    <h3 class="font-bold text-sm mb-1 truncate">Alex</h3>
+                    <p class="text-xs text-white/50 mb-2 truncate">Digital Dreams EP</p>
+                    <div class="flex items-center justify-between text-xs mb-1.5">
+                        <span class="text-[#1DB954] font-medium">$45.2K</span>
+                        <span class="text-white/30">75%</span>
+                    </div>
+                    <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-[#1DB954] rounded-full" style="width: 75%"></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="flex justify-center py-6">
+            <button class="px-6 py-2.5 bg-white/10 rounded-full text-sm font-medium">加载更多</button>
+        </div>
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-md border-t border-white/10 safe-bottom z-50">
+        <div class="flex items-center justify-around py-2">
+            <a href="index.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-[10px]">首页</span>
+            </a>
+            <a href="discover.html" class="flex flex-col items-center gap-1 py-2 px-4 text-[#1DB954]">
+                <i class="fas fa-compass text-xl"></i>
+                <span class="text-[10px]">发现</span>
+            </a>
+            <a href="create.html" class="flex flex-col items-center -mt-6">
+                <div class="w-14 h-14 bg-[#1DB954] rounded-full flex items-center justify-center pulse-btn">
+                    <i class="fas fa-plus text-black text-xl"></i>
+                </div>
+                <span class="text-[10px] text-white/50 mt-1">发起</span>
+            </a>
+            <a href="dashboard.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-chart-pie text-xl"></i>
+                <span class="text-[10px]">投资</span>
+            </a>
+            <a href="login.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-user text-xl"></i>
+                <span class="text-[10px]">我的</span>
+            </a>
+        </div>
+    </nav>
+
+    <div id="filterModal" class="fixed inset-0 bg-black/80 z-50 hidden items-end">
+        <div class="w-full bg-[#121212] rounded-t-3xl max-h-[80vh]">
+            <div class="flex items-center justify-between px-4 py-4 border-b border-white/10">
+                <h3 class="text-lg font-bold">筛选</h3>
+                <button onclick="hideFilter()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4 overflow-y-auto max-h-[60vh]">
+                <div class="mb-6">
+                    <div class="text-sm font-medium mb-3">项目状态</div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="px-4 py-2 bg-[#1DB954] text-black rounded-full text-sm font-medium">全部</button>
+                        <button class="px-4 py-2 bg-white/10 rounded-full text-sm">进行中</button>
+                        <button class="px-4 py-2 bg-white/10 rounded-full text-sm">即将开始</button>
+                        <button class="px-4 py-2 bg-white/10 rounded-full text-sm">已完成</button>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <div class="text-sm font-medium mb-3">目标金额</div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="px-4 py-2 bg-white/10 rounded-full text-sm">< $10K</button>
+                        <button class="px-4 py-2 bg-white/10 rounded-full text-sm">$10K - $50K</button>
+                        <button class="px-4 py-2 bg-white/10 rounded-full text-sm">$50K - $100K</button>
+                        <button class="px-4 py-2 bg-white/10 rounded-full text-sm">> $100K</button>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <div class="text-sm font-medium mb-3">进度</div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="px-4 py-2 bg-white/10 rounded-full text-sm">< 30%</button>
+                        <button class="px-4 py-2 bg-white/10 rounded-full text-sm">30% - 70%</button>
+                        <button class="px-4 py-2 bg-white/10 rounded-full text-sm">> 70%</button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-white/10">
+                <div class="flex gap-3">
+                    <button class="flex-1 py-3 bg-white/10 rounded-xl font-medium">重置</button>
+                    <button class="flex-1 py-3 bg-[#1DB954] text-black rounded-xl font-bold">应用</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../public/js/xmusic.js"></script>
+    <script src="../public/js/security-utils.js"></script>
+    <script>
+        function showFilter() {
+            document.getElementById('filterModal').classList.remove('hidden');
+            document.getElementById('filterModal').classList.add('flex');
+        }
+        function hideFilter() {
+            document.getElementById('filterModal').classList.add('hidden');
+            document.getElementById('filterModal').classList.remove('flex');
+        }
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.category-tab').forEach(t => {
+                    t.classList.remove('active', 'bg-[#1DB954]', 'text-black');
+                    t.classList.add('bg-white/10', 'text-white/70');
+                });
+                this.classList.add('active', 'bg-[#1DB954]', 'text-black');
+                this.classList.remove('bg-white/10', 'text-white/70');
+            });
+        });
+    </script>
+</body>
+</html>

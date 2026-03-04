@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>X-Music-Brand - Web3音乐金融</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xm-bg': '#0a0a0a',
+                        'xm-card': '#1a1a1a',
+                        'xm-green': '#4ade80',
+                        'xm-green-dark': '#22c55e',
+                        'xm-gray': '#2a2a2a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        
+        body {
+            background: #0a0a0a;
+            color: white;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+        
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 50%, #4ade80 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Glow effects */
+        .glow-green {
+            box-shadow: 0 0 40px rgba(74, 222, 128, 0.3);
+        }
+        
+        .glow-bg {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(74, 222, 128, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+        
+        /* Card hover */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:active {
+            transform: scale(0.98);
+        }
+        
+        /* Progress bar */
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #4ade80, #22c55e);
+            border-radius: 999px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Bottom nav pulse */
+        @keyframes pulse-green {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+            50% { box-shadow: 0 0 0 12px rgba(74, 222, 128, 0); }
+        }
+        .pulse-btn {
+            animation: pulse-green 2s infinite;
+        }
+        
+        /* Floating animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Modal slide up */
+        .modal-enter {
+            animation: slideUp 0.3s ease forwards;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-20">
+    <!-- Status bar spacer -->
+    <div class="h-safe-top bg-[#0a0a0a]"></div>
+    
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5">
+        <div class="flex items-center justify-between px-4 py-3">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-gradient-to-br from-xm-green to-xm-green-dark rounded-xl flex items-center justify-center">
+                    <i class="fas fa-music text-black text-sm"></i>
+                </div>
+                <span class="text-lg font-bold">X-Music</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="showSearch()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
+                    <i class="fas fa-search text-white/70"></i>
+                </button>
+                <button onclick="showNotif()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 transition-colors relative">
+                    <i class="fas fa-bell text-white/70"></i>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-xm-green rounded-full"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="relative px-4 pt-6 pb-8 overflow-hidden">
+            <!-- Glow backgrounds -->
+            <div class="glow-bg -top-20 -left-20"></div>
+            <div class="glow-bg top-20 right-0" style="background: radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, transparent 70%);"></div>
+            
+            <div class="relative">
+                <!-- Dynamic Title -->
+                <h1 id="dynamicTitle" class="text-3xl font-bold mb-3 leading-tight">
+                    <span class="gradient-text">发现下一个音乐巨星</span>
+                </h1>
+                
+                <p class="text-sm text-white/50 mb-5">
+                    X-Music-Brand — 连接音乐人与投资者的桥梁
+                </p>
+                
+                <!-- Search Box -->
+                <div class="relative bg-xm-card rounded-2xl border border-white/10 p-2 flex items-center gap-2 mb-6">
+                    <div class="flex-1 flex items-center gap-3 px-3">
+                        <i class="fas fa-search text-white/30"></i>
+                        <input type="text" placeholder="搜索艺人、项目..." 
+                            class="flex-1 bg-transparent text-white placeholder-white/30 outline-none text-sm py-2">
+                    </div>
+                    <button class="bg-gradient-to-r from-xm-green to-xm-green-dark text-black px-4 py-2 rounded-xl text-sm font-semibold">
+                        探索
+                    </button>
+                </div>
+                
+                <!-- Quick Tags -->
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-white/60">独立民谣</span>
+                    <span class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-white/60">电子</span>
+                    <span class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-white/60">摇滚</span>
+                    <span class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-white/60">说唱</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="px-4 mb-8">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-xm-card rounded-2xl p-4 border border-white/5">
+                    <div class="w-10 h-10 bg-xm-green/10 rounded-xl flex items-center justify-center mb-3">
+                        <i class="fas fa-music text-xm-green"></i>
+                    </div>
+                    <div class="text-2xl font-bold">1000+</div>
+                    <div class="text-xs text-white/50">活跃艺人</div>
+                </div>
+                <div class="bg-xm-card rounded-2xl p-4 border border-white/5">
+                    <div class="w-10 h-10 bg-xm-green/10 rounded-xl flex items-center justify-center mb-3">
+                        <i class="fas fa-chart-line text-xm-green"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-xm-green">$500K+</div>
+                    <div class="text-xs text-white/50">总融资额</div>
+                </div>
+                <div class="bg-xm-card rounded-2xl p-4 border border-white/5">
+                    <div class="w-10 h-10 bg-xm-green/10 rounded-xl flex items-center justify-center mb-3">
+                        <i class="fas fa-users text-xm-green"></i>
+                    </div>
+                    <div class="text-2xl font-bold">5000+</div>
+                    <div class="text-xs text-white/50">投资社区</div>
+                </div>
+                <div class="bg-xm-card rounded-2xl p-4 border border-white/5">
+                    <div class="w-10 h-10 bg-xm-green/10 rounded-xl flex items-center justify-center mb-3">
+                        <i class="fas fa-sparkles text-xm-green"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-xm-green">98%</div>
+                    <div class="text-xs text-white/50">成功率</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Projects -->
+        <section class="mb-8">
+            <div class="flex items-center justify-between px-4 mb-4">
+                <h2 class="text-lg font-bold">精选项目</h2>
+                <a href="explore.html" class="text-xs text-xm-green flex items-center gap-1">
+                    查看全部 <i class="fas fa-chevron-right text-xs"></i>
+                </a>
+            </div>
+            
+            <!-- Horizontal Scroll -->
+            <div class="flex gap-4 px-4 overflow-x-auto hide-scrollbar pb-2">
+                <!-- Project 1 -->
+                <a href="project.html?id=1" class="flex-shrink-0 w-64 card-hover">
+                    <div class="bg-xm-card rounded-2xl overflow-hidden border border-white/5">
+                        <div class="relative h-36">
+                            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop" 
+                                alt="Alex" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                            <div class="absolute bottom-3 left-3 flex items-center gap-2">
+                                <div class="w-8 h-8 bg-xm-green rounded-full flex items-center justify-center">
+                                    <i class="fas fa-play text-black text-xs ml-0.5"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-medium">City Echo</div>
+                                    <div class="text-[10px] text-white/50">@Alex</div>
+                                </div>
+                            </div>
+                            <div class="absolute top-3 right-3 px-2 py-1 bg-black/50 backdrop-blur rounded-full text-[10px]">
+                                Indie Folk
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-bold">Alex</span>
+                                <span class="text-xs text-xm-green font-medium">$7,850</span>
+                            </div>
+                            <div class="progress-bar h-1.5 mb-2">
+                                <div class="progress-fill h-full" style="width: 78%"></div>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-white/50">
+                                <span>82 位投资人</span>
+                                <span class="text-xm-green">查看详情 →</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 2 -->
+                <a href="project.html?id=2" class="flex-shrink-0 w-64 card-hover">
+                    <div class="bg-xm-card rounded-2xl overflow-hidden border border-white/5">
+                        <div class="relative h-36">
+                            <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=300&fit=crop" 
+                                alt="Luna" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                            <div class="absolute bottom-3 left-3 flex items-center gap-2">
+                                <div class="w-8 h-8 bg-xm-green rounded-full flex items-center justify-center">
+                                    <i class="fas fa-play text-black text-xs ml-0.5"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-medium">Deep Sea</div>
+                                    <div class="text-[10px] text-white/50">@Luna</div>
+                                </div>
+                            </div>
+                            <div class="absolute top-3 right-3 px-2 py-1 bg-black/50 backdrop-blur rounded-full text-[10px]">
+                                Electronic
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-bold">Luna</span>
+                                <span class="text-xs text-xm-green font-medium">$3,200</span>
+                            </div>
+                            <div class="progress-bar h-1.5 mb-2">
+                                <div class="progress-fill h-full" style="width: 64%"></div>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-white/50">
+                                <span>45 位投资人</span>
+                                <span class="text-xm-green">查看详情 →</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 3 -->
+                <a href="project.html?id=3" class="flex-shrink-0 w-64 card-hover">
+                    <div class="bg-xm-card rounded-2xl overflow-hidden border border-white/5">
+                        <div class="relative h-36">
+                            <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=300&fit=crop" 
+                                alt="Sam" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                            <div class="absolute bottom-3 left-3 flex items-center gap-2">
+                                <div class="w-8 h-8 bg-xm-green rounded-full flex items-center justify-center">
+                                    <i class="fas fa-play text-black text-xs ml-0.5"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-medium">Highway</div>
+                                    <div class="text-[10px] text-white/50">@Sam</div>
+                                </div>
+                            </div>
+                            <div class="absolute top-3 right-3 px-2 py-1 bg-black/50 backdrop-blur rounded-full text-[10px]">
+                                Rock
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-bold">Sam</span>
+                                <span class="text-xs text-xm-green font-medium">$11,500</span>
+                            </div>
+                            <div class="progress-bar h-1.5 mb-2">
+                                <div class="progress-fill h-full" style="width: 57%"></div>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-white/50">
+                                <span>112 位投资人</span>
+                                <span class="text-xm-green">查看详情 →</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="px-4 mb-8">
+            <h2 class="text-lg font-bold mb-4">如何运作</h2>
+            <div class="space-y-3">
+                <div class="bg-xm-card rounded-2xl p-4 border border-white/5 flex items-start gap-4">
+                    <div class="text-3xl font-bold text-xm-green/20">01</div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <i class="fas fa-search text-xm-green text-sm"></i>
+                            <span class="font-semibold">发现艺人</span>
+                        </div>
+                        <p class="text-xs text-white/50">浏览平台上的独立音乐人及其融资项目</p>
+                    </div>
+                </div>
+                <div class="bg-xm-card rounded-2xl p-4 border border-white/5 flex items-start gap-4">
+                    <div class="text-3xl font-bold text-xm-green/20">02</div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <i class="fas fa-chart-line text-xm-green text-sm"></i>
+                            <span class="font-semibold">进行投资</span>
+                        </div>
+                        <p class="text-xs text-white/50">选择心仪项目，投资获得股份和收益分配权</p>
+                    </div>
+                </div>
+                <div class="bg-xm-card rounded-2xl p-4 border border-white/5 flex items-start gap-4">
+                    <div class="text-3xl font-bold text-xm-green/20">03</div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <i class="fas fa-sparkles text-xm-green text-sm"></i>
+                            <span class="font-semibold">分享成功</span>
+                        </div>
+                        <p class="text-xs text-white/50">随着艺人成长，分享他们的流媒体和销售收入</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="px-4 mb-8">
+            <div class="relative bg-gradient-to-r from-[#1a472a] to-[#0d2818] rounded-3xl p-6 overflow-hidden">
+                <div class="absolute inset-0 opacity-30" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.1\'%3E%3Ccircle cx=\'30\' cy=\'30\' r=\'2\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+                <div class="relative">
+                    <h3 class="text-xl font-bold mb-2">准备好开始了吗？</h3>
+                    <p class="text-sm text-white/70 mb-4">加入数千名投资者，支持您喜爱的独立音乐人</p>
+                    <div class="flex gap-3">
+                        <a href="explore.html" class="flex-1 bg-white text-black py-3 rounded-xl font-semibold text-center text-sm">
+                            开始探索
+                        </a>
+                        <a href="login.html" class="flex-1 bg-white/10 border border-white/20 text-white py-3 rounded-xl font-semibold text-center text-sm">
+                            注册账户
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-[#0a0a0a]/95 backdrop-blur-xl border-t border-white/5 safe-bottom z-50">
+        <div class="flex items-center justify-around py-2">
+            <a href="index.html" class="flex flex-col items-center gap-1 py-2 px-4 text-xm-green">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[10px]">首页</span>
+            </a>
+            <a href="explore.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-compass text-lg"></i>
+                <span class="text-[10px]">探索</span>
+            </a>
+            <a href="create.html" class="flex flex-col items-center -mt-6">
+                <div class="w-14 h-14 bg-gradient-to-r from-xm-green to-xm-green-dark rounded-full flex items-center justify-center pulse-btn">
+                    <i class="fas fa-plus text-black text-xl"></i>
+                </div>
+                <span class="text-[10px] text-white/50 mt-1">发起</span>
+            </a>
+            <a href="dashboard.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-chart-pie text-lg"></i>
+                <span class="text-[10px]">投资</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-user text-lg"></i>
+                <span class="text-[10px]">我的</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Search Modal -->
+    <div id="searchModal" class="fixed inset-0 bg-[#0a0a0a] z-50 hidden flex-col">
+        <div class="flex items-center gap-3 px-4 py-3 border-b border-white/10">
+            <div class="flex-1 relative">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/30"></i>
+                <input type="text" placeholder="搜索艺人、项目..." 
+                    class="w-full bg-xm-card text-white pl-11 pr-4 py-3 rounded-xl border border-white/10 focus:border-xm-green focus:outline-none transition-colors"
+                    autofocus>
+            </div>
+            <button onclick="hideSearch()" class="text-white/70 text-sm">取消</button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4">
+            <div class="text-sm text-white/50 mb-3">热门搜索</div>
+            <div class="flex flex-wrap gap-2 mb-6">
+                <span class="px-3 py-1.5 bg-xm-card rounded-full text-sm">电子音乐</span>
+                <span class="px-3 py-1.5 bg-xm-card rounded-full text-sm">独立民谣</span>
+                <span class="px-3 py-1.5 bg-xm-card rounded-full text-sm">说唱</span>
+                <span class="px-3 py-1.5 bg-xm-card rounded-full text-sm">爵士</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notifModal" class="fixed inset-0 bg-black/80 z-50 hidden items-end">
+        <div class="w-full bg-xm-card rounded-t-3xl modal-enter max-h-[80vh]">
+            <div class="flex items-center justify-between px-4 py-4 border-b border-white/10">
+                <h3 class="text-lg font-bold">通知</h3>
+                <button onclick="hideNotif()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
+            <div class="p-4 max-h-[60vh] overflow-y-auto">
+                <div class="space-y-3">
+                    <div class="flex gap-3 p-3 bg-white/5 rounded-xl">
+                        <div class="w-10 h-10 bg-xm-green/20 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-check text-xm-green text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-sm">投资成功</div>
+                            <div class="text-xs text-white/50 mt-0.5">您已成功投资 Alex 的项目 $500</div>
+                            <div class="text-xs text-white/30 mt-1">2小时前</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 p-3 bg-white/5 rounded-xl">
+                        <div class="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-bell text-blue-500 text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-sm">项目更新</div>
+                            <div class="text-xs text-white/50 mt-0.5">Luna 的新专辑已完成 80% 录制进度</div>
+                            <div class="text-xs text-white/30 mt-1">5小时前</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dynamic title rotation
+        const titles = [
+            "发现下一个音乐巨星",
+            "投资您喜爱的音乐",
+            "与艺人共同成长",
+            "让梦想成真"
+        ];
+        let titleIndex = 0;
+        setInterval(() => {
+            titleIndex = (titleIndex + 1) % titles.length;
+            document.getElementById('dynamicTitle').innerHTML = `<span class="gradient-text">${titles[titleIndex]}</span>`;
+        }, 3000);
+
+        function showSearch() {
+            document.getElementById('searchModal').classList.remove('hidden');
+            document.getElementById('searchModal').classList.add('flex');
+        }
+        function hideSearch() {
+            document.getElementById('searchModal').classList.add('hidden');
+            document.getElementById('searchModal').classList.remove('flex');
+        }
+        function showNotif() {
+            document.getElementById('notifModal').classList.remove('hidden');
+            document.getElementById('notifModal').classList.add('flex');
+        }
+        function hideNotif() {
+            document.getElementById('notifModal').classList.add('hidden');
+            document.getElementById('notifModal').classList.remove('flex');
+        }
+    </script>
+</body>
+</html>

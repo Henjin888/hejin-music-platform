@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>探索 - X-Music-Brand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xm-bg': '#0a0a0a',
+                        'xm-card': '#1a1a1a',
+                        'xm-green': '#4ade80',
+                        'xm-green-dark': '#22c55e',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #0a0a0a; color: white; -webkit-tap-highlight-color: transparent; }
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .category-tab { transition: all 0.3s ease; }
+        .category-tab.active { background: #4ade80; color: black; }
+        .progress-bar { background: rgba(255,255,255,0.1); border-radius: 999px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #4ade80, #22c55e); border-radius: 999px; }
+    </style>
+</head>
+<body class="min-h-screen pb-20">
+    <header class="sticky top-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5">
+        <div class="flex items-center justify-between px-4 py-3">
+            <div class="flex items-center gap-3">
+                <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5">
+                    <i class="fas fa-arrow-left text-white/70"></i>
+                </button>
+                <span class="text-lg font-bold">探索项目</span>
+            </div>
+            <button onclick="showFilter()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5">
+                <i class="fas fa-sliders-h text-white/70"></i>
+            </button>
+        </div>
+        
+        <div class="flex gap-2 px-4 pb-3 overflow-x-auto hide-scrollbar">
+            <button class="category-tab active px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10">全部</button>
+            <button class="category-tab px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10 text-white/70">录音</button>
+            <button class="category-tab px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10 text-white/70">电子</button>
+            <button class="category-tab px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10 text-white/70">巡演</button>
+            <button class="category-tab px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10 text-white/70">民谣</button>
+            <button class="category-tab px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10 text-white/70">爵士</button>
+            <button class="category-tab px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white/10 text-white/70">摇滚</button>
+        </div>
+    </header>
+
+    <main class="px-4 py-4">
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-sm text-white/50">共 128 个项目</span>
+            <select class="bg-xm-card text-white text-sm px-3 py-1.5 rounded-lg border border-white/10 outline-none">
+                <option>最热</option>
+                <option>最新</option>
+                <option>即将结束</option>
+            </select>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4">
+            <!-- Project 1 -->
+            <a href="project.html?id=1" class="block bg-xm-card rounded-2xl overflow-hidden border border-white/5">
+                <div class="relative h-44">
+                    <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&h=400&fit=crop" alt="" class="w-full h-full object-cover">
+                    <div class="absolute top-3 right-3 bg-xm-green text-black px-3 py-1 rounded-full text-sm font-bold">78%</div>
+                    <div class="absolute top-3 left-3 bg-black/50 backdrop-blur text-white px-3 py-1 rounded-full text-xs">录音</div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold mb-1">City Echo - My First Studio EP</h3>
+                    <p class="text-sm text-white/50 mb-3">by Alex</p>
+                    
+                    <div class="progress-bar h-2 mb-3">
+                        <div class="progress-fill h-full" style="width: 78%"></div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-white/50"><span class="text-xm-green font-medium">$7,850</span> / $10,000</span>
+                        <span class="text-white/50">15 天剩余</span>
+                    </div>
+                    <div class="flex items-center justify-between mt-3 pt-3 border-t border-white/5">
+                        <span class="text-xs text-white/50">82 位投资人</span>
+                        <span class="text-xm-green text-sm">查看详情 →</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Project 2 -->
+            <a href="project.html?id=2" class="block bg-xm-card rounded-2xl overflow-hidden border border-white/5">
+                <div class="relative h-44">
+                    <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=400&fit=crop" alt="" class="w-full h-full object-cover">
+                    <div class="absolute top-3 right-3 bg-xm-green text-black px-3 py-1 rounded-full text-sm font-bold">64%</div>
+                    <div class="absolute top-3 left-3 bg-black/50 backdrop-blur text-white px-3 py-1 rounded-full text-xs">电子</div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold mb-1">Deep Sea Whisper - Experimental Album</h3>
+                    <p class="text-sm text-white/50 mb-3">by Luna</p>
+                    
+                    <div class="progress-bar h-2 mb-3">
+                        <div class="progress-fill h-full" style="width: 64%"></div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-white/50"><span class="text-xm-green font-medium">$3,200</span> / $5,000</span>
+                        <span class="text-white/50">28 天剩余</span>
+                    </div>
+                    <div class="flex items-center justify-between mt-3 pt-3 border-t border-white/5">
+                        <span class="text-xs text-white/50">45 位投资人</span>
+                        <span class="text-xm-green text-sm">查看详情 →</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Project 3 -->
+            <a href="project.html?id=3" class="block bg-xm-card rounded-2xl overflow-hidden border border-white/5">
+                <div class="relative h-44">
+                    <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&h=400&fit=crop" alt="" class="w-full h-full object-cover">
+                    <div class="absolute top-3 right-3 bg-xm-green text-black px-3 py-1 rounded-full text-sm font-bold">57%</div>
+                    <div class="absolute top-3 left-3 bg-black/50 backdrop-blur text-white px-3 py-1 rounded-full text-xs">巡演</div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold mb-1">Highway Poems - National Tour Funding</h3>
+                    <p class="text-sm text-white/50 mb-3">by Sam</p>
+                    
+                    <div class="progress-bar h-2 mb-3">
+                        <div class="progress-fill h-full" style="width: 57%"></div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-white/50"><span class="text-xm-green font-medium">$11,500</span> / $20,000</span>
+                        <span class="text-white/50">40 天剩余</span>
+                    </div>
+                    <div class="flex items-center justify-between mt-3 pt-3 border-t border-white/5">
+                        <span class="text-xs text-white/50">112 位投资人</span>
+                        <span class="text-xm-green text-sm">查看详情 →</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="flex justify-center py-6">
+            <button class="px-6 py-3 bg-white/10 rounded-full text-sm font-medium">加载更多</button>
+        </div>
+    </main>
+
+    <!-- Filter Modal -->
+    <div id="filterModal" class="fixed inset-0 bg-black/80 z-50 hidden items-end">
+        <div class="w-full bg-xm-card rounded-t-3xl">
+            <div class="flex items-center justify-between px-4 py-4 border-b border-white/10">
+                <h3 class="text-lg font-bold">筛选</h3>
+                <button onclick="hideFilter()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4 max-h-[60vh] overflow-y-auto">
+                <div class="mb-6">
+                    <div class="text-sm font-medium mb-3">项目状态</div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="px-4 py-2 bg-xm-green text-black rounded-full text-sm font-medium">全部</button>
+                        <button class="px-4 py-2 bg-white/10 rounded-full text-sm">进行中</button>
+                        <button class="px-4 py-2 bg-white/10 rounded-full text-sm">即将开始</button>
+                        <button class="px-4 py-2 bg-white/10 rounded-full text-sm">已完成</button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-white/10">
+                <div class="flex gap-3">
+                    <button class="flex-1 py-3 bg-white/10 rounded-xl font-medium">重置</button>
+                    <button class="flex-1 py-3 bg-xm-green text-black rounded-xl font-bold">应用</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-[#0a0a0a]/95 backdrop-blur-xl border-t border-white/5 safe-bottom z-40">
+        <div class="flex items-center justify-around py-2">
+            <a href="index.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[10px]">首页</span>
+            </a>
+            <a href="explore.html" class="flex flex-col items-center gap-1 py-2 px-4 text-xm-green">
+                <i class="fas fa-compass text-lg"></i>
+                <span class="text-[10px]">探索</span>
+            </a>
+            <a href="create.html" class="flex flex-col items-center -mt-6">
+                <div class="w-14 h-14 bg-gradient-to-r from-xm-green to-xm-green-dark rounded-full flex items-center justify-center">
+                    <i class="fas fa-plus text-black text-xl"></i>
+                </div>
+                <span class="text-[10px] text-white/50 mt-1">发起</span>
+            </a>
+            <a href="dashboard.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-chart-pie text-lg"></i>
+                <span class="text-[10px]">投资</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-user text-lg"></i>
+                <span class="text-[10px]">我的</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        function showFilter() {
+            document.getElementById('filterModal').classList.remove('hidden');
+            document.getElementById('filterModal').classList.add('flex');
+        }
+        function hideFilter() {
+            document.getElementById('filterModal').classList.add('hidden');
+            document.getElementById('filterModal').classList.remove('flex');
+        }
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.category-tab').forEach(t => {
+                    t.classList.remove('active', 'bg-xm-green', 'text-black');
+                    t.classList.add('bg-white/10', 'text-white/70');
+                });
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

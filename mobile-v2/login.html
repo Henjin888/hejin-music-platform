@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>登录 - X-Music-Brand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xm-bg': '#0a0a0a',
+                        'xm-card': '#1a1a1a',
+                        'xm-green': '#4ade80',
+                        'xm-green-dark': '#22c55e',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #0a0a0a; color: white; -webkit-tap-highlight-color: transparent; }
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        .input-field {
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .input-field:focus {
+            border-color: #4ade80;
+            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+            outline: none;
+        }
+        .social-btn {
+            transition: all 0.2s ease;
+        }
+        .social-btn:active {
+            transform: scale(0.95);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="px-4 py-4">
+        <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
+            <i class="fas fa-arrow-left text-white/70"></i>
+        </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-6 py-4">
+        <!-- Logo -->
+        <div class="flex items-center gap-3 mb-8">
+            <div class="w-12 h-12 bg-gradient-to-br from-xm-green to-xm-green-dark rounded-xl flex items-center justify-center">
+                <i class="fas fa-music text-black text-xl"></i>
+            </div>
+            <div>
+                <span class="text-2xl font-bold">X-Music</span>
+                <span class="text-xs text-white/50 block">Brand</span>
+            </div>
+        </div>
+
+        <!-- Title -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold mb-2">欢迎回来</h1>
+            <p class="text-white/50">登录您的账户继续探索音乐投资世界</p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="space-y-5">
+            <!-- Email/Phone Input -->
+            <div>
+                <label class="text-sm text-white/70 mb-2 block">邮箱或手机号</label>
+                <div class="relative">
+                    <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-white/30"></i>
+                    <input 
+                        type="text" 
+                        id="email" 
+                        placeholder="请输入邮箱或手机号"
+                        class="input-field w-full text-white pl-12 pr-4 py-4 rounded-xl"
+                        autocomplete="email"
+                    >
+                </div>
+            </div>
+
+            <!-- Password Input -->
+            <div>
+                <label class="text-sm text-white/70 mb-2 block">密码</label>
+                <div class="relative">
+                    <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-white/30"></i>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        placeholder="请输入密码"
+                        class="input-field w-full text-white pl-12 pr-12 py-4 rounded-xl"
+                        autocomplete="current-password"
+                    >
+                    <button 
+                        type="button" 
+                        onclick="togglePassword()"
+                        class="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/70 transition-colors"
+                    >
+                        <i id="eyeIcon" class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Forgot Password -->
+            <div class="flex items-center justify-between">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" class="w-4 h-4 accent-xm-green rounded">
+                    <span class="text-sm text-white/70">记住我</span>
+                </label>
+                <a href="#" class="text-sm text-xm-green hover:text-xm-green-dark transition-colors">忘记密码？</a>
+            </div>
+
+            <!-- Login Button -->
+            <button 
+                type="submit" 
+                id="loginBtn"
+                class="w-full py-4 bg-gradient-to-r from-xm-green to-xm-green-dark text-black rounded-xl font-bold text-lg hover:opacity-90 transition-opacity"
+            >
+                登录
+            </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="flex items-center gap-4 my-8">
+            <div class="flex-1 h-px bg-white/10"></div>
+            <span class="text-sm text-white/50">或使用以下方式登录</span>
+            <div class="flex-1 h-px bg-white/10"></div>
+        </div>
+
+        <!-- Social Login -->
+        <div class="grid grid-cols-3 gap-4">
+            <button type="button" class="social-btn flex flex-col items-center gap-2 p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                    <i class="fab fa-google text-red-500"></i>
+                </div>
+                <span class="text-xs text-white/70">Google</span>
+            </button>
+
+            <button type="button" class="social-btn flex flex-col items-center gap-2 p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
+                <div class="w-10 h-10 bg-black border border-white/20 rounded-full flex items-center justify-center">
+                    <i class="fab fa-apple text-white"></i>
+                </div>
+                <span class="text-xs text-white/70">Apple</span>
+            </button>
+
+            <button type="button" class="social-btn flex flex-col items-center gap-2 p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
+                <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                    <i class="fab fa-weixin text-white"></i>
+                </div>
+                <span class="text-xs text-white/70">微信</span>
+            </button>
+        </div>
+
+        <!-- Register Link -->
+        <div class="mt-8 text-center">
+            <p class="text-sm text-white/50">
+                还没有账户？
+                <a href="register.html" class="text-xm-green font-medium hover:text-xm-green-dark transition-colors">立即注册</a>
+            </p>
+        </div>
+
+        <!-- Crypto Wallet Login -->
+        <div class="mt-6 p-4 bg-gradient-to-r from-xm-green/10 to-transparent rounded-xl border border-xm-green/20">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-xm-green/20 rounded-full flex items-center justify-center">
+                    <i class="fas fa-wallet text-xm-green"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="text-sm font-medium">使用加密钱包登录</div>
+                    <div class="text-xs text-white/50">MetaMask, WalletConnect</div>
+                </div>
+                <i class="fas fa-chevron-right text-white/30"></i>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                alert('请填写邮箱/手机号和密码');
+                return;
+            }
+            
+            // Simulate login
+            const loginBtn = document.getElementById('loginBtn');
+            loginBtn.textContent = '登录中...';
+            loginBtn.disabled = true;
+            
+            setTimeout(() => {
+                // Save login state
+                localStorage.setItem('xmusic_user', JSON.stringify({
+                    email: email,
+                    loginTime: Date.now()
+                }));
+                
+                alert('登录成功！');
+                window.location.href = 'index.html';
+            }, 1500);
+        });
+
+        // Check if already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = localStorage.getItem('xmusic_user');
+            if (user) {
+                // Optional: auto redirect or show welcome back
+                console.log('Welcome back:', JSON.parse(user));
+            }
+        });
+    </script>
+</body>
+</html>

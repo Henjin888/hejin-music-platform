@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <title>XMUSIC - Web3音乐金融</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        
+        /* 移动端优化 */
+        body {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+        
+        /* 底部安全区域 */
+        .safe-bottom {
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+        
+        /* 卡片滑动效果 */
+        .card-swipe {
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        .card-swipe > * {
+            scroll-snap-align: start;
+        }
+        
+        /* 底部导航栏 */
+        .bottom-nav {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        /* 隐藏滚动条 */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* 脉冲动画 */
+        @keyframes pulse-green {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(29, 185, 84, 0); }
+        }
+        .pulse-btn {
+            animation: pulse-green 2s infinite;
+        }
+        
+        /* 骨架屏动画 */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #282828 25%, #383838 50%, #282828 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        
+        /* 下拉刷新指示器 */
+        .pull-refresh {
+            transition: transform 0.3s ease;
+        }
+        .pull-refresh.pulling {
+            transform: translateY(60px);
+        }
+        
+        /* 模态框动画 */
+        .modal-enter {
+            animation: modalIn 0.3s ease forwards;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(100%); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 标签页指示器 */
+        .tab-indicator {
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen pb-20">
+    <!-- 状态栏占位 -->
+    <div class="h-safe-top bg-black"></div>
+    
+    <!-- 顶部导航 -->
+    <header class="sticky top-0 z-40 bg-black/95 backdrop-blur-md border-b border-white/5">
+        <div class="flex items-center justify-between px-4 py-3">
+            <div class="flex items-center gap-2">
+                <div class="w-9 h-9 bg-[#1DB954] rounded-full flex items-center justify-center">
+                    <i class="fas fa-music text-black text-sm"></i>
+                </div>
+                <span class="text-xl font-bold">XMUSIC</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="showSearch()" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/5">
+                    <i class="fas fa-search text-white/80"></i>
+                </button>
+                <button onclick="toggleNotif()" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 relative">
+                    <i class="fas fa-bell text-white/80"></i>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-[#1DB954] rounded-full"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="pull-refresh" id="mainContent">
+        <!-- Hero 区域 -->
+        <section class="relative px-4 pt-6 pb-8">
+            <div class="absolute inset-0 bg-gradient-to-b from-[#1DB954]/20 via-transparent to-transparent pointer-events-none"></div>
+            
+            <div class="relative">
+                <span class="inline-block bg-[#1DB954]/20 text-[#1DB954] px-3 py-1 rounded-full text-xs font-semibold mb-4">
+                    Web3 音乐金融
+                </span>
+                
+                <h1 class="text-3xl font-black mb-3 leading-tight">
+                    让每个歌手拥有<br>
+                    <span class="text-[#1DB954]">自己的小投行</span>
+                </h1>
+                
+                <p class="text-sm text-white/60 mb-5">
+                    把音乐事业变成可投资、可分配、可治理的数字资产
+                </p>
+                
+                <div class="flex gap-3">
+                    <a href="#projects" class="flex-1 bg-[#1DB954] text-black py-3.5 rounded-xl font-bold text-center flex items-center justify-center gap-2">
+                        <i class="fas fa-compass"></i>
+                        探索项目
+                    </a>
+                    <a href="create.html" class="flex-1 bg-white/10 text-white py-3.5 rounded-xl font-bold text-center border border-white/20">
+                        发起融资
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 平台数据卡片 -->
+        <section class="px-4 mb-6">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-gradient-to-br from-[#1DB954]/20 to-[#1DB954]/5 rounded-2xl p-4 border border-[#1DB954]/20">
+                    <div class="text-2xl font-bold text-[#1DB954] mb-1">$2.8M+</div>
+                    <div class="text-xs text-white/50">累计融资</div>
+                </div>
+                <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+                    <div class="text-2xl font-bold mb-1">18.5%</div>
+                    <div class="text-xs text-white/50">平均回报</div>
+                </div>
+                <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+                    <div class="text-2xl font-bold mb-1">128</div>
+                    <div class="text-xs text-white/50">已上线艺人</div>
+                </div>
+                <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+                    <div class="text-2xl font-bold mb-1">12K+</div>
+                    <div class="text-xs text-white/50">活跃投资人</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 热门音乐人 -->
+        <section id="projects" class="mb-6">
+            <div class="flex items-center justify-between px-4 mb-4">
+                <h2 class="text-lg font-bold">热门音乐人</h2>
+                <a href="discover.html" class="text-xs text-[#1DB954] font-medium">查看全部 <i class="fas fa-chevron-right text-xs"></i></a>
+            </div>
+            
+            <!-- 横向滚动卡片 -->
+            <div class="flex gap-3 px-4 overflow-x-auto hide-scrollbar card-swipe pb-2">
+                <!-- 艺人 1 -->
+                <a href="project.html?id=1" class="flex-shrink-0 w-36">
+                    <div class="aspect-square rounded-2xl bg-gradient-to-br from-purple-600 to-blue-600 mb-3 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center text-4xl">🎵</div>
+                        <div class="absolute bottom-2 right-2 w-8 h-8 bg-[#1DB954] rounded-full flex items-center justify-center">
+                            <i class="fas fa-play text-black text-xs ml-0.5"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-sm mb-0.5 truncate">林夕</h3>
+                    <p class="text-xs text-white/50 mb-2 truncate">2025巡演计划</p>
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="text-[#1DB954] font-medium">$32.5K</span>
+                        <span class="text-white/30">/</span>
+                        <span class="text-white/50">$50K</span>
+                    </div>
+                    <div class="h-1 bg-white/10 rounded-full mt-2 overflow-hidden">
+                        <div class="h-full bg-[#1DB954] rounded-full" style="width: 65%"></div>
+                    </div>
+                </a>
+
+                <!-- 艺人 2 -->
+                <a href="project.html?id=2" class="flex-shrink-0 w-36">
+                    <div class="aspect-square rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-600 mb-3 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center text-4xl">🎹</div>
+                        <div class="absolute bottom-2 right-2 w-8 h-8 bg-[#1DB954] rounded-full flex items-center justify-center">
+                            <i class="fas fa-play text-black text-xs ml-0.5"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-sm mb-0.5 truncate">陈默</h3>
+                    <p class="text-xs text-white/50 mb-2 truncate">新专辑《午夜飞行》</p>
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="text-[#1DB954] font-medium">$30K</span>
+                        <span class="text-white/30">/</span>
+                        <span class="text-white/50">$30K</span>
+                    </div>
+                    <div class="h-1 bg-white/10 rounded-full mt-2 overflow-hidden">
+                        <div class="h-full bg-[#1DB954] rounded-full" style="width: 100%"></div>
+                    </div>
+                    <div class="mt-1.5">
+                        <span class="text-[10px] bg-[#1DB954]/20 text-[#1DB954] px-2 py-0.5 rounded-full">已达成</span>
+                    </div>
+                </a>
+
+                <!-- 艺人 3 -->
+                <a href="project.html?id=3" class="flex-shrink-0 w-36">
+                    <div class="aspect-square rounded-2xl bg-gradient-to-br from-orange-600 to-red-600 mb-3 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center text-4xl">🎤</div>
+                        <div class="absolute bottom-2 right-2 w-8 h-8 bg-[#1DB954] rounded-full flex items-center justify-center">
+                            <i class="fas fa-play text-black text-xs ml-0.5"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-sm mb-0.5 truncate">MC 阿龙</h3>
+                    <p class="text-xs text-white/50 mb-2 truncate">地下说唱联盟</p>
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="text-[#1DB954] font-medium">$8.5K</span>
+                        <span class="text-white/30">/</span>
+                        <span class="text-white/50">$20K</span>
+                    </div>
+                    <div class="h-1 bg-white/10 rounded-full mt-2 overflow-hidden">
+                        <div class="h-full bg-[#1DB954] rounded-full" style="width: 42%"></div>
+                    </div>
+                </a>
+
+                <!-- 艺人 4 -->
+                <a href="project.html?id=4" class="flex-shrink-0 w-36">
+                    <div class="aspect-square rounded-2xl bg-gradient-to-br from-pink-600 to-rose-600 mb-3 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center text-4xl">🎸</div>
+                        <div class="absolute bottom-2 right-2 w-8 h-8 bg-[#1DB954] rounded-full flex items-center justify-center">
+                            <i class="fas fa-play text-black text-xs ml-0.5"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-sm mb-0.5 truncate">小雨</h3>
+                    <p class="text-xs text-white/50 mb-2 truncate">独立民谣EP</p>
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="text-[#1DB954] font-medium">$15K</span>
+                        <span class="text-white/30">/</span>
+                        <span class="text-white/50">$25K</span>
+                    </div>
+                    <div class="h-1 bg-white/10 rounded-full mt-2 overflow-hidden">
+                        <div class="h-full bg-[#1DB954] rounded-full" style="width: 60%"></div>
+                    </div>
+                </a>
+
+                <!-- 艺人 5 -->
+                <a href="project.html?id=5" class="flex-shrink-0 w-36">
+                    <div class="aspect-square rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 mb-3 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center text-4xl">🎺</div>
+                        <div class="absolute bottom-2 right-2 w-8 h-8 bg-[#1DB954] rounded-full flex items-center justify-center">
+                            <i class="fas fa-play text-black text-xs ml-0.5"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-sm mb-0.5 truncate">爵士老王</h3>
+                    <p class="text-xs text-white/50 mb-2 truncate">爵士酒吧驻场</p>
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="text-[#1DB954] font-medium">$12K</span>
+                        <span class="text-white/30">/</span>
+                        <span class="text-white/50">$40K</span>
+                    </div>
+                    <div class="h-1 bg-white/10 rounded-full mt-2 overflow-hidden">
+                        <div class="h-full bg-[#1DB954] rounded-full" style="width: 30%"></div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- 推荐项目 -->
+        <section class="px-4 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold">推荐项目</h2>
+                <button class="text-xs text-white/50 font-medium">筛选 <i class="fas fa-sliders-h text-xs"></i></button>
+            </div>
+            
+            <!-- 项目列表 -->
+            <div class="space-y-3">
+                <!-- 项目 1 -->
+                <a href="project.html?id=6" class="block bg-white/5 rounded-2xl p-4 border border-white/10">
+                    <div class="flex gap-4">
+                        <div class="w-20 h-20 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 flex-shrink-0 flex items-center justify-center text-3xl">
+                            🎧
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-2">
+                                <h3 class="font-bold truncate">电子音乐制作人 Alex</h3>
+                                <span class="text-[10px] bg-[#1DB954]/20 text-[#1DB954] px-2 py-0.5 rounded-full flex-shrink-0">热门</span>
+                            </div>
+                            <p class="text-xs text-white/50 mt-1 truncate">首张EP《Digital Dreams》制作发行</p>
+                            <div class="flex items-center gap-3 mt-2">
+                                <div class="flex items-center gap-1 text-xs">
+                                    <i class="fas fa-users text-white/30"></i>
+                                    <span class="text-white/70">234</span>
+                                </div>
+                                <div class="flex items-center gap-1 text-xs">
+                                    <i class="fas fa-clock text-white/30"></i>
+                                    <span class="text-white/70">12天</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="flex items-center justify-between text-xs mb-1.5">
+                            <span class="text-white/50">已筹集 <span class="text-[#1DB954] font-medium">$45.2K</span></span>
+                            <span class="text-white/50">目标 $60K</span>
+                        </div>
+                        <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-[#1DB954] to-[#1ed760] rounded-full" style="width: 75%"></div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 项目 2 -->
+                <a href="project.html?id=7" class="block bg-white/5 rounded-2xl p-4 border border-white/10">
+                    <div class="flex gap-4">
+                        <div class="w-20 h-20 rounded-xl bg-gradient-to-br from-amber-600 to-orange-600 flex-shrink-0 flex items-center justify-center text-3xl">
+                            🎻
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-bold truncate">古典小提琴家 李雪</h3>
+                            <p class="text-xs text-white/50 mt-1 truncate">个人独奏音乐会巡演</p>
+                            <div class="flex items-center gap-3 mt-2">
+                                <div class="flex items-center gap-1 text-xs">
+                                    <i class="fas fa-users text-white/30"></i>
+                                    <span class="text-white/70">189</span>
+                                </div>
+                                <div class="flex items-center gap-1 text-xs">
+                                    <i class="fas fa-clock text-white/30"></i>
+                                    <span class="text-white/70">25天</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="flex items-center justify-between text-xs mb-1.5">
+                            <span class="text-white/50">已筹集 <span class="text-[#1DB954] font-medium">$28.5K</span></span>
+                            <span class="text-white/50">目标 $80K</span>
+                        </div>
+                        <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-[#1DB954] to-[#1ed760] rounded-full" style="width: 35%"></div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 项目 3 -->
+                <a href="project.html?id=8" class="block bg-white/5 rounded-2xl p-4 border border-white/10">
+                    <div class="flex gap-4">
+                        <div class="w-20 h-20 rounded-xl bg-gradient-to-br from-rose-600 to-pink-600 flex-shrink-0 flex items-center justify-center text-3xl">
+                            🎤
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-bold truncate">流行歌手 小星星</h3>
+                            <p class="text-xs text-white/50 mt-1 truncate">出道专辑《星光》</p>
+                            <div class="flex items-center gap-3 mt-2">
+                                <div class="flex items-center gap-1 text-xs">
+                                    <i class="fas fa-users text-white/30"></i>
+                                    <span class="text-white/70">567</span>
+                                </div>
+                                <div class="flex items-center gap-1 text-xs">
+                                    <i class="fas fa-clock text-white/30"></i>
+                                    <span class="text-white/70">5天</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="flex items-center justify-between text-xs mb-1.5">
+                            <span class="text-white/50">已筹集 <span class="text-[#1DB954] font-medium">$89.5K</span></span>
+                            <span class="text-white/50">目标 $100K</span>
+                        </div>
+                        <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-[#1DB954] to-[#1ed760] rounded-full" style="width: 89%"></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- 附近音乐人 -->
+        <section class="px-4 mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold">附近音乐人</h2>
+                <a href="map.html" class="text-xs text-[#1DB954] font-medium">查看地图 <i class="fas fa-map-marker-alt text-xs"></i></a>
+            </div>
+            
+            <div class="bg-gradient-to-r from-[#1DB954]/20 to-purple-900/20 rounded-2xl p-4 border border-white/10">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 bg-[#1DB954] rounded-full flex items-center justify-center">
+                        <i class="fas fa-map-marker-alt text-black"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold">发现身边的音乐</div>
+                        <div class="text-xs text-white/50">距离您 2.3km 内有 5 位音乐人</div>
+                    </div>
+                </div>
+                <div class="flex gap-2 overflow-x-auto hide-scrollbar">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-lg">🎸</div>
+                    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-lg">🎹</div>
+                    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-lg">🎺</div>
+                    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-lg">🎤</div>
+                    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-rose-500 to-red-500 flex items-center justify-center text-lg">🎻</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-black/90 bottom-nav border-t border-white/10 safe-bottom z-50">
+        <div class="flex items-center justify-around py-2">
+            <a href="index.html" class="flex flex-col items-center gap-1 py-2 px-4 text-[#1DB954]">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-[10px]">首页</span>
+            </a>
+            <a href="discover.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-compass text-xl"></i>
+                <span class="text-[10px]">发现</span>
+            </a>
+            <a href="create.html" class="flex flex-col items-center -mt-6">
+                <div class="w-14 h-14 bg-[#1DB954] rounded-full flex items-center justify-center pulse-btn">
+                    <i class="fas fa-plus text-black text-xl"></i>
+                </div>
+                <span class="text-[10px] text-white/50 mt-1">发起</span>
+            </a>
+            <a href="dashboard.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-chart-pie text-xl"></i>
+                <span class="text-[10px]">投资</span>
+            </a>
+            <a href="login.html" class="flex flex-col items-center gap-1 py-2 px-4 text-white/50">
+                <i class="fas fa-user text-xl"></i>
+                <span class="text-[10px]">我的</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 搜索弹窗 -->
+    <div id="searchModal" class="fixed inset-0 bg-black z-50 hidden flex-col">
+        <div class="flex items-center gap-3 px-4 py-3 border-b border-white/10">
+            <div class="flex-1 relative">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/50"></i>
+                <input type="text" id="searchInput" placeholder="搜索音乐人、项目..." 
+                    class="w-full bg-white/10 text-white pl-11 pr-4 py-3 rounded-xl border border-transparent focus:border-[#1DB954] focus:outline-none transition-colors placeholder-white/30"
+                    autofocus>
+            </div>
+            <button onclick="hideSearch()" class="text-white/70 font-medium">取消</button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4">
+            <div class="text-sm text-white/50 mb-3">热门搜索</div>
+            <div class="flex flex-wrap gap-2 mb-6">
+                <span class="px-3 py-1.5 bg-white/10 rounded-full text-sm">电子音乐</span>
+                <span class="px-3 py-1.5 bg-white/10 rounded-full text-sm">独立民谣</span>
+                <span class="px-3 py-1.5 bg-white/10 rounded-full text-sm">说唱</span>
+                <span class="px-3 py-1.5 bg-white/10 rounded-full text-sm">爵士</span>
+                <span class="px-3 py-1.5 bg-white/10 rounded-full text-sm">古典</span>
+            </div>
+            <div class="text-sm text-white/50 mb-3">最近浏览</div>
+            <div class="space-y-3">
+                <a href="project.html?id=1" class="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
+                    <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-xl">🎵</div>
+                    <div class="flex-1">
+                        <div class="font-medium">林夕</div>
+                        <div class="text-xs text-white/50">2025巡演计划</div>
+                    </div>
+                    <i class="fas fa-chevron-right text-white/30"></i>
+                </a>
+                <a href="project.html?id=2" class="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
+                    <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center text-xl">🎹</div>
+                    <div class="flex-1">
+                        <div class="font-medium">陈默</div>
+                        <div class="text-xs text-white/50">新专辑《午夜飞行》</div>
+                    </div>
+                    <i class="fas fa-chevron-right text-white/30"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知弹窗 -->
+    <div id="notifModal" class="fixed inset-0 bg-black/80 z-50 hidden items-end">
+        <div class="w-full bg-[#121212] rounded-t-3xl modal-enter max-h-[80vh] overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-4 border-b border-white/10">
+                <h3 class="text-lg font-bold">通知</h3>
+                <button onclick="toggleNotif()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="overflow-y-auto max-h-[60vh] p-4">
+                <div class="space-y-3">
+                    <div class="flex gap-3 p-3 bg-white/5 rounded-xl">
+                        <div class="w-10 h-10 bg-[#1DB954]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-check text-[#1DB954]"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-sm">投资成功</div>
+                            <div class="text-xs text-white/50 mt-0.5">您已成功投资林夕的巡演项目 $500</div>
+                            <div class="text-xs text-white/30 mt-1">2小时前</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 p-3 bg-white/5 rounded-xl">
+                        <div class="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-bell text-blue-500"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-sm">项目更新</div>
+                            <div class="text-xs text-white/50 mt-0.5">陈默的新专辑已完成 80% 录制进度</div>
+                            <div class="text-xs text-white/30 mt-1">5小时前</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 p-3 bg-white/5 rounded-xl">
+                        <div class="w-10 h-10 bg-amber-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-gift text-amber-500"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-sm">收益到账</div>
+                            <div class="text-xs text-white/50 mt-0.5">您收到项目分红 $125.50</div>
+                            <div class="text-xs text-white/30 mt-1">1天前</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../public/js/xmusic.js"></script>
+    <script src="../public/js/security-utils.js"></script>
+    <script>
+        // 搜索功能
+        function showSearch() {
+            const modal = document.getElementById('searchModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                document.getElementById('searchInput').focus();
+            }, 100);
+        }
+        
+        function hideSearch() {
+            const modal = document.getElementById('searchModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+        
+        // 通知弹窗
+        function toggleNotif() {
+            const modal = document.getElementById('notifModal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+        
+        // 下拉刷新
+        let startY = 0;
+        let isPulling = false;
+        const mainContent = document.getElementById('mainContent');
+        
+        mainContent.addEventListener('touchstart', (e) => {
+            if (mainContent.scrollTop === 0) {
+                startY = e.touches[0].clientY;
+                isPulling = true;
+            }
+        }, { passive: true });
+        
+        mainContent.addEventListener('touchmove', (e) => {
+            if (!isPulling) return;
+            const currentY = e.touches[0].clientY;
+            const diff = currentY - startY;
+            if (diff > 0 && diff < 100) {
+                mainContent.style.transform = `translateY(${diff * 0.5}px)`;
+            }
+        }, { passive: true });
+        
+        mainContent.addEventListener('touchend', () => {
+            if (!isPulling) return;
+            isPulling = false;
+            mainContent.style.transform = '';
+            // 这里可以添加刷新逻辑
+        });
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 恢复货币和语言设置
+            try {
+                const savedCurrency = localStorage.getItem('xmusic-currency') || 'USD';
+                const savedLang = localStorage.getItem('xmusic-lang') || 'zh';
+                console.log('Mobile XMUSIC initialized:', { currency: savedCurrency, lang: savedLang });
+            } catch (e) {
+                console.warn('localStorage not available:', e);
+            }
+        });
+    </script>
+</body>
+</html>

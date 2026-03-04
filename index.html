@@ -3,37 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XMUSIC - Web3音乐金融投资平台</title>
+    <title>XMUSIC - Web3 Music Investment Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xm-green': '#1DB954',
+                        'xm-green-light': '#1ED760',
+                        'xm-black': '#000000',
+                        'xm-dark': '#121212',
+                        'xm-card': '#181818',
+                        'xm-gray': '#282828',
+                        'xm-text': '#B3B3B3'
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
-        .sidebar-item:hover { background: rgba(255,255,255,0.1); }
-        .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-4px); background: rgba(255,255,255,0.1); }
-        .play-btn { opacity: 0; transform: translateY(8px); transition: all 0.3s ease; }
-        .card-hover:hover .play-btn { opacity: 1; transform: translateY(0); }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #1DB954 0%, #1ED760 50%, #1DB954 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glow-green {
+            box-shadow: 0 0 40px rgba(29, 185, 84, 0.3);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .play-btn {
+            opacity: 0;
+            transform: translateY(8px);
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover .play-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* 自动隐藏侧边栏样式 */
+        /* Sidebar styles */
         #sidebar {
             position: fixed;
             left: 0;
             top: 0;
             bottom: 0;
-            width: 256px;
+            width: 260px;
             transform: translateX(-100%);
             transition: transform 0.3s ease;
             z-index: 50;
         }
-        #sidebar:hover,
-        #sidebar.expanded {
+        #sidebar:hover, #sidebar.expanded {
             transform: translateX(0);
         }
         
-        /* 三角箭头触发器 */
         .sidebar-arrow {
             position: fixed;
             left: 0;
@@ -47,11 +87,9 @@
             cursor: pointer;
             z-index: 40;
             transition: all 0.2s ease;
-            filter: drop-shadow(2px 0 4px rgba(0,0,0,0.3));
         }
         .sidebar-arrow:hover {
             border-left-width: 16px;
-            filter: drop-shadow(4px 0 8px rgba(29,185,84,0.5));
         }
         #sidebar:hover ~ .sidebar-arrow,
         #sidebar.expanded ~ .sidebar-arrow {
@@ -59,17 +97,15 @@
             pointer-events: none;
         }
         
-        /* 主内容区 */
         #mainContent {
             margin-left: 0;
             transition: margin-left 0.3s ease;
         }
         #sidebar:hover ~ #mainContent,
         #sidebar.expanded ~ #mainContent {
-            margin-left: 256px;
+            margin-left: 260px;
         }
         
-        /* 遮罩层 */
         .sidebar-overlay {
             position: fixed;
             inset: 0;
@@ -84,417 +120,660 @@
             opacity: 1;
             visibility: visible;
         }
+
+        /* Progress bar */
+        .progress-bar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #1DB954, #1ED760);
+            border-radius: 999px;
+            transition: width 0.5s ease;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-green {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.4); }
+            50% { box-shadow: 0 0 0 15px rgba(29, 185, 84, 0); }
+        }
+        .pulse-btn {
+            animation: pulse-green 2s infinite;
+        }
     </style>
 </head>
-<body class="bg-[#000000] text-white overflow-hidden">
-    <!-- 货币选择弹窗 -->
+<body class="bg-xm-black text-white overflow-hidden">
+    <!-- Currency Modal -->
     <div id="currencyModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
-        <div class="bg-[#181818] rounded-2xl p-6 max-w-sm w-full mx-4">
+        <div class="bg-xm-card rounded-2xl p-6 max-w-sm w-full mx-4 border border-white/10">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold">选择货币</h2>
-                <button onclick="closeCurrencyModal()" class="text-[#b3b3b3] hover:text-white"><i class="fas fa-times"></i></button>
+                <h2 class="text-xl font-bold" data-i18n="selectCurrency">Select Currency</h2>
+                <button onclick="closeCurrencyModal()" class="text-xm-text hover:text-white"><i class="fas fa-times"></i></button>
             </div>
-            
             <div class="grid grid-cols-2 gap-3">
-                <button onclick="setCurrency('USD')" class="currency-btn bg-[#1DB954] text-black py-3 px-4 rounded-lg font-semibold" data-currency="USD">USD $</button>
-                <button onclick="setCurrency('CNY')" class="currency-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-currency="CNY">CNY ¥</button>
-                <button onclick="setCurrency('EUR')" class="currency-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-currency="EUR">EUR €</button>
-                <button onclick="setCurrency('GBP')" class="currency-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-currency="GBP">GBP £</button>
-                <button onclick="setCurrency('JPY')" class="currency-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-currency="JPY">JPY ¥</button>
-                <button onclick="setCurrency('KRW')" class="currency-btn bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]" data-currency="KRW">KRW ₩</button>
+                <button onclick="setCurrency('USD')" class="currency-btn bg-xm-green text-black py-3 px-4 rounded-lg font-semibold hover:opacity-90" data-currency="USD">USD $</button>
+                <button onclick="setCurrency('CNY')" class="currency-btn bg-xm-gray text-white py-3 px-4 rounded-lg hover:bg-white/20" data-currency="CNY">CNY ¥</button>
+                <button onclick="setCurrency('EUR')" class="currency-btn bg-xm-gray text-white py-3 px-4 rounded-lg hover:bg-white/20" data-currency="EUR">EUR €</button>
+                <button onclick="setCurrency('GBP')" class="currency-btn bg-xm-gray text-white py-3 px-4 rounded-lg hover:bg-white/20" data-currency="GBP">GBP £</button>
+                <button onclick="setCurrency('JPY')" class="currency-btn bg-xm-gray text-white py-3 px-4 rounded-lg hover:bg-white/20" data-currency="JPY">JPY ¥</button>
+                <button onclick="setCurrency('KRW')" class="currency-btn bg-xm-gray text-white py-3 px-4 rounded-lg hover:bg-white/20" data-currency="KRW">KRW ₩</button>
             </div>
         </div>
     </div>
 
-    <!-- 语言选择弹窗 -->
+    <!-- Language Modal -->
     <div id="langModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
-        <div class="bg-[#181818] rounded-2xl p-6 max-w-md w-full mx-4">
+        <div class="bg-xm-card rounded-2xl p-6 max-w-md w-full mx-4 border border-white/10">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold">选择语言</h2>
-                <button onclick="closeLangModal()" class="text-[#b3b3b3] hover:text-white"><i class="fas fa-times"></i></button>
+                <h2 class="text-xl font-bold" data-i18n="selectLanguage">Select Language</h2>
+                <button onclick="closeLangModal()" class="text-xm-text hover:text-white"><i class="fas fa-times"></i></button>
             </div>
-            
             <div class="grid grid-cols-2 gap-3">
-                <button onclick="setLanguage('zh')" class="bg-[#1DB954] text-black py-3 px-4 rounded-lg font-semibold">简体中文</button>
-                <button onclick="setLanguage('zht')" class="bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]">繁體中文</button>
-                <button onclick="setLanguage('en')" class="bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]">English</button>
-                <button onclick="setLanguage('ja')" class="bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]">日本語</button>
-                <button onclick="setLanguage('ko')" class="bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]">한국어</button>
-                <button onclick="setLanguage('es')" class="bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]">Español</button>
-                <button onclick="setLanguage('fr')" class="bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]">Français</button>
-                <button onclick="setLanguage('de')" class="bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]">Deutsch</button>
-                <button onclick="setLanguage('pt')" class="bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]">Português</button>
-                <button onclick="setLanguage('ru')" class="bg-[#282828] text-white py-3 px-4 rounded-lg hover:bg-[#383838]">Русский</button>
+                <button onclick="setLanguage('zh')" class="lang-btn bg-xm-green text-black py-3 px-4 rounded-lg font-semibold hover:opacity-90" data-lang="zh">简体中文</button>
+                <button onclick="setLanguage('zht')" class="lang-btn bg-xm-gray text-white py-3 px-4 rounded-lg hover:bg-white/20" data-lang="zht">繁體中文</button>
+                <button onclick="setLanguage('en')" class="lang-btn bg-xm-gray text-white py-3 px-4 rounded-lg hover:bg-white/20" data-lang="en">English</button>
+                <button onclick="setLanguage('ja')" class="lang-btn bg-xm-gray text-white py-3 px-4 rounded-lg hover:bg-white/20" data-lang="ja">日本語</button>
+                <button onclick="setLanguage('ko')" class="lang-btn bg-xm-gray text-white py-3 px-4 rounded-lg hover:bg-white/20" data-lang="ko">한국어</button>
+                <button onclick="setLanguage('es')" class="lang-btn bg-xm-gray text-white py-3 px-4 rounded-lg hover:bg-white/20" data-lang="es">Español</button>
+                <button onclick="setLanguage('fr')" class="lang-btn bg-xm-gray text-white py-3 px-4 rounded-lg hover:bg-white/20" data-lang="fr">Français</button>
+                <button onclick="setLanguage('de')" class="lang-btn bg-xm-gray text-white py-3 px-4 rounded-lg hover:bg-white/20" data-lang="de">Deutsch</button>
+                <button onclick="setLanguage('pt')" class="lang-btn bg-xm-gray text-white py-3 px-4 rounded-lg hover:bg-white/20" data-lang="pt">Português</button>
+                <button onclick="setLanguage('ru')" class="lang-btn bg-xm-gray text-white py-3 px-4 rounded-lg hover:bg-white/20" data-lang="ru">Русский</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wallet Modal -->
+    <div id="walletModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+        <div class="bg-xm-card rounded-2xl p-6 max-w-sm w-full mx-4 border border-white/10">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold" data-i18n="connectWallet">Connect Wallet</h2>
+                <button onclick="closeWalletModal()" class="text-xm-text hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="space-y-3">
+                <button onclick="connectMetaMask()" class="w-full flex items-center gap-4 bg-xm-gray hover:bg-white/20 p-4 rounded-xl transition-colors">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" class="w-10 h-10">
+                    <span class="font-semibold">MetaMask</span>
+                </button>
+                <button onclick="connectWalletConnect()" class="w-full flex items-center gap-4 bg-xm-gray hover:bg-white/20 p-4 rounded-xl transition-colors">
+                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-wallet text-white"></i>
+                    </div>
+                    <span class="font-semibold">WalletConnect</span>
+                </button>
             </div>
         </div>
     </div>
 
     <div class="flex h-screen">
-        <!-- 三角箭头触发器 -->
-        <div class="sidebar-arrow" onclick="expandSidebar()" title="展开导航栏"></div>
-        
-        <!-- 遮罩层 -->
+        <!-- Sidebar Trigger -->
+        <div class="sidebar-arrow" onclick="expandSidebar()"></div>
         <div class="sidebar-overlay" onclick="collapseSidebar()"></div>
 
-        <!-- 左侧导航栏 -->
-        <aside id="sidebar" class="bg-[#000000] flex flex-col p-6 gap-6">
-            <!-- 关闭按钮 -->
-            <button onclick="collapseSidebar()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-[#b3b3b3] hover:text-white transition-colors md:hidden">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="bg-xm-black flex flex-col p-6 gap-6 border-r border-white/5">
+            <button onclick="collapseSidebar()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-xm-text hover:text-white md:hidden">
                 <i class="fas fa-times"></i>
             </button>
 
             <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
-                <div class="w-10 h-10 bg-[#1DB954] rounded-full flex items-center justify-center flex-shrink-0">
+                <div class="w-10 h-10 bg-xm-green rounded-full flex items-center justify-center flex-shrink-0">
                     <i class="fas fa-music text-black text-lg"></i>
                 </div>
-                <span class="logo-text text-2xl font-bold tracking-tight">XMUSIC</span>
+                <span class="text-2xl font-bold tracking-tight">XMUSIC</span>
             </div>
 
             <nav class="flex flex-col gap-2">
-                <a href="index.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-white font-semibold transition-colors bg-[#282828]">
+                <a href="index.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-white font-semibold bg-xm-gray">
                     <i class="fas fa-home text-xl w-6 text-center"></i>
-                    <span class="nav-text">首页</span>
+                    <span data-i18n="home">Home</span>
                 </a>
-                <a href="discover.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                <a href="discover.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-xm-text font-semibold hover:text-white hover:bg-white/10 transition-colors">
                     <i class="fas fa-compass text-xl w-6 text-center"></i>
-                    <span class="nav-text">发现</span>
+                    <span data-i18n="discover">Discover</span>
                 </a>
-                <a href="map.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                <a href="map.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-xm-text font-semibold hover:text-white hover:bg-white/10 transition-colors">
                     <i class="fas fa-map-marker-alt text-xl w-6 text-center"></i>
-                    <span class="nav-text">附近音乐人</span>
+                    <span data-i18n="nearby">Nearby Artists</span>
                 </a>
             </nav>
 
-            <div class="h-px bg-[#282828]"></div>
+            <div class="h-px bg-xm-gray"></div>
 
             <nav class="flex flex-col gap-2">
-                <a href="dashboard.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
-                    <i class="fas fa-book text-xl w-6 text-center"></i>
-                    <span class="nav-text">我的投资</span>
+                <a href="dashboard.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-xm-text font-semibold hover:text-white hover:bg-white/10 transition-colors">
+                    <i class="fas fa-chart-pie text-xl w-6 text-center"></i>
+                    <span data-i18n="invest">My Investments</span>
                 </a>
-                <a href="create.html" class="sidebar-item flex items-center gap-4 px-4 py-3 rounded-lg text-[#b3b3b3] font-semibold transition-colors hover:text-white">
+                <a href="create.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-xm-text font-semibold hover:text-white hover:bg-white/10 transition-colors">
                     <i class="fas fa-plus-circle text-xl w-6 text-center"></i>
-                    <span class="nav-text">发起融资</span>
+                    <span data-i18n="create">Start Funding</span>
                 </a>
             </nav>
 
             <div class="mt-auto space-y-2">
-                <button onclick="showCurrencyModal()" class="sidebar-item flex items-center gap-3 px-4 py-3 text-[#b3b3b3] hover:text-white transition-colors w-full rounded-lg">
+                <button onclick="showCurrencyModal()" class="flex items-center gap-3 px-4 py-3 text-xm-text hover:text-white transition-colors w-full rounded-lg hover:bg-white/10">
                     <i class="fas fa-dollar-sign w-6 text-center"></i>
-                    <span id="currentCurrency" class="nav-text">USD</span>
+                    <span id="currentCurrency">USD</span>
                 </button>
-                <button onclick="showLangModal()" class="sidebar-item flex items-center gap-3 px-4 py-3 text-[#b3b3b3] hover:text-white transition-colors w-full rounded-lg">
-                    <i class="fas fa-globe"></i>
-                    <span>语言: 中文</span>
+                <button onclick="showLangModal()" class="flex items-center gap-3 px-4 py-3 text-xm-text hover:text-white transition-colors w-full rounded-lg hover:bg-white/10">
+                    <i class="fas fa-globe w-6 text-center"></i>
+                    <span id="currentLanguage">English</span>
                 </button>
             </div>
         </aside>
 
-        <!-- 主内容区 -->
-        <main class="flex-1 bg-[#121212] rounded-lg m-2 overflow-hidden flex flex-col md:ml-0">
-            <!-- 顶部栏 -->
-            <header class="flex items-center justify-between px-8 py-4 bg-[#070707]">
-                <div class="flex-1 max-w-md">
+        <!-- Main Content -->
+        <main id="mainContent" class="flex-1 bg-xm-dark rounded-lg m-2 overflow-hidden flex flex-col">
+            <!-- Header -->
+            <header class="flex items-center justify-between px-8 py-4 bg-xm-black/50 backdrop-blur">
+                <div class="flex-1 max-w-md hidden md:block">
                     <div class="relative">
-                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-[#757575]"></i>
-                        <input type="text" placeholder="搜索音乐人、项目..." 
-                            class="w-full bg-[#242424] text-white pl-12 pr-4 py-3 rounded-full border border-transparent focus:border-white focus:outline-none transition-colors placeholder-[#757575]"
-                        >
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-xm-text"></i>
+                        <input type="text" placeholder="Search artists, projects..." 
+                            class="w-full bg-xm-card text-white pl-12 pr-4 py-3 rounded-full border border-white/10 focus:border-xm-green focus:outline-none transition-colors"
+                            data-i18n="searchPlaceholder">
                     </div>
                 </div>
 
-                <div class="flex items-center gap-4">
-                    <button onclick="window.location.href='create.html'" class="bg-white text-black px-6 py-2 rounded-full font-bold hover:scale-105 transition-transform">
-                        发起融资
+                <div class="flex items-center gap-4 ml-auto">
+                    <!-- Wallet Button -->
+                    <button id="walletConnectBtn" onclick="showWalletModal()" 
+                        class="hidden md:flex items-center gap-2 bg-xm-green text-black px-5 py-2.5 rounded-full font-semibold hover:opacity-90 transition-opacity">
+                        <i class="fas fa-wallet"></i>
+                        <span data-i18n="connectWallet">Connect Wallet</span>
                     </button>
-                    <button onclick="window.location.href='login.html'" class="bg-[#1DB954] text-black px-6 py-2 rounded-full font-bold hover:scale-105 transition-transform">
-                        登录
-                    </button>
+                    
+                    <div id="walletDisplay" class="hidden items-center gap-2 bg-xm-gray px-4 py-2 rounded-full">
+                        <div class="w-2 h-2 bg-xm-green rounded-full"></div>
+                        <span class="wallet-address text-sm font-mono"></span>
+                        <button onclick="disconnectWallet()" class="text-xm-text hover:text-white ml-2">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+
+                    <!-- User Menu -->
+                    <div class="relative group">
+                        <button class="w-10 h-10 bg-xm-gray rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
+                            <i class="fas fa-user text-xm-text"></i>
+                        </button>
+                        <div class="absolute right-0 top-full mt-2 w-48 bg-xm-card rounded-xl border border-white/10 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                            <a href="profile.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 rounded-t-xl">
+                                <i class="fas fa-user-circle text-xm-text"></i>
+                                <span data-i18n="profile">Profile</span>
+                            </a>
+                            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10">
+                                <i class="fas fa-chart-pie text-xm-text"></i>
+                                <span data-i18n="invest">My Investments</span>
+                            </a>
+                            <a href="favorites.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10">
+                                <i class="fas fa-heart text-xm-text"></i>
+                                <span data-i18n="favorites">Favorites</span>
+                            </a>
+                            <a href="settings.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10">
+                                <i class="fas fa-cog text-xm-text"></i>
+                                <span data-i18n="settings">Settings</span>
+                            </a>
+                            <div class="h-px bg-xm-gray mx-4"></div>
+                            <a href="login.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 rounded-b-xl text-red-400">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span data-i18n="logout">Logout</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </header>
 
-            <!-- 可滚动内容 -->
+            <!-- Scrollable Content -->
             <div class="flex-1 overflow-y-auto scrollbar-hide">
-                <!-- Hero -->
-                <section class="relative bg-gradient-to-b from-[#1DB954]/40 via-[#121212] to-[#121212] px-8 py-12">
-                    <div class="max-w-4xl">
-                        <span class="inline-block bg-[#1DB954]/20 text-[#1DB954] px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
-                            Web3 音乐金融投资平台
-                        </span>
-                        
-                        <h1 class="text-5xl md:text-6xl font-black mb-6 leading-tight">
-                            让每个歌手拥有<br>
-                            <span class="text-[#1DB954]">自己的小投行</span>
+                <!-- Hero Section -->
+                <section class="relative px-8 py-12 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-xm-green/10 via-transparent to-transparent"></div>
+                    <div class="absolute top-20 right-20 w-96 h-96 bg-xm-green/20 rounded-full filter blur-3xl"></div>
+                    
+                    <div class="relative max-w-4xl">
+                        <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                            <span class="gradient-text" data-i18n="heroTitle">Discover the Next Music Star</span>
                         </h1>
-                        
-                        <p class="text-lg text-[#b3b3b3] mb-8 max-w-2xl">
-                            XMUSIC 是音乐现金流的资产化和分配层。把音乐事业变成可投资、可分配、可治理的数字资产。
+                        <p class="text-xl text-xm-text mb-8 max-w-2xl" data-i18n="heroSubtitle">
+                            XMUSIC — Bridging Musicians and Investors
                         </p>
-                        
-                        <div class="flex gap-4">
-                            <a href="#projects" class="bg-[#1DB954] text-black px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform flex items-center gap-2">
-                                <i class="fas fa-play"></i>
-                                开始探索
+                        <div class="flex flex-wrap gap-4">
+                            <a href="discover.html" class="bg-xm-green text-black px-8 py-4 rounded-full font-bold text-lg hover:opacity-90 transition-opacity flex items-center gap-2">
+                                <span data-i18n="explore">Explore</span>
+                                <i class="fas fa-arrow-right"></i>
                             </a>
-                            
-                            <a href="create.html" class="bg-transparent border border-white/30 text-white px-8 py-4 rounded-full font-bold text-lg hover:border-white transition-colors">
-                                发起融资
+                            <a href="create.html" class="bg-xm-gray text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white/20 transition-colors">
+                                <span data-i18n="create">Start Funding</span>
                             </a>
                         </div>
                     </div>
                 </section>
 
-                <!-- 平台数据 -->
-                <section class="px-8 py-8">
+                <!-- Stats Section -->
+                <section class="px-8 mb-12">
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="bg-[#181818] rounded-lg p-6 card-hover">
-                            <div class="text-3xl font-bold mb-1">128</div>
-                            <div class="text-[#b3b3b3] text-sm">已上线艺人</div>
+                        <div class="bg-xm-card rounded-2xl p-6 border border-white/5">
+                            <div class="w-12 h-12 bg-xm-green/20 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-music text-xm-green text-xl"></i>
+                            </div>
+                            <div class="text-3xl font-bold">1,000+</div>
+                            <div class="text-sm text-xm-text" data-i18n="statsArtists">Active Artists</div>
                         </div>
-                        
-                        <div class="bg-[#181818] rounded-lg p-6 card-hover">
-                            <div class="text-3xl font-bold mb-1 text-[#1DB954]">$2.8M+</div>
-                            <div class="text-[#b3b3b3] text-sm">累计融资</div>
+                        <div class="bg-xm-card rounded-2xl p-6 border border-white/5">
+                            <div class="w-12 h-12 bg-xm-green/20 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-chart-line text-xm-green text-xl"></i>
+                            </div>
+                            <div class="text-3xl font-bold text-xm-green">$500K+</div>
+                            <div class="text-sm text-xm-text" data-i18n="statsFunding">Total Funding</div>
                         </div>
-                        
-                        <div class="bg-[#181818] rounded-lg p-6 card-hover">
-                            <div class="text-3xl font-bold mb-1">12,456</div>
-                            <div class="text-[#b3b3b3] text-sm">活跃投资人</div>
+                        <div class="bg-xm-card rounded-2xl p-6 border border-white/5">
+                            <div class="w-12 h-12 bg-xm-green/20 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-users text-xm-green text-xl"></i>
+                            </div>
+                            <div class="text-3xl font-bold">5,000+</div>
+                            <div class="text-sm text-xm-text" data-i18n="statsCommunity">Investor Community</div>
                         </div>
-                        
-                        <div class="bg-[#181818] rounded-lg p-6 card-hover">
-                            <div class="text-3xl font-bold mb-1 text-[#1DB954]">18.5%</div>
-                            <div class="text-[#b3b3b3] text-sm">平均回报</div>
+                        <div class="bg-xm-card rounded-2xl p-6 border border-white/5">
+                            <div class="w-12 h-12 bg-xm-green/20 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-sparkles text-xm-green text-xl"></i>
+                            </div>
+                            <div class="text-3xl font-bold text-xm-green">98%</div>
+                            <div class="text-sm text-xm-text" data-i18n="statsSuccess">Success Rate</div>
                         </div>
                     </div>
                 </section>
 
-                <!-- 热门音乐人 -->
-                <section id="projects" class="px-8 py-8">
+                <!-- Featured Projects -->
+                <section class="px-8 mb-12">
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-2xl font-bold">热门音乐人</h2>
-                        <a href="discover.html" class="text-[#b3b3b3] text-sm font-bold hover:text-white transition-colors">查看全部</a>
+                        <h2 class="text-2xl font-bold" data-i18n="featuredProjects">Featured Projects</h2>
+                        <a href="discover.html" class="text-xm-green hover:underline flex items-center gap-1" data-i18n="viewAll">View All</a>
                     </div>
-
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                        <!-- 艺人 1 -->
-                        <a href="project.html?id=1" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
-                            <div class="aspect-square rounded-md bg-gradient-to-br from-purple-600 to-blue-600 mb-4 relative overflow-hidden">
-                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎵</div>
-                                <div class="play-btn absolute bottom-2 right-2">
-                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Project 1 -->
+                        <a href="project.html?id=1" class="bg-xm-card rounded-2xl overflow-hidden border border-white/5 card-hover group">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=400&fit=crop" 
+                                    alt="Alex" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                                <div class="absolute bottom-4 left-4 flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-xm-green rounded-full flex items-center justify-center play-btn">
                                         <i class="fas fa-play text-black ml-1"></i>
                                     </div>
+                                    <div>
+                                        <div class="font-semibold">City Echo</div>
+                                        <div class="text-sm text-xm-text">@Alex</div>
+                                    </div>
+                                </div>
+                                <div class="absolute top-4 right-4 px-3 py-1 bg-black/50 backdrop-blur rounded-full text-xs">
+                                    Indie Folk
                                 </div>
                             </div>
-                            
-                            <h3 class="font-bold text-white mb-1 truncate">林夕</h3>
-                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">2025巡演计划</p>
-                            
-                            <div class="flex items-center justify-between text-xs">
-                                <span class="text-[#1DB954]">$32.5K / $50K</span>
-                                <span class="text-[#b3b3b3]">65%</span>
-                            </div>
-                            
-                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
-                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 65%"></div>
+                            <div class="p-5">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="font-bold text-lg">Alex Chen</span>
+                                    <span class="text-xm-green font-bold">$7,850</span>
+                                </div>
+                                <div class="progress-bar h-2 mb-3">
+                                    <div class="progress-fill h-full" style="width: 78%"></div>
+                                </div>
+                                <div class="flex items-center justify-between text-sm text-xm-text">
+                                    <span>82 investors</span>
+                                    <span class="text-xm-green">78% funded</span>
+                                </div>
                             </div>
                         </a>
 
-                        <!-- 艺人 2 -->
-                        <a href="project.html?id=2" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
-                            <div class="aspect-square rounded-md bg-gradient-to-br from-emerald-600 to-teal-600 mb-4 relative overflow-hidden">
-                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎹</div>
-                                <div class="play-btn absolute bottom-2 right-2">
-                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                        <!-- Project 2 -->
+                        <a href="project.html?id=2" class="bg-xm-card rounded-2xl overflow-hidden border border-white/5 card-hover group">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&h=400&fit=crop" 
+                                    alt="Luna" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                                <div class="absolute bottom-4 left-4 flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-xm-green rounded-full flex items-center justify-center play-btn">
                                         <i class="fas fa-play text-black ml-1"></i>
                                     </div>
+                                    <div>
+                                        <div class="font-semibold">Deep Sea</div>
+                                        <div class="text-sm text-xm-text">@Luna</div>
+                                    </div>
+                                </div>
+                                <div class="absolute top-4 right-4 px-3 py-1 bg-black/50 backdrop-blur rounded-full text-xs">
+                                    Electronic
                                 </div>
                             </div>
-                            
-                            <h3 class="font-bold text-white mb-1 truncate">陈默</h3>
-                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">新专辑《午夜飞行》</p>
-                            
-                            <div class="flex items-center justify-between text-xs">
-                                <span class="text-[#1DB954]">$30K / $30K</span>
-                                <span class="text-[#b3b3b3]">100%</span>
-                            </div>
-                            
-                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
-                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 100%"></div>
+                            <div class="p-5">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="font-bold text-lg">Luna Park</span>
+                                    <span class="text-xm-green font-bold">$3,200</span>
+                                </div>
+                                <div class="progress-bar h-2 mb-3">
+                                    <div class="progress-fill h-full" style="width: 64%"></div>
+                                </div>
+                                <div class="flex items-center justify-between text-sm text-xm-text">
+                                    <span>45 investors</span>
+                                    <span class="text-xm-green">64% funded</span>
+                                </div>
                             </div>
                         </a>
 
-                        <!-- 艺人 3 -->
-                        <a href="project.html?id=3" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
-                            <div class="aspect-square rounded-md bg-gradient-to-br from-orange-600 to-red-600 mb-4 relative overflow-hidden">
-                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎤</div>
-                                <div class="play-btn absolute bottom-2 right-2">
-                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
+                        <!-- Project 3 -->
+                        <a href="project.html?id=3" class="bg-xm-card rounded-2xl overflow-hidden border border-white/5 card-hover group">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&h=400&fit=crop" 
+                                    alt="Sam" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                                <div class="absolute bottom-4 left-4 flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-xm-green rounded-full flex items-center justify-center play-btn">
                                         <i class="fas fa-play text-black ml-1"></i>
                                     </div>
+                                    <div>
+                                        <div class="font-semibold">Highway</div>
+                                        <div class="text-sm text-xm-text">@Sam</div>
+                                    </div>
+                                </div>
+                                <div class="absolute top-4 right-4 px-3 py-1 bg-black/50 backdrop-blur rounded-full text-xs">
+                                    Rock
                                 </div>
                             </div>
-                            
-                            <h3 class="font-bold text-white mb-1 truncate">MC 阿龙</h3>
-                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">地下说唱联盟</p>
-                            
-                            <div class="flex items-center justify-between text-xs">
-                                <span class="text-[#1DB954]">$8.5K / $20K</span>
-                                <span class="text-[#b3b3b3]">42%</span>
-                            </div>
-                            
-                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
-                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 42%"></div>
+                            <div class="p-5">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="font-bold text-lg">Sam Rock</span>
+                                    <span class="text-xm-green font-bold">$11,500</span>
+                                </div>
+                                <div class="progress-bar h-2 mb-3">
+                                    <div class="progress-fill h-full" style="width: 92%"></div>
+                                </div>
+                                <div class="flex items-center justify-between text-sm text-xm-text">
+                                    <span>112 investors</span>
+                                    <span class="text-xm-green">92% funded</span>
+                                </div>
                             </div>
                         </a>
+                    </div>
+                </section>
 
-                        <!-- 艺人 4 -->
-                        <a href="project.html?id=4" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
-                            <div class="aspect-square rounded-md bg-gradient-to-br from-pink-600 to-rose-600 mb-4 relative overflow-hidden">
-                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎸</div>
-                                <div class="play-btn absolute bottom-2 right-2">
-                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
-                                        <i class="fas fa-play text-black ml-1"></i>
-                                    </div>
+                <!-- How It Works -->
+                <section class="px-8 mb-12">
+                    <h2 class="text-2xl font-bold mb-8" data-i18n="howItWorks">How It Works</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-xm-card rounded-2xl p-6 border border-white/5 relative overflow-hidden">
+                            <div class="absolute -right-4 -top-4 text-8xl font-bold text-white/5">01</div>
+                            <div class="relative">
+                                <div class="w-14 h-14 bg-xm-green/20 rounded-xl flex items-center justify-center mb-4">
+                                    <i class="fas fa-search text-xm-green text-2xl"></i>
                                 </div>
+                                <h3 class="text-xl font-bold mb-2" data-i18n="step1Title">Discover Artists</h3>
+                                <p class="text-xm-text" data-i18n="step1Desc">Browse independent musicians and their funding projects</p>
                             </div>
-                            
-                            <h3 class="font-bold text-white mb-1 truncate">小雨</h3>
-                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">独立民谣EP</p>
-                            
-                            <div class="flex items-center justify-between text-xs">
-                                <span class="text-[#1DB954]">$15K / $25K</span>
-                                <span class="text-[#b3b3b3]">60%</span>
+                        </div>
+                        <div class="bg-xm-card rounded-2xl p-6 border border-white/5 relative overflow-hidden">
+                            <div class="absolute -right-4 -top-4 text-8xl font-bold text-white/5">02</div>
+                            <div class="relative">
+                                <div class="w-14 h-14 bg-xm-green/20 rounded-xl flex items-center justify-center mb-4">
+                                    <i class="fas fa-chart-line text-xm-green text-2xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold mb-2" data-i18n="step2Title">Invest</h3>
+                                <p class="text-xm-text" data-i18n="step2Desc">Choose projects and invest for equity and revenue share</p>
                             </div>
-                            
-                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
-                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 60%"></div>
+                        </div>
+                        <div class="bg-xm-card rounded-2xl p-6 border border-white/5 relative overflow-hidden">
+                            <div class="absolute -right-4 -top-4 text-8xl font-bold text-white/5">03</div>
+                            <div class="relative">
+                                <div class="w-14 h-14 bg-xm-green/20 rounded-xl flex items-center justify-center mb-4">
+                                    <i class="fas fa-sparkles text-xm-green text-2xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold mb-2" data-i18n="step3Title">Share Success</h3>
+                                <p class="text-xm-text" data-i18n="step3Desc">Share streaming and sales revenue as artists grow</p>
                             </div>
-                        </a>
+                        </div>
+                    </div>
+                </section>
 
-                        <!-- 艺人 5 -->
-                        <a href="project.html?id=5" class="bg-[#181818] rounded-lg p-4 card-hover group cursor-pointer">
-                            <div class="aspect-square rounded-md bg-gradient-to-br from-indigo-600 to-purple-600 mb-4 relative overflow-hidden">
-                                <div class="absolute inset-0 flex items-center justify-center text-6xl">🎺</div>
-                                <div class="play-btn absolute bottom-2 right-2">
-                                    <div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center shadow-lg">
-                                        <i class="fas fa-play text-black ml-1"></i>
-                                    </div>
-                                </div>
+                <!-- CTA Section -->
+                <section class="px-8 mb-12">
+                    <div class="relative bg-gradient-to-r from-xm-green/20 to-xm-green/5 rounded-3xl p-8 md:p-12 overflow-hidden border border-xm-green/20">
+                        <div class="absolute inset-0 opacity-30" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%231DB954\' fill-opacity=\'0.1\'%3E%3Ccircle cx=\'30\' cy=\'30\' r=\'2\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+                        <div class="relative flex flex-col md:flex-row items-center justify-between gap-6">
+                            <div>
+                                <h3 class="text-2xl md:text-3xl font-bold mb-2" data-i18n="readyToStart">Ready to Start?</h3>
+                                <p class="text-xm-text" data-i18n="joinCommunity">Join thousands of investors supporting independent musicians</p>
                             </div>
-                            
-                            <h3 class="font-bold text-white mb-1 truncate">爵士老王</h3>
-                            <p class="text-sm text-[#b3b3b3] mb-2 truncate">爵士酒吧驻场</p>
-                            
-                            <div class="flex items-center justify-between text-xs">
-                                <span class="text-[#1DB954]">$12K / $40K</span>
-                                <span class="text-[#b3b3b3]">30%</span>
+                            <div class="flex gap-4">
+                                <a href="discover.html" class="bg-xm-green text-black px-6 py-3 rounded-full font-bold hover:opacity-90 transition-opacity" data-i18n="startExploring">Start Exploring</a>
+                                <a href="login.html" class="bg-xm-gray text-white px-6 py-3 rounded-full font-bold hover:bg-white/20 transition-colors" data-i18n="createAccount">Create Account</a>
                             </div>
-                            
-                            <div class="h-1 bg-[#404040] rounded-full mt-2 overflow-hidden">
-                                <div class="h-full bg-[#1DB954] rounded-full" style="width: 30%"></div>
-                            </div>
-                        </a>
+                        </div>
                     </div>
                 </section>
 
                 <!-- Footer -->
-                <footer class="px-8 py-8 border-t border-[#282828]">
-                    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <footer class="px-8 py-8 border-t border-white/10">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-[#1DB954] rounded-full flex items-center justify-center">
+                            <div class="w-8 h-8 bg-xm-green rounded-full flex items-center justify-center">
                                 <i class="fas fa-music text-black text-sm"></i>
                             </div>
                             <span class="font-bold">XMUSIC</span>
                         </div>
-                        
-                        <div class="flex gap-6 text-sm text-[#b3b3b3]">
-                            <a href="#" class="hover:text-white transition-colors">关于我们</a>
-                            <a href="#" class="hover:text-white transition-colors">帮助中心</a>
-                            <a href="#" class="hover:text-white transition-colors">隐私政策</a>
-                            <a href="#" class="hover:text-white transition-colors">服务条款</a>
+                        <div class="flex gap-6 text-sm text-xm-text">
+                            <a href="about.html" class="hover:text-white transition-colors">About</a>
+                            <a href="team.html" class="hover:text-white transition-colors">Team</a>
+                            <a href="contact.html" class="hover:text-white transition-colors">Contact</a>
+                            <a href="terms.html" class="hover:text-white transition-colors">Terms</a>
+                            <a href="privacy.html" class="hover:text-white transition-colors">Privacy</a>
                         </div>
-                        
-                        <p class="text-sm text-[#666]">© 2025 XMUSIC</p>
+                        <div class="text-sm text-xm-text">
+                            © 2026 XMUSIC. All rights reserved.
+                        </div>
                     </div>
                 </footer>
             </div>
         </main>
     </div>
 
-    <script src="public/js/xmusic.js"></script>
-    <script src="public/js/security-utils.js"></script>
+    <script src="public/js/xmusic-core.js"></script>
     <script>
-        // 语言切换
-        function showLangModal() {
-            document.getElementById('langModal').classList.remove('hidden');
-            document.getElementById('langModal').classList.add('flex');
-            updateLangUI();
-        }
+        // Translations
+        const translations = {
+            zh: {
+                home: '首页', discover: '发现', nearby: '附近音乐人', invest: '我的投资',
+                create: '发起融资', login: '登录', register: '注册', logout: '退出',
+                profile: '个人中心', settings: '设置', favorites: '收藏', messages: '消息',
+                search: '搜索', searchPlaceholder: '搜索音乐人、项目...',
+                heroTitle: '发现下一个音乐巨星',
+                heroSubtitle: 'XMUSIC — 连接音乐人与投资者的桥梁',
+                explore: '探索', statsArtists: '活跃艺人', statsFunding: '总融资额',
+                statsCommunity: '投资社区', statsSuccess: '成功率',
+                featuredProjects: '精选项目', viewAll: '查看全部',
+                howItWorks: '如何运作', step1Title: '发现艺人',
+                step1Desc: '浏览平台上的独立音乐人及其融资项目',
+                step2Title: '进行投资', step2Desc: '选择心仪项目，投资获得股份和收益分配权',
+                step3Title: '分享成功', step3Desc: '随着艺人成长，分享他们的流媒体和销售收入',
+                readyToStart: '准备好开始了吗？',
+                joinCommunity: '加入数千名投资者，支持您喜爱的独立音乐人',
+                startExploring: '开始探索', createAccount: '注册账户',
+                connectWallet: '连接钱包', disconnect: '断开连接',
+                selectCurrency: '选择货币', selectLanguage: '选择语言'
+            },
+            en: {
+                home: 'Home', discover: 'Discover', nearby: 'Nearby Artists', invest: 'My Investments',
+                create: 'Start Funding', login: 'Login', register: 'Register', logout: 'Logout',
+                profile: 'Profile', settings: 'Settings', favorites: 'Favorites', messages: 'Messages',
+                search: 'Search', searchPlaceholder: 'Search artists, projects...',
+                heroTitle: 'Discover the Next Music Star',
+                heroSubtitle: 'XMUSIC — Bridging Musicians and Investors',
+                explore: 'Explore', statsArtists: 'Active Artists', statsFunding: 'Total Funding',
+                statsCommunity: 'Investor Community', statsSuccess: 'Success Rate',
+                featuredProjects: 'Featured Projects', viewAll: 'View All',
+                howItWorks: 'How It Works', step1Title: 'Discover Artists',
+                step1Desc: 'Browse independent musicians and their funding projects',
+                step2Title: 'Invest', step2Desc: 'Choose projects and invest for equity and revenue share',
+                step3Title: 'Share Success', step3Desc: 'Share streaming and sales revenue as artists grow',
+                readyToStart: 'Ready to Start?',
+                joinCommunity: 'Join thousands of investors supporting independent musicians',
+                startExploring: 'Start Exploring', createAccount: 'Create Account',
+                connectWallet: 'Connect Wallet', disconnect: 'Disconnect',
+                selectCurrency: 'Select Currency', selectLanguage: 'Select Language'
+            },
+            ja: {
+                home: 'ホーム', discover: '発見', nearby: '近くのアーティスト', invest: 'マイ投資',
+                create: '資金調達開始', login: 'ログイン', logout: 'ログアウト',
+                profile: 'プロフィール', settings: '設定', favorites: 'お気に入り',
+                heroTitle: '次の音楽スターを発見', heroSubtitle: 'XMUSIC — アーティストと投資家を繋ぐ',
+                explore: '探索', featuredProjects: 'おすすめプロジェクト', viewAll: 'すべて見る',
+                howItWorks: '使い方', selectCurrency: '通貨を選択', selectLanguage: '言語を選択'
+            },
+            ko: {
+                home: '홈', discover: '발견', nearby: '주변 아티스트', invest: '내 투자',
+                create: '펀딩 시작', login: '로그인', logout: '로그아웃',
+                profile: '프로필', settings: '설정', favorites: '즐겨찾기',
+                heroTitle: '다음 음악 스타 발견', heroSubtitle: 'XMUSIC — 아티스트와 투자자를 연결',
+                explore: '탐색', featuredProjects: '추천 프로젝트', viewAll: '모두 보기',
+                howItWorks: '이용 방법', selectCurrency: '통화 선택', selectLanguage: '언어 선택'
+            },
+            es: {
+                home: 'Inicio', discover: 'Descubrir', nearby: 'Artistas Cercanos', invest: 'Mis Inversiones',
+                create: 'Iniciar Financiamiento', login: 'Iniciar Sesión', logout: 'Cerrar Sesión',
+                profile: 'Perfil', settings: 'Configuración', favorites: 'Favoritos',
+                heroTitle: 'Descubre la Próxima Estrella Musical', heroSubtitle: 'XMUSIC — Conectando Músicos e Inversores',
+                explore: 'Explorar', featuredProjects: 'Proyectos Destacados', viewAll: 'Ver Todo',
+                howItWorks: 'Cómo Funciona', selectCurrency: 'Seleccionar Moneda', selectLanguage: 'Seleccionar Idioma'
+            },
+            fr: {
+                home: 'Accueil', discover: 'Découvrir', nearby: 'Artistes Proches', invest: 'Mes Investissements',
+                create: 'Lancer le Financement', login: 'Connexion', logout: 'Déconnexion',
+                profile: 'Profil', settings: 'Paramètres', favorites: 'Favoris',
+                heroTitle: 'Découvrez la Prochaine Star', heroSubtitle: 'XMUSIC — Connecter Musiciens et Investisseurs',
+                explore: 'Explorer', featuredProjects: 'Projets en Vedette', viewAll: 'Voir Tout',
+                howItWorks: 'Comment Ça Marche', selectCurrency: 'Sélectionner la Devise', selectLanguage: 'Sélectionner la Langue'
+            },
+            de: {
+                home: 'Startseite', discover: 'Entdecken', nearby: 'Künstler in der Nähe', invest: 'Meine Investitionen',
+                create: 'Finanzierung Starten', login: 'Anmelden', logout: 'Abmelden',
+                profile: 'Profil', settings: 'Einstellungen', favorites: 'Favoriten',
+                heroTitle: 'Entdecke den Nächsten Musikstar', heroSubtitle: 'XMUSIC — Musiker und Investoren verbinden',
+                explore: 'Erkunden', featuredProjects: 'Empfohlene Projekte', viewAll: 'Alle Anzeigen',
+                howItWorks: 'Wie Es Funktioniert', selectCurrency: 'Währung Wählen', selectLanguage: 'Sprache Wählen'
+            },
+            pt: {
+                home: 'Início', discover: 'Descobrir', nearby: 'Artistas Próximos', invest: 'Meus Investimentos',
+                create: 'Iniciar Financiamento', login: 'Entrar', logout: 'Sair',
+                profile: 'Perfil', settings: 'Configurações', favorites: 'Favoritos',
+                heroTitle: 'Descubra a Próxima Estrela Musical', heroSubtitle: 'XMUSIC — Conectando Músicos e Investidores',
+                explore: 'Explorar', featuredProjects: 'Projetos em Destaque', viewAll: 'Ver Tudo',
+                howItWorks: 'Como Funciona', selectCurrency: 'Selecionar Moeda', selectLanguage: 'Selecionar Idioma'
+            },
+            ru: {
+                home: 'Главная', discover: 'Открытия', nearby: 'Близкие Артисты', invest: 'Мои Инвестиции',
+                create: 'Начать Сбор', login: 'Вход', logout: 'Выход',
+                profile: 'Профиль', settings: 'Настройки', favorites: 'Избранное',
+                heroTitle: 'Откройте Следующую Музыкальную Звезду', heroSubtitle: 'XMUSIC — Связь Музыкантов и Инвесторов',
+                explore: 'Исследовать', featuredProjects: 'Избранные Проекты', viewAll: 'Смотреть Всё',
+                howItWorks: 'Как Это Работает', selectCurrency: 'Выбрать Валюту', selectLanguage: 'Выбрать Язык'
+            },
+            zht: {
+                home: '首頁', discover: '發現', nearby: '附近音樂人', invest: '我的投資',
+                create: '發起融資', login: '登錄', logout: '退出',
+                profile: '個人中心', settings: '設置', favorites: '收藏',
+                heroTitle: '發現下一個音樂巨星', heroSubtitle: 'XMUSIC — 連接音樂人與投資者的橋樑',
+                explore: '探索', featuredProjects: '精選項目', viewAll: '查看全部',
+                howItWorks: '如何運作', selectCurrency: '選擇貨幣', selectLanguage: '選擇語言'
+            }
+        };
 
-        function closeLangModal() {
-            document.getElementById('langModal').classList.add('hidden');
-            document.getElementById('langModal').classList.remove('flex');
-        }
+        // State
+        let currentLang = localStorage.getItem('xmusic-lang') || 'zh';
+        let currentCurrency = localStorage.getItem('xmusic-currency') || 'USD';
+        let walletConnected = false;
+        let walletAddress = '';
 
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateLanguage();
+            updateCurrency();
+            loadWallet();
+        });
+
+        // Language functions
         function setLanguage(lang) {
-            try {
-                localStorage.setItem('xmusic-lang', lang);
-            } catch (e) {
-                console.warn('localStorage not available:', e);
-            }
             currentLang = lang;
-            
-            const langNames = {
-                'zh': '简体中文',
-                'zht': '繁體中文',
-                'en': 'English',
-                'ja': '日本語',
-                'ko': '한국어',
-                'es': 'Español',
-                'fr': 'Français',
-                'de': 'Deutsch',
-                'pt': 'Português',
-                'ru': 'Русский'
-            };
-            
-            const langDisplay = document.querySelector('button[onclick="showLangModal()"] span');
-            if (langDisplay) {
-                langDisplay.textContent = '语言: ' + langNames[lang];
-            }
-            
-            applyTranslations();
-            updateLangUI();
+            localStorage.setItem('xmusic-lang', lang);
+            document.documentElement.lang = lang;
+            updateLanguage();
             closeLangModal();
         }
 
-        function updateLangUI() {
-            let current = 'zh';
-            try {
-                current = localStorage.getItem('xmusic-lang') || 'zh';
-            } catch (e) {
-                console.warn('localStorage not available:', e);
-            }
-            document.querySelectorAll('#langModal button').forEach(btn => {
-                const btnLang = btn.getAttribute('onclick')?.match(/setLanguage\('(\w+)'\)/)?.[1];
-                if (btnLang) {
-                    if (btnLang === current) {
-                        btn.classList.remove('bg-[#282828]', 'text-white');
-                        btn.classList.add('bg-[#1DB954]', 'text-black');
+        function updateLanguage() {
+            const t = translations[currentLang] || translations.zh;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) {
+                    if (el.tagName === 'INPUT' && el.placeholder) {
+                        el.placeholder = t[key];
                     } else {
-                        btn.classList.remove('bg-[#1DB954]', 'text-black');
-                        btn.classList.add('bg-[#282828]', 'text-white');
+                        el.textContent = t[key];
                     }
+                }
+            });
+            
+            const langNames = {
+                zh: '简体中文', zht: '繁體中文', en: 'English', ja: '日本語', ko: '한국어',
+                es: 'Español', fr: 'Français', de: 'Deutsch', pt: 'Português', ru: 'Русский'
+            };
+            document.getElementById('currentLanguage').textContent = langNames[currentLang] || 'English';
+            
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.dataset.lang === currentLang) {
+                    btn.classList.remove('bg-xm-gray', 'text-white');
+                    btn.classList.add('bg-xm-green', 'text-black');
+                } else {
+                    btn.classList.remove('bg-xm-green', 'text-black');
+                    btn.classList.add('bg-xm-gray', 'text-white');
                 }
             });
         }
 
-        // 货币切换
+        // Currency functions
+        function setCurrency(currency) {
+            currentCurrency = currency;
+            localStorage.setItem('xmusic-currency', currency);
+            updateCurrency();
+            closeCurrencyModal();
+        }
+
+        function updateCurrency() {
+            document.getElementById('currentCurrency').textContent = currentCurrency;
+            
+            // Update active button
+            document.querySelectorAll('.currency-btn').forEach(btn => {
+                if (btn.dataset.currency === currentCurrency) {
+                    btn.classList.remove('bg-xm-gray', 'text-white');
+                    btn.classList.add('bg-xm-green', 'text-black');
+                } else {
+                    btn.classList.remove('bg-xm-green', 'text-black');
+                    btn.classList.add('bg-xm-gray', 'text-white');
+                }
+            });
+        }
+
+        // Modal functions
         function showCurrencyModal() {
             document.getElementById('currencyModal').classList.remove('hidden');
             document.getElementById('currencyModal').classList.add('flex');
-            updateCurrencyUI();
         }
 
         function closeCurrencyModal() {
@@ -502,103 +781,107 @@
             document.getElementById('currencyModal').classList.remove('flex');
         }
 
-        function setCurrency(currency) {
-            try {
-                localStorage.setItem('xmusic-currency', currency);
-            } catch (e) {
-                console.warn('localStorage not available:', e);
-            }
-            currentCurrency = currency;
-            document.getElementById('currentCurrency').textContent = currency;
-            updateCurrencyUI();
-            closeCurrencyModal();
-            updateAllCurrencyDisplays();
+        function showLangModal() {
+            document.getElementById('langModal').classList.remove('hidden');
+            document.getElementById('langModal').classList.add('flex');
         }
 
-        function updateCurrencyUI() {
-            let current = 'USD';
-            try {
-                current = localStorage.getItem('xmusic-currency') || 'USD';
-            } catch (e) {
-                console.warn('localStorage not available:', e);
-            }
-            document.querySelectorAll('.currency-btn').forEach(btn => {
-                if (btn.dataset.currency === current) {
-                    btn.classList.remove('bg-[#282828]', 'text-white');
-                    btn.classList.add('bg-[#1DB954]', 'text-black');
-                } else {
-                    btn.classList.remove('bg-[#1DB954]', 'text-black');
-                    btn.classList.add('bg-[#282828]', 'text-white');
-                }
-            });
+        function closeLangModal() {
+            document.getElementById('langModal').classList.add('hidden');
+            document.getElementById('langModal').classList.remove('flex');
         }
 
-        function updateAllCurrencyDisplays() {
-            // 更新页面上所有金额显示
-            document.querySelectorAll('[data-amount]').forEach(el => {
-                const amount = parseFloat(el.dataset.amount);
-                if (!isNaN(amount)) {
-                    el.textContent = formatCurrency(amount);
-                }
-            });
+        function showWalletModal() {
+            document.getElementById('walletModal').classList.remove('hidden');
+            document.getElementById('walletModal').classList.add('flex');
         }
 
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            try {
-                // 恢复货币设置
-                const savedCurrency = localStorage.getItem('xmusic-currency') || 'USD';
-                const currencyEl = document.getElementById('currentCurrency');
-                if (currencyEl) {
-                    currencyEl.textContent = savedCurrency;
-                }
-                
-                // 恢复语言设置
-                const savedLang = localStorage.getItem('xmusic-lang') || 'zh';
-                const langNames = {
-                    'zh': '简体中文', 'zht': '繁體中文', 'en': 'English', 'ja': '日本語',
-                    'ko': '한국어', 'es': 'Español', 'fr': 'Français', 'de': 'Deutsch',
-                    'pt': 'Português', 'ru': 'Русский'
-                };
-                const langDisplay = document.querySelector('button[onclick="showLangModal()"] span');
-                if (langDisplay) {
-                    langDisplay.textContent = '语言: ' + (langNames[savedLang] || '简体中文');
-                }
-                
-                // 恢复侧边栏状态
-                const sidebarExpanded = localStorage.getItem('xmusic-sidebar-expanded') === 'true';
-                const sidebar = document.getElementById('sidebar');
-                if (sidebarExpanded && sidebar) {
-                    sidebar.classList.add('expanded');
-                }
-                
-                // 侧边栏展开/收起
-                window.expandSidebar = function() {
-                    if (sidebar) sidebar.classList.add('expanded');
-                }
-                
-                window.collapseSidebar = function() {
-                    if (sidebar) sidebar.classList.remove('expanded');
-                }
-                
-                // 鼠标进入侧边栏时展开
-                if (sidebar) {
-                    sidebar.addEventListener('mouseenter', function() {
-                        this.classList.add('expanded');
-                    });
-                    
-                    // 鼠标离开侧边栏时收起
-                    sidebar.addEventListener('mouseleave', function() {
-                        this.classList.remove('expanded');
-                    });
-                }
-                
-                console.log('XMUSIC initialized successfully');
-            } catch (error) {
-                console.error('Initialization error:', error);
-            }
-        });
+        function closeWalletModal() {
+            document.getElementById('walletModal').classList.add('hidden');
+            document.getElementById('walletModal').classList.remove('flex');
+        }
 
+        // Sidebar functions
+        function expandSidebar() {
+            document.getElementById('sidebar').classList.add('expanded');
+        }
+
+        function collapseSidebar() {
+            document.getElementById('sidebar').classList.remove('expanded');
+        }
+
+        // Wallet functions
+        async function connectMetaMask() {
+            if (!window.ethereum) {
+                alert('Please install MetaMask');
+                window.open('https://metamask.io', '_blank');
+                return;
+            }
+            
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                walletAddress = accounts[0];
+                walletConnected = true;
+                saveWallet();
+                updateWalletUI();
+                closeWalletModal();
+            } catch (err) {
+                console.error('Connection failed:', err);
+            }
+        }
+
+        function connectWalletConnect() {
+            alert('WalletConnect integration coming soon!');
+        }
+
+        function disconnectWallet() {
+            walletConnected = false;
+            walletAddress = '';
+            localStorage.removeItem('xmusic-wallet');
+            updateWalletUI();
+        }
+
+        function saveWallet() {
+            localStorage.setItem('xmusic-wallet', JSON.stringify({
+                address: walletAddress,
+                connected: walletConnected
+            }));
+        }
+
+        function loadWallet() {
+            const saved = localStorage.getItem('xmusic-wallet');
+            if (saved) {
+                const data = JSON.parse(saved);
+                walletAddress = data.address;
+                walletConnected = data.connected;
+                updateWalletUI();
+            }
+        }
+
+        function updateWalletUI() {
+            const connectBtn = document.getElementById('walletConnectBtn');
+            const walletDisplay = document.getElementById('walletDisplay');
+            
+            if (walletConnected && walletAddress) {
+                connectBtn.classList.add('hidden');
+                walletDisplay.classList.remove('hidden');
+                walletDisplay.classList.add('flex');
+                const short = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+                walletDisplay.querySelector('.wallet-address').textContent = short;
+            } else {
+                connectBtn.classList.remove('hidden');
+                walletDisplay.classList.add('hidden');
+                walletDisplay.classList.remove('flex');
+            }
+        }
+
+        // Close modals on outside click
+        window.onclick = function(event) {
+            if (event.target.classList.contains('fixed')) {
+                event.target.classList.add('hidden');
+                event.target.classList.remove('flex');
+            }
+        }
     </script>
 </body>
 </html>
