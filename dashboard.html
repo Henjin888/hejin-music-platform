@@ -366,8 +366,17 @@
             KRW: { symbol: '₩', rate: 1330, name: 'KRW' }
         };
 
-        let currentCurrency = localStorage.getItem('xmusic-currency') || 'USD';
-        let currentLang = localStorage.getItem('xmusic-lang') || 'zh';
+        let currentCurrency = 'USD';
+        let currentLang = 'zh';
+        
+        try {
+            const storedCurrency = localStorage.getItem('xmusic-currency');
+            const storedLang = localStorage.getItem('xmusic-lang');
+            if (storedCurrency) currentCurrency = storedCurrency;
+            if (storedLang) currentLang = storedLang;
+        } catch (e) {
+            console.warn('localStorage not available:', e);
+        }
 
         const LANG_NAMES = {
             zh: '简体中文', zht: '繁體中文', en: 'English', ja: '日本語', ko: '한국어',
@@ -398,7 +407,11 @@
 
         function setCurrency(currency) {
             currentCurrency = currency;
-            localStorage.setItem('xmusic-currency', currency);
+            try {
+                localStorage.setItem('xmusic-currency', currency);
+            } catch (e) {
+                console.warn('localStorage not available:', e);
+            }
             document.getElementById('currentCurrency').textContent = currency;
             updateCurrencyButtons();
             closeCurrencyModal();
@@ -407,7 +420,11 @@
 
         function setLanguage(lang) {
             currentLang = lang;
-            localStorage.setItem('xmusic-lang', lang);
+            try {
+                localStorage.setItem('xmusic-lang', lang);
+            } catch (e) {
+                console.warn('localStorage not available:', e);
+            }
             document.getElementById('currentLangDisplay').textContent = '语言: ' + LANG_NAMES[lang];
             updateLangButtons();
             closeLangModal();

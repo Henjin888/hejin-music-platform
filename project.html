@@ -543,7 +543,11 @@
         }
 
         function setCurrency(currency) {
-            localStorage.setItem('xmusic-currency', currency);
+            try {
+                localStorage.setItem('xmusic-currency', currency);
+            } catch (e) {
+                console.warn('localStorage not available:', e);
+            }
             currentCurrency = currency;
             document.getElementById('currentCurrency').textContent = currency;
             updateCurrencyUI();
@@ -551,7 +555,12 @@
         }
 
         function updateCurrencyUI() {
-            const current = localStorage.getItem('xmusic-currency') || 'USD';
+            let current = 'USD';
+            try {
+                current = localStorage.getItem('xmusic-currency') || 'USD';
+            } catch (e) {
+                console.warn('localStorage not available:', e);
+            }
             document.querySelectorAll('.currency-btn').forEach(btn => {
                 if (btn.dataset.currency === current) {
                     btn.classList.remove('bg-[#282828]', 'text-white');
@@ -576,7 +585,11 @@
         }
 
         function setLanguage(lang) {
-            localStorage.setItem('xmusic-lang', lang);
+            try {
+                localStorage.setItem('xmusic-lang', lang);
+            } catch (e) {
+                console.warn('localStorage not available:', e);
+            }
             currentLang = lang;
             applyTranslations();
             updateLangUI();
@@ -584,7 +597,12 @@
         }
 
         function updateLangUI() {
-            const current = localStorage.getItem('xmusic-lang') || 'zh';
+            let current = 'zh';
+            try {
+                current = localStorage.getItem('xmusic-lang') || 'zh';
+            } catch (e) {
+                console.warn('localStorage not available:', e);
+            }
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 if (btn.dataset.lang === current) {
                     btn.classList.remove('bg-[#282828]', 'text-white');

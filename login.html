@@ -6,6 +6,7 @@
     <title>登录 - XMUSIC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="public/js/security-utils.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
@@ -282,8 +283,12 @@
             console.log('Login attempt:', { phone: phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') });
             
             // 登录成功，存储登录状态
-            localStorage.setItem('xmusic-logged-in', 'true');
-            localStorage.setItem('xmusic-user-phone', phone);
+            try {
+                localStorage.setItem('xmusic-logged-in', 'true');
+                localStorage.setItem('xmusic-user-phone', phone);
+            } catch (e) {
+                console.warn('localStorage not available:', e);
+            }
             
             // 跳转到首页
             window.location.href = 'index.html';
@@ -349,7 +354,11 @@
             }
             
             // TODO: 集成后端API验证验证码
-            localStorage.setItem('xmusic-user-phone', phone);
+            try {
+                localStorage.setItem('xmusic-user-phone', phone);
+            } catch (e) {
+                console.warn('localStorage not available:', e);
+            }
             alert('绑定成功！');
             window.location.href = 'index.html';
         }
@@ -361,10 +370,14 @@
         
         // 页面加载时检查登录状态
         document.addEventListener('DOMContentLoaded', function() {
-            const isLoggedIn = localStorage.getItem('xmusic-logged-in');
-            if (isLoggedIn === 'true') {
-                // 已登录，可选择跳转到首页或保持当前页面
-                console.log('User already logged in');
+            try {
+                const isLoggedIn = localStorage.getItem('xmusic-logged-in');
+                if (isLoggedIn === 'true') {
+                    // 已登录，可选择跳转到首页或保持当前页面
+                    console.log('User already logged in');
+                }
+            } catch (e) {
+                console.warn('localStorage not available:', e);
             }
         });
     </script>
