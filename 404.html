@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found - XMUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xm-green': '#1DB954',
+                        'xm-green-light': '#1ED760',
+                        'xm-black': '#000000',
+                        'xm-dark': '#121212',
+                        'xm-card': '#181818',
+                        'xm-gray': '#282828',
+                        'xm-text': '#B3B3B3'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #1DB954 0%, #1ED760 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-xm-black text-white min-h-screen flex items-center justify-center">
+    <div class="text-center px-8">
+        <!-- 404 Icon -->
+        <div class="relative mb-8">
+            <div class="text-[150px] font-bold gradient-text float-animation leading-none">404</div>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <i class="fas fa-music text-6xl text-xm-green/20 pulse-animation"></i>
+            </div>
+        </div>
+
+        <!-- Message -->
+        <h1 class="text-3xl font-bold mb-4">Page Not Found</h1>
+        
+        <p class="text-xm-text text-lg mb-8 max-w-md mx-auto">
+            Oops! Looks like this track got lost in the mix. The page you're looking for doesn't exist or has been moved.
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap justify-center gap-4">
+            <a href="index.html" class="bg-xm-green text-black px-8 py-3 rounded-full font-bold hover:opacity-90 transition-opacity flex items-center gap-2">
+                <i class="fas fa-home"></i>
+                Back to Home
+            </a>
+            
+            <a href="discover.html" class="bg-xm-gray text-white px-8 py-3 rounded-full font-bold hover:bg-white/20 transition-colors flex items-center gap-2">
+                <i class="fas fa-compass"></i>
+                Explore Music
+            </a>
+        </div>
+
+        <!-- Search Box -->
+        <div class="mt-12 max-w-md mx-auto">
+            <p class="text-xm-text mb-4">Or try searching:</p>
+            <div class="relative">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-xm-text"></i>
+                <input type="text" 
+                    placeholder="Search artists, projects..." 
+                    class="w-full bg-xm-card border border-white/10 rounded-full pl-12 pr-4 py-3 text-white focus:border-xm-green focus:outline-none transition-colors"
+                    onkeypress="if(event.key==='Enter') window.location.href='discover.html?q='+this.value">
+            </div>
+        </div>
+
+        <!-- Helpful Links -->
+        <div class="mt-12">
+            <p class="text-xm-text mb-4">Popular pages:</p>
+            <div class="flex flex-wrap justify-center gap-4 text-sm">
+                <a href="discover.html" class="text-xm-green hover:underline">Discover</a>
+                <a href="dashboard.html" class="text-xm-green hover:underline">My Investments</a>
+                <a href="create.html" class="text-xm-green hover:underline">Start Funding</a>
+                <a href="about.html" class="text-xm-green hover:underline">About</a>
+                <a href="contact.html" class="text-xm-green hover:underline">Contact</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-16 pt-8 border-t border-white/10">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <div class="w-8 h-8 bg-xm-green rounded-full flex items-center justify-center">
+                    <i class="fas fa-music text-black text-sm"></i>
+                </div>
+                <span class="font-bold">XMUSIC</span>
+            </div>
+            
+            <p class="text-sm text-xm-text">© 2026 XMUSIC. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

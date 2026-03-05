@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - XMUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xm-green': '#1DB954',
+                        'xm-green-light': '#1ED760',
+                        'xm-black': '#000000',
+                        'xm-dark': '#121212',
+                        'xm-card': '#181818',
+                        'xm-gray': '#282828',
+                        'xm-text': '#B3B3B3'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #1DB954 0%, #1ED760 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        #sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 260px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 50;
+        }
+        #sidebar:hover, #sidebar.expanded {
+            transform: translateX(0);
+        }
+        
+        .sidebar-arrow {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 12px solid #1DB954;
+            cursor: pointer;
+            z-index: 40;
+        }
+        #sidebar:hover ~ .sidebar-arrow,
+        #sidebar.expanded ~ .sidebar-arrow {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        #mainContent {
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+        }
+        #sidebar:hover ~ #mainContent,
+        #sidebar.expanded ~ #mainContent {
+            margin-left: 260px;
+        }
+    </style>
+</head>
+<body class="bg-xm-black text-white">
+    <!-- Sidebar Trigger -->
+    <div class="sidebar-arrow" onclick="expandSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-xm-black flex flex-col p-6 gap-6 border-r border-white/5">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+            <div class="w-10 h-10 bg-xm-green rounded-full flex items-center justify-center">
+                <i class="fas fa-music text-black text-lg"></i>
+            </div>
+            <span class="text-2xl font-bold">XMUSIC</span>
+        </div>
+
+        <nav class="flex flex-col gap-2">
+            <a href="index.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-xm-text font-semibold hover:text-white hover:bg-white/10">
+                <i class="fas fa-home text-xl w-6 text-center"></i>
+                <span>Home</span>
+            </a>
+            <a href="discover.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-xm-text font-semibold hover:text-white hover:bg-white/10">
+                <i class="fas fa-compass text-xl w-6 text-center"></i>
+                <span>Discover</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main id="mainContent" class="min-h-screen">
+        <!-- Hero Section -->
+        <section class="relative px-8 py-20 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-xm-green/10 via-transparent to-transparent"></div>
+            <div class="absolute top-20 right-20 w-96 h-96 bg-xm-green/20 rounded-full filter blur-3xl"></div>
+            
+            <div class="relative max-w-4xl mx-auto text-center">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                    <span class="gradient-text">Contact Us</span>
+                </h1>
+                <p class="text-xl text-xm-text max-w-2xl mx-auto">
+                    We'd love to hear from you. Get in touch with our team.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="px-8 py-16">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <!-- Contact Info -->
+                    <div>
+                        <h2 class="text-3xl font-bold mb-8">Get in Touch</h2>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-xm-green/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-envelope text-xm-green"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold mb-1">Email</h3>
+                                    <p class="text-xm-text">support@xmusic.finance</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-xm-green/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-map-marker-alt text-xm-green"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold mb-1">Office</h3>
+                                    <p class="text-xm-text">123 Music Street, San Francisco, CA 94102</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-xm-green/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-phone text-xm-green"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold mb-1">Phone</h3>
+                                    <p class="text-xm-text">+1 (555) 123-4567</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-12">
+                            <h3 class="font-bold mb-4">Follow Us</h3>
+                            <div class="flex gap-4">
+                                <a href="#" class="w-12 h-12 bg-xm-gray rounded-full flex items-center justify-center hover:bg-xm-green hover:text-black transition-colors">
+                                    <i class="fab fa-twitter text-xl"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 bg-xm-gray rounded-full flex items-center justify-center hover:bg-xm-green hover:text-black transition-colors">
+                                    <i class="fab fa-discord text-xl"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 bg-xm-gray rounded-full flex items-center justify-center hover:bg-xm-green hover:text-black transition-colors">
+                                    <i class="fab fa-telegram text-xl"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 bg-xm-gray rounded-full flex items-center justify-center hover:bg-xm-green hover:text-black transition-colors">
+                                    <i class="fab fa-medium text-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="bg-xm-card rounded-2xl p-8 border border-white/5">
+                        <h2 class="text-2xl font-bold mb-6">Send Message</h2>
+                        
+                        <form onsubmit="handleSubmit(event)" class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Name</label>
+                                <input type="text" required 
+                                    class="w-full bg-xm-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-xm-green focus:outline-none transition-colors"
+                                    placeholder="Your name">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Email</label>
+                                <input type="email" required 
+                                    class="w-full bg-xm-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-xm-green focus:outline-none transition-colors"
+                                    placeholder="your@email.com">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Subject</label>
+                                <select class="w-full bg-xm-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-xm-green focus:outline-none transition-colors">
+                                    <option>General Inquiry</option>
+                                    <option>Artist Support</option>
+                                    <option>Investment Questions</option>
+                                    <option>Technical Support</option>
+                                    <option>Partnerships</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Message</label>
+                                <textarea rows="5" required 
+                                    class="w-full bg-xm-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-xm-green focus:outline-none transition-colors resize-none"
+                                    placeholder="How can we help you?"></textarea>
+                            </div>
+
+                            <button type="submit" 
+                                class="w-full bg-xm-green text-black py-4 rounded-xl font-bold hover:opacity-90 transition-opacity">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="px-8 py-16 bg-xm-dark">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
+                
+                <div class="space-y-4">
+                    <div class="bg-xm-card rounded-xl p-6 border border-white/5">
+                        <h3 class="font-bold mb-2">How do I start investing in artists?</h3>
+                        <p class="text-xm-text">Simply browse our discover page, find an artist you believe in, and click "Invest Now". You can start with as little as $10.</p>
+                    </div>
+
+                    <div class="bg-xm-card rounded-xl p-6 border border-white/5">
+                        <h3 class="font-bold mb-2">How do artists receive funding?</h3>
+                        <p class="text-xm-text">Funds are held in escrow via smart contracts and released to artists as they hit predetermined milestones.</p>
+                    </div>
+
+                    <div class="bg-xm-card rounded-xl p-6 border border-white/5">
+                        <h3 class="font-bold mb-2">What returns can I expect as an investor?</h3>
+                        <p class="text-xm-text">Returns vary based on artist success. Investors receive a share of streaming revenue, merchandise sales, and other income proportional to their investment.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="px-8 py-12 border-t border-white/10">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-xm-green rounded-full flex items-center justify-center">
+                            <i class="fas fa-music text-black"></i>
+                        </div>
+                        <span class="text-xl font-bold">XMUSIC</span>
+                    </div>
+                    
+                    <div class="flex gap-8 text-sm text-xm-text">
+                        <a href="about.html" class="hover:text-white transition-colors">About</a>
+                        <a href="team.html" class="hover:text-white transition-colors">Team</a>
+                        <a href="contact.html" class="hover:text-white transition-colors">Contact</a>
+                        <a href="terms.html" class="hover:text-white transition-colors">Terms</a>
+                        <a href="privacy.html" class="hover:text-white transition-colors">Privacy</a>
+                    </div>
+                    
+                    <div class="text-sm text-xm-text">
+                        © 2026 XMUSIC. All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        function expandSidebar() {
+            document.getElementById('sidebar').classList.add('expanded');
+        }
+
+        function collapseSidebar() {
+            document.getElementById('sidebar').classList.remove('expanded');
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            event.target.reset();
+        }
+    </script>
+</body>
+</html>

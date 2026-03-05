@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - XMUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xm-green': '#1DB954',
+                        'xm-green-light': '#1ED760',
+                        'xm-black': '#000000',
+                        'xm-dark': '#121212',
+                        'xm-card': '#181818',
+                        'xm-gray': '#282828',
+                        'xm-text': '#B3B3B3'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #1DB954 0%, #1ED760 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        #sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 260px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 50;
+        }
+        #sidebar:hover, #sidebar.expanded {
+            transform: translateX(0);
+        }
+        
+        .sidebar-arrow {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 12px solid #1DB954;
+            cursor: pointer;
+            z-index: 40;
+        }
+        #sidebar:hover ~ .sidebar-arrow,
+        #sidebar.expanded ~ .sidebar-arrow {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        #mainContent {
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+        }
+        #sidebar:hover ~ #mainContent,
+        #sidebar.expanded ~ #mainContent {
+            margin-left: 260px;
+        }
+    </style>
+</head>
+<body class="bg-xm-black text-white">
+    <!-- Sidebar Trigger -->
+    <div class="sidebar-arrow" onclick="expandSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-xm-black flex flex-col p-6 gap-6 border-r border-white/5">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+            <div class="w-10 h-10 bg-xm-green rounded-full flex items-center justify-center">
+                <i class="fas fa-music text-black text-lg"></i>
+            </div>
+            <span class="text-2xl font-bold">XMUSIC</span>
+        </div>
+
+        <nav class="flex flex-col gap-2">
+            <a href="index.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-xm-text font-semibold hover:text-white hover:bg-white/10">
+                <i class="fas fa-home text-xl w-6 text-center"></i>
+                <span>Home</span>
+            </a>
+            <a href="discover.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-xm-text font-semibold hover:text-white hover:bg-white/10">
+                <i class="fas fa-compass text-xl w-6 text-center"></i>
+                <span>Discover</span>
+            </a>
+            <a href="dashboard.html" class="flex items-center gap-4 px-4 py-3 rounded-lg text-xm-text font-semibold hover:text-white hover:bg-white/10">
+                <i class="fas fa-chart-pie text-xl w-6 text-center"></i>
+                <span>Investments</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main id="mainContent" class="min-h-screen">
+        <!-- Hero Section -->
+        <section class="relative px-8 py-20 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-xm-green/10 via-transparent to-transparent"></div>
+            <div class="absolute top-20 right-20 w-96 h-96 bg-xm-green/20 rounded-full filter blur-3xl"></div>
+            
+            <div class="relative max-w-4xl mx-auto text-center">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                    <span class="gradient-text">About XMUSIC</span>
+                </h1>
+                <p class="text-xl text-xm-text max-w-2xl mx-auto">
+                    Empowering independent musicians and connecting them with passionate investors worldwide.
+                </p>
+            </div>
+        </section>
+
+        <!-- Mission Section -->
+        <section class="px-8 py-16">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-6">Our Mission</h2>
+                        <p class="text-xm-text leading-relaxed mb-6">
+                            XMUSIC was founded with a simple yet powerful vision: to democratize the music industry 
+                            by enabling direct connections between talented independent artists and their supporters.
+                        </p>
+                        <p class="text-xm-text leading-relaxed mb-6">
+                            We believe that every musician deserves the opportunity to create without financial barriers, 
+                            and every fan should have the chance to be part of their favorite artist's journey.
+                        </p>
+                        <p class="text-xm-text leading-relaxed">
+                            Through blockchain technology and innovative investment models, we're building a 
+                            sustainable ecosystem where creativity thrives and value is shared fairly.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-xm-card rounded-2xl p-8 border border-white/5">
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="text-center">
+                                <div class="text-4xl font-bold text-xm-green mb-2">10K+</div>
+                                <div class="text-sm text-xm-text">Active Artists</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-4xl font-bold text-xm-green mb-2">$2M+</div>
+                                <div class="text-sm text-xm-text">Total Funding</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-4xl font-bold text-xm-green mb-2">50K+</div>
+                                <div class="text-sm text-xm-text">Investors</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-4xl font-bold text-xm-green mb-2">100+</div>
+                                <div class="text-sm text-xm-text">Countries</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Values Section -->
+        <section class="px-8 py-16 bg-xm-dark">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl font-bold mb-12 text-center">Our Values</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-xm-card rounded-2xl p-8 border border-white/5">
+                        <div class="w-14 h-14 bg-xm-green/20 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-handshake text-xm-green text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Transparency</h3>
+                        <p class="text-xm-text">
+                            We believe in complete openness. Every transaction, investment, and revenue share 
+                            is recorded on the blockchain for full transparency.
+                        </p>
+                    </div>
+
+                    <div class="bg-xm-card rounded-2xl p-8 border border-white/5">
+                        <div class="w-14 h-14 bg-xm-green/20 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-users text-xm-green text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Community</h3>
+                        <p class="text-xm-text">
+                            Music is about connection. We foster a global community where artists and fans 
+                            support each other and grow together.
+                        </p>
+                    </div>
+
+                    <div class="bg-xm-card rounded-2xl p-8 border border-white/5">
+                        <div class="w-14 h-14 bg-xm-green/20 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-lightbulb text-xm-green text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Innovation</h3>
+                        <p class="text-xm-text">
+                            We're constantly pushing boundaries with Web3 technology, creating new ways 
+                            for artists to monetize and fans to engage.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="px-8 py-16">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl font-bold mb-12 text-center">How It Works</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-xm-green rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-3xl font-bold text-black">1</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-3">Discover</h3>
+                        <p class="text-xm-text text-sm">Browse talented independent artists and their projects</p>
+                    </div>
+
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-xm-green rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-3xl font-bold text-black">2</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-3">Invest</h3>
+                        <p class="text-xm-text text-sm">Support artists with investments starting from $10</p>
+                    </div>
+
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-xm-green rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-3xl font-bold text-black">3</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-3">Grow</span>
+                        <p class="text-xm-text text-sm">Watch artists succeed and share in their revenue</p>
+                    </div>
+
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-xm-green rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-3xl font-bold text-black">4</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-3">Earn</h3>
+                        <p class="text-xm-text text-sm">Receive returns as your supported artists thrive</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="px-8 py-16">
+            <div class="max-w-4xl mx-auto bg-gradient-to-r from-xm-green/20 to-xm-green/5 rounded-3xl p-12 text-center border border-xm-green/20">
+                <h2 class="text-3xl font-bold mb-4">Ready to Join the Revolution?</h2>
+                <p class="text-xm-text mb-8">
+                    Whether you're an artist looking for funding or an investor seeking opportunities, 
+                    XMUSIC is your platform.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="discover.html" class="bg-xm-green text-black px-8 py-3 rounded-full font-bold hover:opacity-90 transition-opacity">
+                        Explore Projects
+                    </a>
+                    <a href="create.html" class="bg-xm-gray text-white px-8 py-3 rounded-full font-bold hover:bg-white/20 transition-colors">
+                        Start a Project
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="px-8 py-12 border-t border-white/10">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-xm-green rounded-full flex items-center justify-center">
+                            <i class="fas fa-music text-black"></i>
+                        </div>
+                        <span class="text-xl font-bold">XMUSIC</span>
+                    </div>
+                    
+                    <div class="flex gap-8 text-sm text-xm-text">
+                        <a href="about.html" class="hover:text-white transition-colors">About</a>
+                        <a href="team.html" class="hover:text-white transition-colors">Team</a>
+                        <a href="contact.html" class="hover:text-white transition-colors">Contact</a>
+                        <a href="terms.html" class="hover:text-white transition-colors">Terms</a>
+                        <a href="privacy.html" class="hover:text-white transition-colors">Privacy</a>
+                    </div>
+                    
+                    <div class="text-sm text-xm-text">
+                        © 2026 XMUSIC. All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        function expandSidebar() {
+            document.getElementById('sidebar').classList.add('expanded');
+        }
+
+        function collapseSidebar() {
+            document.getElementById('sidebar').classList.remove('expanded');
+        }
+    </script>
+</body>
+</html>
