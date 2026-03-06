@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XMUSIC - 在线音乐平台</title>
+    <title id="page-title">XMUSIC - 在线音乐平台</title>
     <style>
         * {
             margin: 0;
@@ -24,11 +24,86 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', 'Noto Sans JP', 'Noto Sans KR', sans-serif;
             background: var(--bg-dark);
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
+        }
+        
+        /* 语言选择器 */
+        .lang-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .lang-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-hover);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .lang-btn:hover {
+            background: var(--bg-hover);
+            transform: scale(1.05);
+        }
+        
+        .lang-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 10px;
+            min-width: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        
+        .lang-dropdown.show {
+            display: block;
+        }
+        
+        .lang-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .lang-option:hover {
+            background: var(--bg-hover);
+        }
+        
+        .lang-flag {
+            font-size: 20px;
+            width: 28px;
+            text-align: center;
+        }
+        
+        .lang-name {
+            font-size: 14px;
+        }
+        
+        .lang-native {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-left: auto;
         }
         
         /* 侧边栏 */
@@ -108,6 +183,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 32px;
+            padding-right: 200px;
         }
         
         .search-box {
@@ -445,53 +521,6 @@
             width: 70%;
         }
         
-        /* 响应式 */
-        @media (max-width: 1024px) {
-            .sidebar {
-                width: 72px;
-            }
-            .logo-text, .nav-item span {
-                display: none;
-            }
-            .main-content {
-                margin-left: 72px;
-            }
-            .search-box {
-                width: 300px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-            .main-content {
-                margin-left: 0;
-            }
-            .player-left, .player-right {
-                display: none;
-            }
-            .player-center {
-                max-width: 100%;
-            }
-            .search-box {
-                width: 200px;
-            }
-            .card-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
-        /* 动画 */
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        .playing .card-image {
-            animation: pulse 2s infinite;
-        }
-        
         /* 歌词面板 */
         .lyrics-panel {
             position: fixed;
@@ -529,9 +558,72 @@
             font-size: 20px;
             font-weight: 600;
         }
+        
+        /* 响应式 */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 72px;
+            }
+            .logo-text, .nav-item span {
+                display: none;
+            }
+            .main-content {
+                margin-left: 72px;
+            }
+            .search-box {
+                width: 300px;
+            }
+            .lang-selector {
+                right: 10px;
+                top: 10px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+                padding-top: 60px;
+            }
+            .player-left, .player-right {
+                display: none;
+            }
+            .player-center {
+                max-width: 100%;
+            }
+            .search-box {
+                width: 200px;
+            }
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .top-bar {
+                padding-right: 0;
+            }
+            .lang-selector {
+                position: fixed;
+                top: auto;
+                bottom: 100px;
+                right: 20px;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- 语言选择器 -->
+    <div class="lang-selector">
+        <button class="lang-btn" onclick="toggleLangDropdown()">
+            <span id="current-lang-flag">🇨🇳</span>
+            <span id="current-lang-name">中文</span>
+            <span>▼</span>
+        </button>
+        <div class="lang-dropdown" id="lang-dropdown">
+            <!-- 语言选项将由JS生成 -->
+        </div>
+    </div>
+
     <!-- 侧边栏 -->
     <nav class="sidebar">
         <div class="logo">
@@ -542,26 +634,26 @@
         <div class="nav-section">
             <a href="#" class="nav-item active" onclick="showSection('home')">
                 <i>🏠</i>
-                <span>首页</span>
+                <span data-i18n="nav.home">首页</span>
             </a>
             <a href="#" class="nav-item" onclick="showSection('search')">
                 <i>🔍</i>
-                <span>搜索</span>
+                <span data-i18n="nav.search">搜索</span>
             </a>
             <a href="#" class="nav-item" onclick="showSection('library')">
                 <i>📚</i>
-                <span>音乐库</span>
+                <span data-i18n="nav.library">音乐库</span>
             </a>
         </div>
         
         <div class="nav-section">
             <a href="#" class="nav-item" onclick="showSection('playlist')">
                 <i>➕</i>
-                <span>创建歌单</span>
+                <span data-i18n="nav.createPlaylist">创建歌单</span>
             </a>
             <a href="#" class="nav-item" onclick="showSection('liked')">
                 <i>❤️</i>
-                <span>喜欢的歌曲</span>
+                <span data-i18n="nav.likedSongs">喜欢的歌曲</span>
             </a>
         </div>
     </nav>
@@ -570,8 +662,9 @@
     <main class="main-content">
         <div class="top-bar">
             <div class="search-box">
-                <input type="text" placeholder="搜索歌曲、艺人、专辑..." id="searchInput" onkeyup="searchMusic(this.value)">
+                <input type="text" id="search-input" placeholder="搜索歌曲、艺人、专辑..." onkeyup="searchMusic(this.value)">
             </div>
+            
             <div class="user-menu">
                 <span style="color: var(--text-secondary); font-size: 14px;">Henjin888</span>
                 <div class="user-avatar">H</div>
@@ -582,32 +675,26 @@
         <div id="home-section">
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">🔥 热门推荐</h2>
-                    <a href="#" class="see-all">显示全部</a>
+                    <h2 class="section-title" data-i18n="sections.trending">🔥 热门推荐</h2>
+                    <a href="#" class="see-all" data-i18n="common.seeAll">显示全部</a>
                 </div>
-                <div class="card-grid" id="trending-grid">
-                    <!-- 动态生成 -->
-                </div>
+                <div class="card-grid" id="trending-grid"></div>
             </div>
 
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">🎸 为你打造</h2>
-                    <a href="#" class="see-all">显示全部</a>
+                    <h2 class="section-title" data-i18n="sections.foryou">🎸 为你打造</h2>
+                    <a href="#" class="see-all" data-i18n="common.seeAll">显示全部</a>
                 </div>
-                <div class="card-grid" id="foryou-grid">
-                    <!-- 动态生成 -->
-                </div>
+                <div class="card-grid" id="foryou-grid"></div>
             </div>
 
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">🆕 最新发行</h2>
-                    <a href="#" class="see-all">显示全部</a>
+                    <h2 class="section-title" data-i18n="sections.newReleases">🆕 最新发行</h2>
+                    <a href="#" class="see-all" data-i18n="common.seeAll">显示全部</a>
                 </div>
-                <div class="card-grid" id="new-grid">
-                    <!-- 动态生成 -->
-                </div>
+                <div class="card-grid" id="new-grid"></div>
             </div>
         </div>
 
@@ -615,10 +702,10 @@
         <div id="search-section" style="display: none;">
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">🔍 搜索结果</h2>
+                    <h2 class="section-title" data-i18n="sections.searchResults">🔍 搜索结果</h2>
                 </div>
                 <div class="card-grid" id="search-results">
-                    <p style="color: var(--text-secondary);">输入关键词开始搜索...</p>
+                    <p style="color: var(--text-secondary);" data-i18n="search.startTyping">输入关键词开始搜索...</p>
                 </div>
             </div>
         </div>
@@ -627,11 +714,9 @@
         <div id="library-section" style="display: none;">
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">📚 你的音乐库</h2>
+                    <h2 class="section-title" data-i18n="sections.yourLibrary">📚 你的音乐库</h2>
                 </div>
-                <div class="card-grid" id="library-grid">
-                    <!-- 动态生成 -->
-                </div>
+                <div class="card-grid" id="library-grid"></div>
             </div>
         </div>
     </main>
@@ -641,7 +726,7 @@
         <div class="player-left">
             <div class="player-cover" id="player-cover"></div>
             <div class="player-info">
-                <div class="player-title" id="player-title">选择一首歌曲</div>
+                <div class="player-title" id="player-title" data-i18n="player.selectSong">选择一首歌曲</div>
                 <div class="player-artist" id="player-artist">-</div>
             </div>
             <div class="player-like" onclick="toggleLike()">🤍</div>
@@ -649,11 +734,11 @@
 
         <div class="player-center">
             <div class="player-controls">
-                <button class="control-btn">🔀</button>
-                <button class="control-btn" onclick="prevSong()">⏮️</button>
+                <button class="control-btn" title="随机播放">🔀</button>
+                <button class="control-btn" onclick="prevSong()" title="上一首">⏮️</button>
                 <button class="control-btn play" onclick="togglePlay()" id="play-btn">▶️</button>
-                <button class="control-btn" onclick="nextSong()">⏭️</button>
-                <button class="control-btn">🔁</button>
+                <button class="control-btn" onclick="nextSong()" title="下一首">⏭️</button>
+                <button class="control-btn" title="循环播放">🔁</button>
             </div>
             <div class="progress-bar">
                 <span class="time" id="current-time">0:00</span>
@@ -665,8 +750,8 @@
         </div>
 
         <div class="player-right">
-            <button class="control-btn" onclick="toggleLyrics()">🎤</button>
-            <button class="control-btn">📋</button>
+            <button class="control-btn" onclick="toggleLyrics()" title="歌词">🎤</button>
+            <button class="control-btn" title="播放列表">📋</button>
             <div class="volume-control">
                 <button class="control-btn">🔊</button>
                 <div class="volume-slider" onclick="setVolume(event)">
@@ -679,43 +764,863 @@
     <!-- 歌词面板 -->
     <div class="lyrics-panel" id="lyrics-panel">
         <div class="lyrics-header">
-            <h3>歌词</h3>
+            <h3 data-i18n="player.lyrics">歌词</h3>
             <button class="control-btn" onclick="toggleLyrics()">✕</button>
         </div>
         <div id="lyrics-content">
-            <div class="lyrics-line active">暂无歌词</div>
+            <div class="lyrics-line active" data-i18n="player.noLyrics">暂无歌词</div>
         </div>
     </div>
 
     <script>
-        // 模拟歌曲数据
-        const songs = [
-            { id: 1, title: "夜曲", artist: "周杰伦", album: "十一月的萧邦", duration: "3:45", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-            { id: 2, title: "晴天", artist: "周杰伦", album: "叶惠美", duration: "4:29", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-            { id: 3, title: "七里香", artist: "周杰伦", album: "七里香", duration: "4:59", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-            { id: 4, title: "稻香", artist: "周杰伦", album: "魔杰座", duration: "3:43", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            { id: 5, title: "告白气球", artist: "周杰伦", album: "周杰伦的床边故事", duration: "3:35", cover: "linear-gradient(135deg, #fa709a, #fee140)" },
-            { id: 6, title: "演员", artist: "薛之谦", album: "初学者", duration: "4:20", cover: "linear-gradient(135deg, #30cfd0, #330867)" },
-            { id: 7, title: "光年之外", artist: "G.E.M.邓紫棋", album: "PASSENGERS", duration: "3:55", cover: "linear-gradient(135deg, #a8edea, #fed6e3)" },
-            { id: 8, title: "起风了", artist: "买辣椒也用券", album: "起风了", duration: "5:13", cover: "linear-gradient(135deg, #ffecd2, #fcb69f)" },
-        ];
+        // 多语言配置 - 世界主流语言
+        const i18n = {
+            zh: {
+                flag: '🇨🇳',
+                name: '中文',
+                native: '简体中文',
+                nav: {
+                    home: '🏠 首页',
+                    search: '🔍 搜索',
+                    library: '📚 音乐库',
+                    createPlaylist: '➕ 创建歌单',
+                    likedSongs: '❤️ 喜欢的歌曲'
+                },
+                sections: {
+                    trending: '🔥 热门推荐',
+                    foryou: '🎸 为你打造',
+                    newReleases: '🆕 最新发行',
+                    searchResults: '🔍 搜索结果',
+                    yourLibrary: '📚 你的音乐库'
+                },
+                player: {
+                    selectSong: '选择一首歌曲',
+                    lyrics: '歌词',
+                    noLyrics: '暂无歌词'
+                },
+                search: {
+                    placeholder: '搜索歌曲、艺人、专辑...',
+                    startTyping: '输入关键词开始搜索...',
+                    noResults: '没有找到相关歌曲'
+                },
+                common: {
+                    seeAll: '显示全部'
+                }
+            },
+            en: {
+                flag: '🇺🇸',
+                name: 'English',
+                native: 'English',
+                nav: {
+                    home: '🏠 Home',
+                    search: '🔍 Search',
+                    library: '📚 Your Library',
+                    createPlaylist: '➕ Create Playlist',
+                    likedSongs: '❤️ Liked Songs'
+                },
+                sections: {
+                    trending: '🔥 Trending',
+                    foryou: '🎸 Made For You',
+                    newReleases: '🆕 New Releases',
+                    searchResults: '🔍 Search Results',
+                    yourLibrary: '📚 Your Library'
+                },
+                player: {
+                    selectSong: 'Select a song',
+                    lyrics: 'Lyrics',
+                    noLyrics: 'No lyrics available'
+                },
+                search: {
+                    placeholder: 'Search songs, artists, albums...',
+                    startTyping: 'Start typing to search...',
+                    noResults: 'No songs found'
+                },
+                common: {
+                    seeAll: 'See All'
+                }
+            },
+            ja: {
+                flag: '🇯🇵',
+                name: '日本語',
+                native: '日本語',
+                nav: {
+                    home: '🏠 ホーム',
+                    search: '🔍 検索',
+                    library: '📚 ライブラリ',
+                    createPlaylist: '➕ プレイリスト作成',
+                    likedSongs: '❤️ お気に入り'
+                },
+                sections: {
+                    trending: '🔥 人気',
+                    foryou: '🎸 あなたへのおすすめ',
+                    newReleases: '🆕 新着',
+                    searchResults: '🔍 検索結果',
+                    yourLibrary: '📚 ライブラリ'
+                },
+                player: {
+                    selectSong: '曲を選択',
+                    lyrics: '歌詞',
+                    noLyrics: '歌詞がありません'
+                },
+                search: {
+                    placeholder: '曲、アーティスト、アルバムを検索...',
+                    startTyping: '検索キーワードを入力...',
+                    noResults: '曲が見つかりません'
+                },
+                common: {
+                    seeAll: 'すべて表示'
+                }
+            },
+            ko: {
+                flag: '🇰🇷',
+                name: '한국어',
+                native: '한국어',
+                nav: {
+                    home: '🏠 홈',
+                    search: '🔍 검색',
+                    library: '📚 라이브러리',
+                    createPlaylist: '➕ 플레이리스트 만들기',
+                    likedSongs: '❤️ 좋아하는 노래'
+                },
+                sections: {
+                    trending: '🔥 인기',
+                    foryou: '🎸 맞춤추천',
+                    newReleases: '🆕 최신 발매',
+                    searchResults: '🔍 검색 결과',
+                    yourLibrary: '📚 라이브러리'
+                },
+                player: {
+                    selectSong: '노래 선택',
+                    lyrics: '가사',
+                    noLyrics: '가사 없음'
+                },
+                search: {
+                    placeholder: '노래, 아티스트, 앨범 검색...',
+                    startTyping: '검색어를 입력하세요...',
+                    noResults: '노래를 찾을 수 없습니다'
+                },
+                common: {
+                    seeAll: '모두 보기'
+                }
+            },
+            es: {
+                flag: '🇪🇸',
+                name: 'Español',
+                native: 'Español',
+                nav: {
+                    home: '🏠 Inicio',
+                    search: '🔍 Buscar',
+                    library: '📚 Tu Biblioteca',
+                    createPlaylist: '➕ Crear Playlist',
+                    likedSongs: '❤️ Canciones Favoritas'
+                },
+                sections: {
+                    trending: '🔥 Tendencias',
+                    foryou: '🎸 Hecho Para Ti',
+                    newReleases: '🆕 Novedades',
+                    searchResults: '🔍 Resultados',
+                    yourLibrary: '📚 Tu Biblioteca'
+                },
+                player: {
+                    selectSong: 'Selecciona una canción',
+                    lyrics: 'Letra',
+                    noLyrics: 'Letra no disponible'
+                },
+                search: {
+                    placeholder: 'Buscar canciones, artistas, álbumes...',
+                    startTyping: 'Empieza a escribir para buscar...',
+                    noResults: 'No se encontraron canciones'
+                },
+                common: {
+                    seeAll: 'Ver Todo'
+                }
+            },
+            fr: {
+                flag: '🇫🇷',
+                name: 'Français',
+                native: 'Français',
+                nav: {
+                    home: '🏠 Accueil',
+                    search: '🔍 Rechercher',
+                    library: '📚 Bibliothèque',
+                    createPlaylist: '➕ Créer une Playlist',
+                    likedSongs: '❤️ Titres Aimés'
+                },
+                sections: {
+                    trending: '🔥 Tendances',
+                    foryou: '🎸 Pour Vous',
+                    newReleases: '🆕 Nouveautés',
+                    searchResults: '🔍 Résultats',
+                    yourLibrary: '📚 Votre Bibliothèque'
+                },
+                player: {
+                    selectSong: 'Sélectionnez un titre',
+                    lyrics: 'Paroles',
+                    noLyrics: 'Paroles non disponibles'
+                },
+                search: {
+                    placeholder: 'Rechercher des titres, artistes, albums...',
+                    startTyping: 'Commencez à taper pour rechercher...',
+                    noResults: 'Aucun titre trouvé'
+                },
+                common: {
+                    seeAll: 'Tout Voir'
+                }
+            },
+            de: {
+                flag: '🇩🇪',
+                name: 'Deutsch',
+                native: 'Deutsch',
+                nav: {
+                    home: '🏠 Startseite',
+                    search: '🔍 Suche',
+                    library: '📚 Bibliothek',
+                    createPlaylist: '➕ Playlist Erstellen',
+                    likedSongs: '❤️ Lieblingssongs'
+                },
+                sections: {
+                    trending: '🔥 Beliebt',
+                    foryou: '🎸 Für Dich',
+                    newReleases: '🆕 Neuerscheinungen',
+                    searchResults: '🔍 Suchergebnisse',
+                    yourLibrary: '📚 Deine Bibliothek'
+                },
+                player: {
+                    selectSong: 'Wähle einen Song',
+                    lyrics: 'Songtext',
+                    noLyrics: 'Kein Songtext verfügbar'
+                },
+                search: {
+                    placeholder: 'Songs, Künstler, Alben suchen...',
+                    startTyping: 'Tippe zum Suchen...',
+                    noResults: 'Keine Songs gefunden'
+                },
+                common: {
+                    seeAll: 'Alle Anzeigen'
+                }
+            },
+            pt: {
+                flag: '🇧🇷',
+                name: 'Português',
+                native: 'Português',
+                nav: {
+                    home: '🏠 Início',
+                    search: '🔍 Buscar',
+                    library: '📚 Sua Biblioteca',
+                    createPlaylist: '➕ Criar Playlist',
+                    likedSongs: '❤️ Músicas Curtidas'
+                },
+                sections: {
+                    trending: '🔥 Em Alta',
+                    foryou: '🎸 Feito Para Você',
+                    newReleases: '🆕 Lançamentos',
+                    searchResults: '🔍 Resultados',
+                    yourLibrary: '📚 Sua Biblioteca'
+                },
+                player: {
+                    selectSong: 'Selecione uma música',
+                    lyrics: 'Letra',
+                    noLyrics: 'Letra não disponível'
+                },
+                search: {
+                    placeholder: 'Buscar músicas, artistas, álbuns...',
+                    startTyping: 'Comece a digitar para buscar...',
+                    noResults: 'Nenhuma música encontrada'
+                },
+                common: {
+                    seeAll: 'Ver Tudo'
+                }
+            },
+            ru: {
+                flag: '🇷🇺',
+                name: 'Русский',
+                native: 'Русский',
+                nav: {
+                    home: '🏠 Главная',
+                    search: '🔍 Поиск',
+                    library: '📚 Библиотека',
+                    createPlaylist: '➕ Создать плейлист',
+                    likedSongs: '❤️ Любимые треки'
+                },
+                sections: {
+                    trending: '🔥 Популярное',
+                    foryou: '🎸 Персональные подборки',
+                    newReleases: '🆕 Новинки',
+                    searchResults: '🔍 Результаты поиска',
+                    yourLibrary: '📚 Ваша библиотека'
+                },
+                player: {
+                    selectSong: 'Выберите трек',
+                    lyrics: 'Текст песни',
+                    noLyrics: 'Текст недоступен'
+                },
+                search: {
+                    placeholder: 'Поиск треков, исполнителей, альбомов...',
+                    startTyping: 'Начните вводить для поиска...',
+                    noResults: 'Треки не найдены'
+                },
+                common: {
+                    seeAll: 'Смотреть все'
+                }
+            },
+            ar: {
+                flag: '🇸🇦',
+                name: 'العربية',
+                native: 'العربية',
+                nav: {
+                    home: '🏠 الرئيسية',
+                    search: '🔍 بحث',
+                    library: '📚 المكتبة',
+                    createPlaylist: '➕ إنشاء قائمة',
+                    likedSongs: '❤️ الأغاني المفضلة'
+                },
+                sections: {
+                    trending: '🔥 الأكثر شهرة',
+                    foryou: '🎸 مخصص لك',
+                    newReleases: '🆕 جديد',
+                    searchResults: '🔍 نتائج البحث',
+                    yourLibrary: '📚 مكتبتك'
+                },
+                player: {
+                    selectSong: 'اختر أغنية',
+                    lyrics: 'كلمات',
+                    noLyrics: 'لا توجد كلمات'
+                },
+                search: {
+                    placeholder: 'البحث عن أغاني، فنانين، ألبومات...',
+                    startTyping: 'ابدأ الكتابة للبحث...',
+                    noResults: 'لم يتم العثور على أغاني'
+                },
+                common: {
+                    seeAll: 'عرض الكل'
+                }
+            },
+            hi: {
+                flag: '🇮🇳',
+                name: 'हिन्दी',
+                native: 'हिन्दी',
+                nav: {
+                    home: '🏠 होम',
+                    search: '🔍 खोजें',
+                    library: '📚 लाइब्रेरी',
+                    createPlaylist: '➕ प्लेलिस्ट बनाएं',
+                    likedSongs: '❤️ पसंदीदा गाने'
+                },
+                sections: {
+                    trending: '🔥 ट्रेंडिंग',
+                    foryou: '🎸 आपके लिए',
+                    newReleases: '🆕 नई रिलीज़',
+                    searchResults: '🔍 खोज परिणाम',
+                    yourLibrary: '📚 आपकी लाइब्रेरी'
+                },
+                player: {
+                    selectSong: 'गाना चुनें',
+                    lyrics: 'बोल',
+                    noLyrics: 'बोल उपलब्ध नहीं'
+                },
+                search: {
+                    placeholder: 'गाने, कलाकार, एल्बम खोजें...',
+                    startTyping: 'खोजने के लिए टाइप करें...',
+                    noResults: 'कोई गाना नहीं मिला'
+                },
+                common: {
+                    seeAll: 'सभी देखें'
+                }
+            },
+            it: {
+                flag: '🇮🇹',
+                name: 'Italiano',
+                native: 'Italiano',
+                nav: {
+                    home: '🏠 Home',
+                    search: '🔍 Cerca',
+                    library: '📚 La Tua Libreria',
+                    createPlaylist: '➕ Crea Playlist',
+                    likedSongs: '❤️ Brani Preferiti'
+                },
+                sections: {
+                    trending: '🔥 Di Tendenza',
+                    foryou: '🎸 Creato Per Te',
+                    newReleases: '🆕 Nuove Uscite',
+                    searchResults: '🔍 Risultati',
+                    yourLibrary: '📚 La Tua Libreria'
+                },
+                player: {
+                    selectSong: 'Seleziona un brano',
+                    lyrics: 'Testo',
+                    noLyrics: 'Testo non disponibile'
+                },
+                search: {
+                    placeholder: 'Cerca brani, artisti, album...',
+                    startTyping: 'Inizia a digitare per cercare...',
+                    noResults: 'Nessun brano trovato'
+                },
+                common: {
+                    seeAll: 'Visualizza Tutto'
+                }
+            },
+            nl: {
+                flag: '🇳🇱',
+                name: 'Nederlands',
+                native: 'Nederlands',
+                nav: {
+                    home: '🏠 Home',
+                    search: '🔍 Zoeken',
+                    library: '📚 Bibliotheek',
+                    createPlaylist: '➕ Playlist Maken',
+                    likedSongs: '❤️ Favoriete Nummers'
+                },
+                sections: {
+                    trending: '🔥 Trending',
+                    foryou: '🎸 Voor Jou',
+                    newReleases: '🆕 Nieuwe Releases',
+                    searchResults: '🔍 Zoekresultaten',
+                    yourLibrary: '📚 Jouw Bibliotheek'
+                },
+                player: {
+                    selectSong: 'Selecteer een nummer',
+                    lyrics: 'Songtekst',
+                    noLyrics: 'Geen songtekst beschikbaar'
+                },
+                search: {
+                    placeholder: 'Zoek nummers, artiesten, albums...',
+                    startTyping: 'Begin met typen om te zoeken...',
+                    noResults: 'Geen nummers gevonden'
+                },
+                common: {
+                    seeAll: 'Alles Bekijken'
+                }
+            },
+            tr: {
+                flag: '🇹🇷',
+                name: 'Türkçe',
+                native: 'Türkçe',
+                nav: {
+                    home: '🏠 Ana Sayfa',
+                    search: '🔍 Ara',
+                    library: '📚 Kitaplığın',
+                    createPlaylist: '➕ Çalma Listesi Oluştur',
+                    likedSongs: '❤️ Beğenilen Şarkılar'
+                },
+                sections: {
+                    trending: '🔥 Trend',
+                    foryou: '🎸 Senin İçin',
+                    newReleases: '🆕 Yeni Çıkanlar',
+                    searchResults: '🔍 Arama Sonuçları',
+                    yourLibrary: '📚 Kitaplığın'
+                },
+                player: {
+                    selectSong: 'Bir şarkı seç',
+                    lyrics: 'Şarkı sözleri',
+                    noLyrics: 'Şarkı sözü yok'
+                },
+                search: {
+                    placeholder: 'Şarkı, sanatçı, albüm ara...',
+                    startTyping: 'Aramak için yazmaya başla...',
+                    noResults: 'Şarkı bulunamadı'
+                },
+                common: {
+                    seeAll: 'Tümünü Gör'
+                }
+            },
+            pl: {
+                flag: '🇵🇱',
+                name: 'Polski',
+                native: 'Polski',
+                nav: {
+                    home: '🏠 Strona Główna',
+                    search: '🔍 Szukaj',
+                    library: '📚 Biblioteka',
+                    createPlaylist: '➕ Utwórz Playlistę',
+                    likedSongs: '❤️ Polubione Utwory'
+                },
+                sections: {
+                    trending: '🔥 Na Czasie',
+                    foryou: '🎸 Dla Ciebie',
+                    newReleases: '🆕 Nowości',
+                    searchResults: '🔍 Wyniki Wyszukiwania',
+                    yourLibrary: '📚 Twoja Biblioteka'
+                },
+                player: {
+                    selectSong: 'Wybierz utwór',
+                    lyrics: 'Tekst',
+                    noLyrics: 'Brak tekstu'
+                },
+                search: {
+                    placeholder: 'Szukaj utworów, artystów, albumów...',
+                    startTyping: 'Zacznij pisać, aby szukać...',
+                    noResults: 'Nie znaleziono utworów'
+                },
+                common: {
+                    seeAll: 'Zobacz Wszystkie'
+                }
+            },
+            vi: {
+                flag: '🇻🇳',
+                name: 'Tiếng Việt',
+                native: 'Tiếng Việt',
+                nav: {
+                    home: '🏠 Trang chủ',
+                    search: '🔍 Tìm kiếm',
+                    library: '📚 Thư viện',
+                    createPlaylist: '➕ Tạo Playlist',
+                    likedSongs: '❤️ Bài hát đã thích'
+                },
+                sections: {
+                    trending: '🔥 Thịnh hành',
+                    foryou: '🎸 Dành cho bạn',
+                    newReleases: '🆕 Mới phát hành',
+                    searchResults: '🔍 Kết quả tìm kiếm',
+                    yourLibrary: '📚 Thư viện của bạn'
+                },
+                player: {
+                    selectSong: 'Chọn một bài hát',
+                    lyrics: 'Lời bài hát',
+                    noLyrics: 'Chưa có lời bài hát'
+                },
+                search: {
+                    placeholder: 'Tìm bài hát, nghệ sĩ, album...',
+                    startTyping: 'Nhập để tìm kiếm...',
+                    noResults: 'Không tìm thấy bài hát'
+                },
+                common: {
+                    seeAll: 'Xem tất cả'
+                }
+            },
+            th: {
+                flag: '🇹🇭',
+                name: 'ไทย',
+                native: 'ไทย',
+                nav: {
+                    home: '🏠 หน้าหลัก',
+                    search: '🔍 ค้นหา',
+                    library: '📚 คลังเพลง',
+                    createPlaylist: '➕ สร้างเพลย์ลิสต์',
+                    likedSongs: '❤️ เพลงที่ถูกใจ'
+                },
+                sections: {
+                    trending: '🔥 กำลังฮิต',
+                    foryou: '🎸 สำหรับคุณ',
+                    newReleases: '🆕 มาใหม่',
+                    searchResults: '🔍 ผลการค้นหา',
+                    yourLibrary: '📚 คลังเพลงของคุณ'
+                },
+                player: {
+                    selectSong: 'เลือกเพลง',
+                    lyrics: 'เนื้อเพลง',
+                    noLyrics: 'ไม่มีเนื้อเพลง'
+                },
+                search: {
+                    placeholder: 'ค้นหาเพลง ศิลปิน อัลบั้ม...',
+                    startTyping: 'พิมพ์เพื่อค้นหา...',
+                    noResults: 'ไม่พบเพลง'
+                },
+                common: {
+                    seeAll: 'ดูทั้งหมด'
+                }
+            },
+            id: {
+                flag: '🇮🇩',
+                name: 'Bahasa Indonesia',
+                native: 'Bahasa Indonesia',
+                nav: {
+                    home: '🏠 Beranda',
+                    search: '🔍 Cari',
+                    library: '📚 Perpustakaan',
+                    createPlaylist: '➕ Buat Playlist',
+                    likedSongs: '❤️ Lagu yang Disukai'
+                },
+                sections: {
+                    trending: '🔥 Sedang Tren',
+                    foryou: '🎸 Untuk Kamu',
+                    newReleases: '🆕 Rilis Baru',
+                    searchResults: '🔍 Hasil Pencarian',
+                    yourLibrary: '📚 Perpustakaan Kamu'
+                },
+                player: {
+                    selectSong: 'Pilih lagu',
+                    lyrics: 'Lirik',
+                    noLyrics: 'Lirik tidak tersedia'
+                },
+                search: {
+                    placeholder: 'Cari lagu, artis, album...',
+                    startTyping: 'Mulai mengetik untuk mencari...',
+                    noResults: 'Tidak ada lagu ditemukan'
+                },
+                common: {
+                    seeAll: 'Lihat Semua'
+                }
+            },
+            ms: {
+                flag: '🇲🇾',
+                name: 'Bahasa Melayu',
+                native: 'Bahasa Melayu',
+                nav: {
+                    home: '🏠 Laman Utama',
+                    search: '🔍 Cari',
+                    library: '📚 Perpustakaan',
+                    createPlaylist: '➕ Cipta Playlist',
+                    likedSongs: '❤️ Lagu Suka'
+                },
+                sections: {
+                    trending: '🔥 Trending',
+                    foryou: '🎸 Untuk Anda',
+                    newReleases: '🆕 Keluaran Baru',
+                    searchResults: '🔍 Keputusan Carian',
+                    yourLibrary: '📚 Perpustakaan Anda'
+                },
+                player: {
+                    selectSong: 'Pilih lagu',
+                    lyrics: 'Lirik',
+                    noLyrics: 'Lirik tidak tersedia'
+                },
+                search: {
+                    placeholder: 'Cari lagu, artis, album...',
+                    startTyping: 'Mula menaip untuk mencari...',
+                    noResults: 'Tiada lagu dijumpai'
+                },
+                common: {
+                    seeAll: 'Lihat Semua'
+                }
+            },
+            sv: {
+                flag: '🇸🇪',
+                name: 'Svenska',
+                native: 'Svenska',
+                nav: {
+                    home: '🏠 Hem',
+                    search: '🔍 Sök',
+                    library: '📚 Bibliotek',
+                    createPlaylist: '➕ Skapa Spellista',
+                    likedSongs: '❤️ Gillade Låtar'
+                },
+                sections: {
+                    trending: '🔥 Trendar',
+                    foryou: '🎸 För Dig',
+                    newReleases: '🆕 Nya Släpp',
+                    searchResults: '🔍 Sökresultat',
+                    yourLibrary: '📚 Ditt Bibliotek'
+                },
+                player: {
+                    selectSong: 'Välj en låt',
+                    lyrics: 'Text',
+                    noLyrics: 'Ingen text tillgänglig'
+                },
+                search: {
+                    placeholder: 'Sök låtar, artister, album...',
+                    startTyping: 'Börja skriva för att söka...',
+                    noResults: 'Inga låtar hittades'
+                },
+                common: {
+                    seeAll: 'Visa Alla'
+                }
+            }
+        };
+
+        let currentLang = 'zh';
+
+        // 歌曲数据 - 多语言
+        const songs = {
+            zh: [
+                { id: 1, title: "夜曲", artist: "周杰伦", album: "十一月的萧邦", duration: "3:45", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "晴天", artist: "周杰伦", album: "叶惠美", duration: "4:29", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "七里香", artist: "周杰伦", album: "七里香", duration: "4:59", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "稻香", artist: "周杰伦", album: "魔杰座", duration: "3:43", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            en: [
+                { id: 1, title: "Shape of You", artist: "Ed Sheeran", album: "Divide", duration: "3:53", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Blinding Lights", artist: "The Weeknd", album: "After Hours", duration: "3:20", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "Stay", artist: "Justin Bieber", album: "Justice", duration: "2:21", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "Levitating", artist: "Dua Lipa", album: "Future Nostalgia", duration: "3:23", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            ja: [
+                { id: 1, title: "Lemon", artist: "米津玄師", album: "Lemon", duration: "4:15", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "打上花火", artist: "DAOKO × 米津玄師", album: "打上花火", duration: "4:49", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "Pretender", artist: "Official髭男dism", album: "Pretender", duration: "5:26", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "アイドル", artist: "YOASOBI", album: "アイドル", duration: "3:30", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            ko: [
+                { id: 1, title: "Dynamite", artist: "BTS", album: "BE", duration: "3:19", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Savage Love", artist: "BTS", album: "Dynamite", duration: "3:03", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "How You Like That", artist: "BLACKPINK", album: "The Album", duration: "3:01", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "DDU-DU DDU-DU", artist: "BLACKPINK", album: "Square Up", duration: "3:29", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            es: [
+                { id: 1, title: "Despacito", artist: "Luis Fonsi", album: "Despacito", duration: "3:47", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Bailando", artist: "Enrique Iglesias", album: "Sex and Love", duration: "4:03", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "La Bicicleta", artist: "Carlos Vives", album: "Vives", duration: "3:51", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "Vivir Mi Vida", artist: "Marc Anthony", album: "3.0", duration: "4:11", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            fr: [
+                { id: 1, title: "Dernière Danse", artist: "Indila", album: "Mini World", duration: "3:32", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Papaoutai", artist: "Stromae", album: "Racine Carrée", duration: "3:52", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "Tourner Dans Le Vide", artist: "Indila", album: "Mini World", duration: "4:18", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "Tous Les Mêmes", artist: "Stromae", album: "Racine Carrée", duration: "3:33", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            de: [
+                { id: 1, title: "Auf Uns", artist: "Andreas Bourani", album: "Hey", duration: "3:27", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Chöre", artist: "Mark Forster", album: "Tape", duration: "3:56", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "Atemlos", artist: "Helene Fischer", album: "Farbenspiel", duration: "3:42", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "80 Millionen", artist: "Max Giesinger", album: "Der Junge", duration: "3:15", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            pt: [
+                { id: 1, title: "Ai Se Eu Te Pego", artist: "Michel Teló", album: "Na Balada", duration: "2:52", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Garota de Ipanema", artist: "Tom Jobim", album: "Getz/Gilberto", duration: "5:24", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "Mas Que Nada", artist: "Sérgio Mendes", album: "Timeless", duration: "4:24", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "Trem das Onze", artist: "Adoniran Barbosa", album: "Samba", duration: "3:08", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            ru: [
+                { id: 1, title: "По полюшку", artist: "Народная", album: "Русские Песни", duration: "3:15", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Я Русский", artist: "Николай Носков", album: "Коллекция", duration: "4:22", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "Очи Чёрные", artist: "Фёдор Шаляпин", album: "Романсы", duration: "3:48", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "Подмосковные Вечера", artist: "Владимир Трошин", album: "Советские Песни", duration: "3:02", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            ar: [
+                { id: 1, title: "عم دماغي", artist: "محمد رمضان", album: "مهرجانات", duration: "3:33", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "بحبك يا لبنان", artist: "نجوى كرم", album: "أغاني وطنية", duration: "4:15", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "الأغلبية الصامتة", artist: "كاظم الساهر", album: "أغاني عربية", duration: "5:22", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "يا طير", artist: "فيروز", album: "أجمل أغاني فيروز", duration: "4:08", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            hi: [
+                { id: 1, title: "मेरे सपनों की रानी", artist: "किशोर कुमार", album: "आराधना", duration: "4:42", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "तुम ही हो", artist: "अरिजीत सिंह", album: "आशिकी 2", duration: "4:22", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "काला चश्मा", artist: "नेहा कक्कड़", album: "बaar बaar देखो", duration: "3:08", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "दिलबर", artist: "नेहा कक्कड़", album: "सत्यमेव जयते", duration: "3:04", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            it: [
+                { id: 1, title: "Volare", artist: "Domenico Modugno", album: "Nel Blu Dipinto Di Blu", duration: "3:30", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Felicità", artist: "Al Bano", album: "Felicità", duration: "3:14", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "O Sole Mio", artist: "Luciano Pavarotti", album: "Opera", duration: "3:28", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "Con Te Partirò", artist: "Andrea Bocelli", album: "Bocelli", duration: "4:09", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            nl: [
+                { id: 1, title: "Zij Gelooft In Mij", artist: "André Hazes", album: "Gewoon André", duration: "3:44", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Papa", artist: "Stef Ekkel", album: "Hollandse Hits", duration: "3:22", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "Het Is Een Nacht", artist: "Guus Meeuwis", album: "Verbazing", duration: "4:15", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "Afscheid", artist: "Volumia!", album: "Puur", duration: "4:02", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            tr: [
+                { id: 1, title: "Yalnızlık Senfonisi", artist: "Sezen Aksu", album: "Gülümse", duration: "4:35", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Dudu", artist: "Tarkan", album: "Dudu", duration: "4:18", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "Firuze", artist: "Sezen Aksu", album: "Firuze", duration: "4:50", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "Kuzu Kuzu", artist: "Tarkan", album: "Karma", duration: "3:52", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            pl: [
+                { id: 1, title: "Biały Miś", artist: "Michał Wiśniewski", album: "Ich Troje", duration: "3:42", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Przez Twe Oczy Zielone", artist: "Akcent", album: "Wspomnienie", duration: "3:58", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "Agnieszka", artist: "Big Cyc", album: "Miłość", duration: "3:25", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "Mój Przyjacielu", artist: "Krzysztof Krawczyk", album: "To Co W Życiu Ważne", duration: "4:44", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            vi: [
+                { id: 1, title: "Như Một Giấc Mơ", artist: "Mỹ Tâm", album: "Tâm", duration: "4:22", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Em Gái Mưa", artist: "Hương Tràm", album: "Em Gái Mưa", duration: "5:08", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "Lạc Trôi", artist: "Sơn Tùng M-TP", album: "Lạc Trôi", duration: "4:23", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "Hãy Trao Cho Anh", artist: "Sơn Tùng M-TP", album: "Hãy Trao Cho Anh", duration: "4:05", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            th: [
+                { id: 1, title: "คู่กัด", artist: "ธงไชย", album: "รวมฮิต", duration: "3:48", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "กลับคำสาอ้าย", artist: "ไผ่ พงศธร", album: "ลูกทุ่งฮิต", duration: "4:32", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "แฟนเก่า", artist: "ค็อกเทล", album: "เพลงฮิต", duration: "4:15", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "รักเธอ", artist: "สิงโต", album: "เพลงรัก", duration: "3:55", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            id: [
+                { id: 1, title: "Separuh Nafas", artist: "Dewa 19", album: "Pandawa Lima", duration: "5:25", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Bento", artist: "Iwan Fals", album: "Ethiopia", duration: "4:18", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "Menghapus Jejakmu", artist: "Peterpan", album: "Hari Yang Cerah", duration: "3:42", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "Tak Gantung", artist: "Nidji", album: "Breakthru", duration: "3:55", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            ms: [
+                { id: 1, title: "Siti Nurhaliza", artist: "Siti Nurhaliza", album: "Pancawarna", duration: "4:22", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Mungkin Nanti", artist: "Peterpan", album: "Taman Langit", duration: "4:32", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "Gemilang", artist: "Jaclyn Victor", album: "Gemilang", duration: "4:15", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "Awan Nano", artist: "Hafiz", album: "Luahan Hati", duration: "4:05", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ],
+            sv: [
+                { id: 1, title: "Vintersaga", artist: "Ted Gärdestad", album: "Upptåg", duration: "4:22", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { id: 2, title: "Fångad Av En Stormvind", artist: "Carola", album: "Much More", duration: "3:00", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+                { id: 3, title: "Sången Han Skrev Till Mig", artist: "Görel Crona", album: "Svensktoppar", duration: "3:45", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+                { id: 4, title: "Eloise", artist: "Arvingarna", album: "Eloise", duration: "3:32", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            ]
+        };
 
         let currentSong = null;
         let isPlaying = false;
         let currentTime = 0;
         let playInterval;
 
+        // 初始化语言选择器
+        function initLangSelector() {
+            const dropdown = document.getElementById('lang-dropdown');
+            let html = '';
+            
+            for (const [code, lang] of Object.entries(i18n)) {
+                html += `
+                    <div class="lang-option" onclick="changeLang('${code}')">
+                        <span class="lang-flag">${lang.flag}</span>
+                        <span class="lang-name">${lang.name}</span>
+                        <span class="lang-native">${lang.native}</span>
+                    </div>
+                `;
+            }
+            dropdown.innerHTML = html;
+        }
+
+        // 切换语言
+        function changeLang(langCode) {
+            currentLang = langCode;
+            const lang = i18n[langCode];
+            
+            document.getElementById('current-lang-flag').textContent = lang.flag;
+            document.getElementById('current-lang-name').textContent = lang.name;
+            document.getElementById('lang-dropdown').classList.remove('show');
+            
+            // 更新所有文本
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const keys = key.split('.');
+                let value = lang;
+                for (const k of keys) {
+                    value = value[k];
+                }
+                if (value) el.textContent = value;
+            });
+            
+            // 更新搜索框placeholder
+            document.getElementById('search-input').placeholder = lang.search.placeholder;
+            
+            // 更新页面标题
+            document.getElementById('page-title').textContent = `XMUSIC - ${lang.nav.home.replace('🏠 ', '')}`;
+            
+            // 重新渲染歌曲
+            init();
+        }
+
+        // 切换语言下拉
+        function toggleLangDropdown() {
+            document.getElementById('lang-dropdown').classList.toggle('show');
+        }
+
+        // 获取当前语言歌曲
+        function getSongs() {
+            return songs[currentLang] || songs.zh;
+        }
+
         // 初始化
         function init() {
-            renderCards('trending-grid', songs.slice(0, 4));
-            renderCards('foryou-grid', songs.slice(2, 6));
-            renderCards('new-grid', songs.slice(4, 8));
-            renderCards('library-grid', songs);
+            const songList = getSongs();
+            renderCards('trending-grid', songList.slice(0, 4));
+            renderCards('foryou-grid', songList.slice(0, 4));
+            renderCards('new-grid', songList.slice(0, 4));
+            renderCards('library-grid', songList);
         }
 
         // 渲染卡片
         function renderCards(gridId, songList) {
             const grid = document.getElementById(gridId);
+            if (!songList || songList.length === 0) {
+                grid.innerHTML = `<p style="color: var(--text-secondary);">${i18n[currentLang].search.noResults}</p>`;
+                return;
+            }
             grid.innerHTML = songList.map(song => `
                 <div class="music-card" onclick="playSong(${song.id})">
                     <div class="card-image" style="background: ${song.cover}">
@@ -729,7 +1634,8 @@
 
         // 播放歌曲
         function playSong(id) {
-            currentSong = songs.find(s => s.id === id);
+            const songList = getSongs();
+            currentSong = songList.find(s => s.id === id);
             if (currentSong) {
                 document.getElementById('player-title').textContent = currentSong.title;
                 document.getElementById('player-artist').textContent = currentSong.artist;
@@ -744,7 +1650,8 @@
         // 播放/暂停
         function togglePlay() {
             if (!currentSong) {
-                playSong(1);
+                const songList = getSongs();
+                if (songList.length > 0) playSong(songList[0].id);
                 return;
             }
             isPlaying = !isPlaying;
@@ -780,17 +1687,19 @@
         // 上一首/下一首
         function prevSong() {
             if (currentSong) {
-                const index = songs.findIndex(s => s.id === currentSong.id);
-                const prevIndex = index > 0 ? index - 1 : songs.length - 1;
-                playSong(songs[prevIndex].id);
+                const songList = getSongs();
+                const index = songList.findIndex(s => s.id === currentSong.id);
+                const prevIndex = index > 0 ? index - 1 : songList.length - 1;
+                playSong(songList[prevIndex].id);
             }
         }
 
         function nextSong() {
             if (currentSong) {
-                const index = songs.findIndex(s => s.id === currentSong.id);
-                const nextIndex = index < songs.length - 1 ? index + 1 : 0;
-                playSong(songs[nextIndex].id);
+                const songList = getSongs();
+                const index = songList.findIndex(s => s.id === currentSong.id);
+                const nextIndex = index < songList.length - 1 ? index + 1 : 0;
+                playSong(songList[nextIndex].id);
             }
         }
 
@@ -821,13 +1730,14 @@
                 return;
             }
             showSection('search');
-            const results = songs.filter(s => 
+            const songList = getSongs();
+            const results = songList.filter(s => 
                 s.title.toLowerCase().includes(query.toLowerCase()) ||
                 s.artist.toLowerCase().includes(query.toLowerCase())
             );
             const grid = document.getElementById('search-results');
             if (results.length === 0) {
-                grid.innerHTML = '<p style="color: var(--text-secondary);">没有找到相关歌曲</p>';
+                grid.innerHTML = `<p style="color: var(--text-secondary);">${i18n[currentLang].search.noResults}</p>`;
             } else {
                 renderCards('search-results', results);
             }
@@ -843,15 +1753,15 @@
                 document.getElementById('home-section').style.display = 'block';
             } else if (section === 'search') {
                 document.getElementById('search-section').style.display = 'block';
-            } else if (section === 'library') {
-                document.getElementById('library-section').style.display = 'block';
-            } else if (section === 'playlist' || section === 'liked') {
+            } else if (section === 'library' || section === 'playlist' || section === 'liked') {
                 document.getElementById('library-section').style.display = 'block';
             }
             
             // 更新导航状态
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            event.target.closest('.nav-item').classList.add('active');
+            if (event && event.target) {
+                event.target.closest('.nav-item').classList.add('active');
+            }
         }
 
         // 歌词面板
@@ -877,7 +1787,15 @@
             return `${min}:${sec.toString().padStart(2, '0')}`;
         }
 
+        // 点击外部关闭语言下拉
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.lang-selector')) {
+                document.getElementById('lang-dropdown').classList.remove('show');
+            }
+        });
+
         // 启动
+        initLangSelector();
         init();
     </script>
 </body>
