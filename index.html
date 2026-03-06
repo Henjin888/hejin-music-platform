@@ -3,53 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">XMUSIC - 在线音乐平台</title>
+    <title>XMUSIC - 全球音乐平台</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        :root {
-            --primary: #1db954;
-            --primary-dark: #1ed760;
-            --bg-dark: #121212;
-            --bg-card: #181818;
-            --bg-hover: #282828;
-            --text-primary: #ffffff;
-            --text-secondary: #b3b3b3;
-            --sidebar-width: 240px;
-            --player-height: 90px;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', 'Noto Sans JP', 'Noto Sans KR', sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #121212;
+            color: #fff;
             min-height: 100vh;
-            overflow-x: hidden;
+            padding: 20px;
         }
-        
-        /* 语言选择器 */
-        .lang-selector {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #1db954, #1ed760);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .selectors {
             display: flex;
             gap: 10px;
         }
-        
-        /* 货币选择器 */
-        .currency-selector {
-            position: relative;
-        }
-        
-        .currency-btn {
-            background: var(--bg-card);
-            border: 1px solid var(--bg-hover);
-            color: var(--text-primary);
+        .selector-btn {
+            background: #181818;
+            border: 1px solid #282828;
+            color: #fff;
             padding: 10px 16px;
             border-radius: 25px;
             cursor: pointer;
@@ -57,2233 +41,267 @@
             align-items: center;
             gap: 8px;
             font-size: 14px;
-            transition: all 0.2s;
-            font-weight: 600;
         }
-        
-        .currency-btn:hover {
-            background: var(--bg-hover);
-            transform: scale(1.05);
-        }
-        
-        .currency-dropdown {
+        .selector-btn:hover { background: #282828; }
+        .dropdown {
             position: absolute;
-            top: 50px;
-            right: 0;
-            background: var(--bg-card);
+            top: 60px;
+            right: 20px;
+            background: #181818;
             border-radius: 12px;
             padding: 10px;
-            min-width: 320px;
-            max-height: 500px;
-            overflow-y: scroll;
+            min-width: 300px;
+            max-height: 600px;
+            overflow-y: auto;
             display: none;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
             z-index: 9999;
         }
-        
-        .currency-dropdown::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .currency-dropdown::-webkit-scrollbar-track {
-            background: var(--bg-hover);
-            border-radius: 4px;
-        }
-        
-        .currency-dropdown::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 4px;
-        }
-        
-        .currency-dropdown.show {
-            display: block;
-        }
-        
-        .currency-option {
+        .dropdown.show { display: block; }
+        .dropdown-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s;
         }
-        
-        .currency-option:hover {
-            background: var(--bg-hover);
+        .dropdown-item:hover { background: #282828; }
+        .flag { font-size: 24px; width: 32px; text-align: center; }
+        .code { font-weight: 600; min-width: 50px; }
+        .name { font-size: 13px; color: #b3b3b3; flex: 1; }
+        .symbol { color: #1db954; font-weight: 500; }
+        .count-header {
+            padding: 15px;
+            text-align: center;
+            color: #1db954;
+            font-size: 14px;
+            border-bottom: 1px solid #282828;
+            margin-bottom: 10px;
         }
-        
-        .currency-flag {
-            font-size: 20px;
-            width: 28px;
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .card {
+            background: #181818;
+            padding: 20px;
+            border-radius: 12px;
             text-align: center;
         }
-        
-        .currency-code {
-            font-weight: 600;
-            min-width: 50px;
+        .card-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            position: relative;
         }
-        
-        .currency-name {
-            font-size: 13px;
-            color: var(--text-secondary);
-            flex: 1;
-        }
-        
-        .currency-rate {
-            font-size: 12px;
-            color: var(--primary);
-            font-weight: 500;
-        }
-        
-        /* 价格标签 */
         .price-tag {
             position: absolute;
             top: 10px;
             left: 10px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            background: #1db954;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 13px;
             font-weight: 700;
-            box-shadow: 0 4px 12px rgba(29, 185, 84, 0.4);
         }
-        
-        .subscription-banner {
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            padding: 20px 30px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .subscription-info h3 {
-            font-size: 20px;
-            margin-bottom: 8px;
-        }
-        
-        .subscription-info p {
-            color: rgba(255,255,255,0.8);
-            font-size: 14px;
-        }
-        
-        .subscription-price {
-            text-align: right;
-        }
-        
-        .price-amount {
-            font-size: 32px;
-            font-weight: bold;
-        }
-        
-        .price-period {
-            font-size: 14px;
-            color: rgba(255,255,255,0.8);
-        }
-        
-        .subscribe-btn {
-            background: var(--text-primary);
-            color: var(--bg-dark);
-            border: none;
-            padding: 12px 32px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.2s;
-        }
-        
-        .subscribe-btn:hover {
-            transform: scale(1.05);
-            background: var(--primary);
-            color: var(--text-primary);
-        }
-        
-        .lang-btn {
-            background: var(--bg-card);
-            border: 1px solid var(--bg-hover);
-            color: var(--text-primary);
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-        
-        .lang-btn:hover {
-            background: var(--bg-hover);
-            transform: scale(1.05);
-        }
-        
-        .lang-dropdown {
-            position: absolute;
-            top: 50px;
-            right: 0;
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 10px;
-            min-width: 200px;
-            max-height: 400px;
-            overflow-y: auto;
-            display: none;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-        }
-        
-        .lang-dropdown.show {
-            display: block;
-        }
-        
-        .lang-option {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .lang-option:hover {
-            background: var(--bg-hover);
-        }
-        
-        .lang-flag {
-            font-size: 20px;
-            width: 28px;
-            text-align: center;
-        }
-        
-        .lang-name {
-            font-size: 14px;
-        }
-        
-        .lang-native {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-left: auto;
-        }
-        
-        /* 侧边栏 */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: var(--sidebar-width);
-            height: 100vh;
-            background: #000;
-            padding: 24px 16px;
-            z-index: 100;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 30px;
-            padding: 0 12px;
-        }
-        
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        
-        .logo-text {
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: -1px;
-        }
-        
-        .nav-section {
-            margin-bottom: 24px;
-        }
-        
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 12px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-        
-        .nav-item:hover, .nav-item.active {
-            color: var(--text-primary);
-            background: var(--bg-hover);
-        }
-        
-        .nav-item i {
-            font-size: 24px;
-            width: 24px;
-            text-align: center;
-        }
-        
-        /* 主内容区 */
-        .main-content {
-            margin-left: var(--sidebar-width);
-            padding: 24px 32px;
-            padding-bottom: calc(var(--player-height) + 40px);
-        }
-        
-        /* 顶部栏 */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-            padding-right: 200px;
-        }
-        
-        .search-box {
-            position: relative;
-            width: 400px;
-        }
-        
-        .search-box input {
-            width: 100%;
-            padding: 12px 20px 12px 44px;
-            border: none;
-            border-radius: 25px;
-            background: var(--bg-card);
-            color: var(--text-primary);
-            font-size: 14px;
-            outline: none;
-            transition: all 0.2s;
-        }
-        
-        .search-box input:focus {
-            background: var(--bg-hover);
-            box-shadow: 0 0 0 2px var(--primary);
-        }
-        
-        .search-box::before {
-            content: "🔍";
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0.6;
-        }
-        
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-        
-        /* 内容区块 */
-        .section {
-            margin-bottom: 40px;
-        }
-        
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .section-title {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        
-        .see-all {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .see-all:hover {
-            text-decoration: underline;
-        }
-        
-        /* 卡片网格 */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 24px;
-        }
-        
-        .music-card {
-            background: var(--bg-card);
-            padding: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-        }
-        
-        .music-card:hover {
-            background: var(--bg-hover);
-            transform: translateY(-4px);
-        }
-        
-        .music-card:hover .play-button {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .card-image {
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #333, #555);
-            margin-bottom: 16px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .play-button {
-            position: absolute;
-            bottom: 12px;
-            right: 12px;
-            width: 48px;
-            height: 48px;
-            background: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            opacity: 0;
-            transform: translateY(8px);
-            transition: all 0.3s;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-        }
-        
-        .play-button:hover {
-            transform: scale(1.1);
-            background: var(--primary-dark);
-        }
-        
-        .card-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .card-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        /* 播放器 */
-        .player {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: var(--player-height);
-            background: var(--bg-card);
-            border-top: 1px solid #282828;
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-            z-index: 200;
-        }
-        
-        .player-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            width: 30%;
-            min-width: 200px;
-        }
-        
-        .player-cover {
-            width: 56px;
-            height: 56px;
-            border-radius: 4px;
-            background: linear-gradient(135deg, #333, #555);
-        }
-        
-        .player-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        
-        .player-title {
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .player-artist {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-        
-        .player-like {
-            margin-left: auto;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 20px;
-        }
-        
-        .player-like:hover {
-            color: var(--primary);
-        }
-        
-        .player-center {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            max-width: 40%;
-        }
-        
-        .player-controls {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-        
-        .control-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .control-btn:hover {
-            color: var(--text-primary);
-        }
-        
-        .control-btn.play {
-            width: 40px;
-            height: 40px;
-            background: var(--text-primary);
-            color: var(--bg-dark);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-        
-        .control-btn.play:hover {
-            transform: scale(1.1);
-        }
-        
-        .progress-bar {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .time {
-            font-size: 12px;
-            color: var(--text-secondary);
-            min-width: 40px;
-            text-align: center;
-        }
-        
-        .progress-track {
-            flex: 1;
-            height: 4px;
-            background: #4d4d4d;
-            border-radius: 2px;
-            cursor: pointer;
-            position: relative;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: var(--text-primary);
-            border-radius: 2px;
-            width: 30%;
-            position: relative;
-        }
-        
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            right: -6px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 12px;
-            height: 12px;
-            background: var(--text-primary);
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        
-        .progress-track:hover .progress-fill::after {
-            opacity: 1;
-        }
-        
-        .player-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            width: 30%;
-            min-width: 200px;
-            justify-content: flex-end;
-        }
-        
-        .volume-control {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            width: 136px;
-        }
-        
-        .volume-slider {
-            flex: 1;
-            height: 4px;
-            background: #4d4d4d;
-            border-radius: 2px;
-            cursor: pointer;
-        }
-        
-        .volume-fill {
-            height: 100%;
-            background: var(--text-primary);
-            border-radius: 2px;
-            width: 70%;
-        }
-        
-        /* 歌词面板 */
-        .lyrics-panel {
-            position: fixed;
-            right: -400px;
-            top: 0;
-            width: 400px;
-            height: 100vh;
-            background: var(--bg-dark);
-            z-index: 300;
-            transition: right 0.3s;
-            padding: 24px;
-            overflow-y: auto;
-        }
-        
-        .lyrics-panel.open {
-            right: 0;
-        }
-        
-        .lyrics-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-        
-        .lyrics-line {
-            padding: 12px 0;
-            color: var(--text-secondary);
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        .lyrics-line.active {
-            color: var(--primary);
-            font-size: 20px;
-            font-weight: 600;
-        }
-        
-        /* 响应式 */
-        @media (max-width: 1024px) {
-            .sidebar {
-                width: 72px;
-            }
-            .logo-text, .nav-item span {
-                display: none;
-            }
-            .main-content {
-                margin-left: 72px;
-            }
-            .search-box {
-                width: 300px;
-            }
-            .lang-selector {
-                right: 10px;
-                top: 10px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-            .main-content {
-                margin-left: 0;
-                padding-top: 60px;
-            }
-            .player-left, .player-right {
-                display: none;
-            }
-            .player-center {
-                max-width: 100%;
-            }
-            .search-box {
-                width: 200px;
-            }
-            .card-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .top-bar {
-                padding-right: 0;
-            }
-            .lang-selector {
-                position: fixed;
-                top: auto;
-                bottom: 100px;
-                right: 20px;
-            }
-        }
+        .card h3 { margin-bottom: 8px; }
+        .card p { color: #b3b3b3; font-size: 14px; }
     </style>
 </head>
 <body>
-    <!-- 语言和货币选择器 -->
-    <div class="lang-selector">
-        <div class="currency-selector">
-            <button class="currency-btn" onclick="toggleCurrencyDropdown()">
-                <span id="current-currency-symbol">¥</span>
-                <span id="current-currency-code">CNY</span>
+    <div class="header">
+        <div class="logo">🎵 XMUSIC</div>
+        <div class="selectors">
+            <button class="selector-btn" onclick="toggleCurrency()">
+                <span id="curr-symbol">¥</span>
+                <span id="curr-code">CNY</span>
                 <span>▼</span>
             </button>
-            <div class="currency-dropdown" id="currency-dropdown">
-                <!-- 货币选项由JS生成 -->
-            </div>
-        </div>
-        
-        <div class="language-selector">
-            <button class="lang-btn" onclick="toggleLangDropdown()">
-                <span id="current-lang-flag">🇨🇳</span>
-                <span id="current-lang-name">中文</span>
-                <span>▼</span>
-            </button>
-            <div class="lang-dropdown" id="lang-dropdown">
-                <!-- 语言选项将由JS生成 -->
-            </div>
         </div>
     </div>
-
-    <!-- 侧边栏 -->
-    <nav class="sidebar">
-        <div class="logo">
-            <div class="logo-icon">🎵</div>
-            <span class="logo-text">XMUSIC</span>
-        </div>
-        
-        <div class="nav-section">
-            <a href="#" class="nav-item active" onclick="showSection('home')">
-                <i>🏠</i>
-                <span data-i18n="nav.home">首页</span>
-            </a>
-            <a href="#" class="nav-item" onclick="showSection('search')">
-                <i>🔍</i>
-                <span data-i18n="nav.search">搜索</span>
-            </a>
-            <a href="#" class="nav-item" onclick="showSection('library')">
-                <i>📚</i>
-                <span data-i18n="nav.library">音乐库</span>
-            </a>
-        </div>
-        
-        <div class="nav-section">
-            <a href="#" class="nav-item" onclick="showSection('playlist')">
-                <i>➕</i>
-                <span data-i18n="nav.createPlaylist">创建歌单</span>
-            </a>
-            <a href="#" class="nav-item" onclick="showSection('liked')">
-                <i>❤️</i>
-                <span data-i18n="nav.likedSongs">喜欢的歌曲</span>
-            </a>
-        </div>
-    </nav>
-
-    <!-- 主内容 -->
-    <main class="main-content">
-        <div class="top-bar">
-            <div class="search-box">
-                <input type="text" id="search-input" placeholder="搜索歌曲、艺人、专辑..." onkeyup="searchMusic(this.value)">
-            </div>
-            
-            <div class="user-menu">
-                <span style="color: var(--text-secondary); font-size: 14px;">Henjin888</span>
-                <div class="user-avatar">H</div>
-            </div>
-        </div>
-
-        <!-- 首页内容 -->
-        <div id="home-section">
-            <!-- 订阅横幅 -->
-            <div class="subscription-banner">
-                <div class="subscription-info">
-                    <h3 data-i18n="subscription.title">🎵 XMUSIC Premium</h3>
-                    <p data-i18n="subscription.description">无限畅听，无广告，离线播放，高品质音质</p>
-                </div>
-                <div class="subscription-price">
-                    <div class="price-amount" id="subscription-price">¥6.99</div>
-                    <div class="price-period" data-i18n="subscription.period">/ 月</div>
-                    <button class="subscribe-btn" data-i18n="subscription.button">立即订阅</button>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title" data-i18n="sections.trending">🔥 热门推荐</h2>
-                    <a href="#" class="see-all" data-i18n="common.seeAll">显示全部</a>
-                </div>
-                <div class="card-grid" id="trending-grid"></div>
-            </div>
-
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title" data-i18n="sections.foryou">🎸 为你打造</h2>
-                    <a href="#" class="see-all" data-i18n="common.seeAll">显示全部</a>
-                </div>
-                <div class="card-grid" id="foryou-grid"></div>
-            </div>
-
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title" data-i18n="sections.newReleases">🆕 最新发行</h2>
-                    <a href="#" class="see-all" data-i18n="common.seeAll">显示全部</a>
-                </div>
-                <div class="card-grid" id="new-grid"></div>
-            </div>
-        </div>
-
-        <!-- 搜索结果 -->
-        <div id="search-section" style="display: none;">
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title" data-i18n="sections.searchResults">🔍 搜索结果</h2>
-                </div>
-                <div class="card-grid" id="search-results">
-                    <p style="color: var(--text-secondary);" data-i18n="search.startTyping">输入关键词开始搜索...</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 音乐库 -->
-        <div id="library-section" style="display: none;">
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title" data-i18n="sections.yourLibrary">📚 你的音乐库</h2>
-                </div>
-                <div class="card-grid" id="library-grid"></div>
-            </div>
-        </div>
-    </main>
-
-    <!-- 播放器 -->
-    <div class="player">
-        <div class="player-left">
-            <div class="player-cover" id="player-cover"></div>
-            <div class="player-info">
-                <div class="player-title" id="player-title" data-i18n="player.selectSong">选择一首歌曲</div>
-                <div class="player-artist" id="player-artist">-</div>
-            </div>
-            <div class="player-like" onclick="toggleLike()">🤍</div>
-        </div>
-
-        <div class="player-center">
-            <div class="player-controls">
-                <button class="control-btn" title="随机播放">🔀</button>
-                <button class="control-btn" onclick="prevSong()" title="上一首">⏮️</button>
-                <button class="control-btn play" onclick="togglePlay()" id="play-btn">▶️</button>
-                <button class="control-btn" onclick="nextSong()" title="下一首">⏭️</button>
-                <button class="control-btn" title="循环播放">🔁</button>
-            </div>
-            <div class="progress-bar">
-                <span class="time" id="current-time">0:00</span>
-                <div class="progress-track" onclick="seek(event)">
-                    <div class="progress-fill" id="progress-fill"></div>
-                </div>
-                <span class="time" id="total-time">3:45</span>
-            </div>
-        </div>
-
-        <div class="player-right">
-            <button class="control-btn" onclick="toggleLyrics()" title="歌词">🎤</button>
-            <button class="control-btn" title="播放列表">📋</button>
-            <div class="volume-control">
-                <button class="control-btn">🔊</button>
-                <div class="volume-slider" onclick="setVolume(event)">
-                    <div class="volume-fill" id="volume-fill"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 歌词面板 -->
-    <div class="lyrics-panel" id="lyrics-panel">
-        <div class="lyrics-header">
-            <h3 data-i18n="player.lyrics">歌词</h3>
-            <button class="control-btn" onclick="toggleLyrics()">✕</button>
-        </div>
-        <div id="lyrics-content">
-            <div class="lyrics-line active" data-i18n="player.noLyrics">暂无歌词</div>
-        </div>
-    </div>
+    
+    <div class="dropdown" id="currency-dropdown"></div>
+    
+    <div class="cards" id="song-cards"></div>
 
     <script>
-        // 多语言配置 - 世界主流语言
-        const i18n = {
-            zh: {
-                flag: '🇨🇳',
-                name: '中文',
-                native: '简体中文',
-                nav: {
-                    home: '🏠 首页',
-                    search: '🔍 搜索',
-                    library: '📚 音乐库',
-                    createPlaylist: '➕ 创建歌单',
-                    likedSongs: '❤️ 喜欢的歌曲'
-                },
-                sections: {
-                    trending: '🔥 热门推荐',
-                    foryou: '🎸 为你打造',
-                    newReleases: '🆕 最新发行',
-                    searchResults: '🔍 搜索结果',
-                    yourLibrary: '📚 你的音乐库'
-                },
-                player: {
-                    selectSong: '选择一首歌曲',
-                    lyrics: '歌词',
-                    noLyrics: '暂无歌词'
-                },
-                search: {
-                    placeholder: '搜索歌曲、艺人、专辑...',
-                    startTyping: '输入关键词开始搜索...',
-                    noResults: '没有找到相关歌曲'
-                },
-                common: {
-                    seeAll: '显示全部'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: '无限畅听，无广告，离线播放，高品质音质',
-                    period: '/ 月',
-                    button: '立即订阅'
-                }
-            },
-            en: {
-                flag: '🇺🇸',
-                name: 'English',
-                native: 'English',
-                nav: {
-                    home: '🏠 Home',
-                    search: '🔍 Search',
-                    library: '📚 Your Library',
-                    createPlaylist: '➕ Create Playlist',
-                    likedSongs: '❤️ Liked Songs'
-                },
-                sections: {
-                    trending: '🔥 Trending',
-                    foryou: '🎸 Made For You',
-                    newReleases: '🆕 New Releases',
-                    searchResults: '🔍 Search Results',
-                    yourLibrary: '📚 Your Library'
-                },
-                player: {
-                    selectSong: 'Select a song',
-                    lyrics: 'Lyrics',
-                    noLyrics: 'No lyrics available'
-                },
-                search: {
-                    placeholder: 'Search songs, artists, albums...',
-                    startTyping: 'Start typing to search...',
-                    noResults: 'No songs found'
-                },
-                common: {
-                    seeAll: 'See All'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: 'Unlimited listening, no ads, offline playback, high-quality audio',
-                    period: '/ month',
-                    button: 'Subscribe Now'
-                }
-            },
-            ja: {
-                flag: '🇯🇵',
-                name: '日本語',
-                native: '日本語',
-                nav: {
-                    home: '🏠 ホーム',
-                    search: '🔍 検索',
-                    library: '📚 ライブラリ',
-                    createPlaylist: '➕ プレイリスト作成',
-                    likedSongs: '❤️ お気に入り'
-                },
-                sections: {
-                    trending: '🔥 人気',
-                    foryou: '🎸 あなたへのおすすめ',
-                    newReleases: '🆕 新着',
-                    searchResults: '🔍 検索結果',
-                    yourLibrary: '📚 ライブラリ'
-                },
-                player: {
-                    selectSong: '曲を選択',
-                    lyrics: '歌詞',
-                    noLyrics: '歌詞がありません'
-                },
-                search: {
-                    placeholder: '曲、アーティスト、アルバムを検索...',
-                    startTyping: '検索キーワードを入力...',
-                    noResults: '曲が見つかりません'
-                },
-                common: {
-                    seeAll: 'すべて表示'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC プレミアム',
-                    description: '無制限再生、広告なし、オフライン再生、高音質',
-                    period: '/ 月',
-                    button: '今すぐ登録'
-                }
-            },
-            ko: {
-                flag: '🇰🇷',
-                name: '한국어',
-                native: '한국어',
-                nav: {
-                    home: '🏠 홈',
-                    search: '🔍 검색',
-                    library: '📚 라이브러리',
-                    createPlaylist: '➕ 플레이리스트 만들기',
-                    likedSongs: '❤️ 좋아하는 노래'
-                },
-                sections: {
-                    trending: '🔥 인기',
-                    foryou: '🎸 맞춤추천',
-                    newReleases: '🆕 최신 발매',
-                    searchResults: '🔍 검색 결과',
-                    yourLibrary: '📚 라이브러리'
-                },
-                player: {
-                    selectSong: '노래 선택',
-                    lyrics: '가사',
-                    noLyrics: '가사 없음'
-                },
-                search: {
-                    placeholder: '노래, 아티스트, 앨범 검색...',
-                    startTyping: '검색어를 입력하세요...',
-                    noResults: '노래를 찾을 수 없습니다'
-                },
-                common: {
-                    seeAll: '모두 보기'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC 프리미엄',
-                    description: '무제한 재생, 광고 없음, 오프라인 재생, 고품질 음향',
-                    period: '/ 월',
-                    button: '지금 구독'
-                }
-            },
-            es: {
-                flag: '🇪🇸',
-                name: 'Español',
-                native: 'Español',
-                nav: {
-                    home: '🏠 Inicio',
-                    search: '🔍 Buscar',
-                    library: '📚 Tu Biblioteca',
-                    createPlaylist: '➕ Crear Playlist',
-                    likedSongs: '❤️ Canciones Favoritas'
-                },
-                sections: {
-                    trending: '🔥 Tendencias',
-                    foryou: '🎸 Hecho Para Ti',
-                    newReleases: '🆕 Novedades',
-                    searchResults: '🔍 Resultados',
-                    yourLibrary: '📚 Tu Biblioteca'
-                },
-                player: {
-                    selectSong: 'Selecciona una canción',
-                    lyrics: 'Letra',
-                    noLyrics: 'Letra no disponible'
-                },
-                search: {
-                    placeholder: 'Buscar canciones, artistas, álbumes...',
-                    startTyping: 'Empieza a escribir para buscar...',
-                    noResults: 'No se encontraron canciones'
-                },
-                common: {
-                    seeAll: 'Ver Todo'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: 'Escucha ilimitada, sin anuncios, reproducción offline, audio de alta calidad',
-                    period: '/ mes',
-                    button: 'Suscribirse'
-                }
-            },
-            fr: {
-                flag: '🇫🇷',
-                name: 'Français',
-                native: 'Français',
-                nav: {
-                    home: '🏠 Accueil',
-                    search: '🔍 Rechercher',
-                    library: '📚 Bibliothèque',
-                    createPlaylist: '➕ Créer une Playlist',
-                    likedSongs: '❤️ Titres Aimés'
-                },
-                sections: {
-                    trending: '🔥 Tendances',
-                    foryou: '🎸 Pour Vous',
-                    newReleases: '🆕 Nouveautés',
-                    searchResults: '🔍 Résultats',
-                    yourLibrary: '📚 Votre Bibliothèque'
-                },
-                player: {
-                    selectSong: 'Sélectionnez un titre',
-                    lyrics: 'Paroles',
-                    noLyrics: 'Paroles non disponibles'
-                },
-                search: {
-                    placeholder: 'Rechercher des titres, artistes, albums...',
-                    startTyping: 'Commencez à taper pour rechercher...',
-                    noResults: 'Aucun titre trouvé'
-                },
-                common: {
-                    seeAll: 'Tout Voir'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: 'Écoute illimitée, sans publicité, lecture hors ligne, audio haute qualité',
-                    period: '/ mois',
-                    button: 'Abonnez-vous'
-                }
-            },
-            de: {
-                flag: '🇩🇪',
-                name: 'Deutsch',
-                native: 'Deutsch',
-                nav: {
-                    home: '🏠 Startseite',
-                    search: '🔍 Suche',
-                    library: '📚 Bibliothek',
-                    createPlaylist: '➕ Playlist Erstellen',
-                    likedSongs: '❤️ Lieblingssongs'
-                },
-                sections: {
-                    trending: '🔥 Beliebt',
-                    foryou: '🎸 Für Dich',
-                    newReleases: '🆕 Neuerscheinungen',
-                    searchResults: '🔍 Suchergebnisse',
-                    yourLibrary: '📚 Deine Bibliothek'
-                },
-                player: {
-                    selectSong: 'Wähle einen Song',
-                    lyrics: 'Songtext',
-                    noLyrics: 'Kein Songtext verfügbar'
-                },
-                search: {
-                    placeholder: 'Songs, Künstler, Alben suchen...',
-                    startTyping: 'Tippe zum Suchen...',
-                    noResults: 'Keine Songs gefunden'
-                },
-                common: {
-                    seeAll: 'Alle Anzeigen'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: 'Unbegrenztes Hören, werbefrei, Offline-Wiedergabe, Hochwertiger Sound',
-                    period: '/ Monat',
-                    button: 'Jetzt Abonnieren'
-                }
-            },
-            pt: {
-                flag: '🇧🇷',
-                name: 'Português',
-                native: 'Português',
-                nav: {
-                    home: '🏠 Início',
-                    search: '🔍 Buscar',
-                    library: '📚 Sua Biblioteca',
-                    createPlaylist: '➕ Criar Playlist',
-                    likedSongs: '❤️ Músicas Curtidas'
-                },
-                sections: {
-                    trending: '🔥 Em Alta',
-                    foryou: '🎸 Feito Para Você',
-                    newReleases: '🆕 Lançamentos',
-                    searchResults: '🔍 Resultados',
-                    yourLibrary: '📚 Sua Biblioteca'
-                },
-                player: {
-                    selectSong: 'Selecione uma música',
-                    lyrics: 'Letra',
-                    noLyrics: 'Letra não disponível'
-                },
-                search: {
-                    placeholder: 'Buscar músicas, artistas, álbuns...',
-                    startTyping: 'Comece a digitar para buscar...',
-                    noResults: 'Nenhuma música encontrada'
-                },
-                common: {
-                    seeAll: 'Ver Tudo'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: 'Escuta ilimitada, sem anúncios, reprodução offline, áudio de alta qualidade',
-                    period: '/ mês',
-                    button: 'Assine Agora'
-                }
-            },
-            ru: {
-                flag: '🇷🇺',
-                name: 'Русский',
-                native: 'Русский',
-                nav: {
-                    home: '🏠 Главная',
-                    search: '🔍 Поиск',
-                    library: '📚 Библиотека',
-                    createPlaylist: '➕ Создать плейлист',
-                    likedSongs: '❤️ Любимые треки'
-                },
-                sections: {
-                    trending: '🔥 Популярное',
-                    foryou: '🎸 Персональные подборки',
-                    newReleases: '🆕 Новинки',
-                    searchResults: '🔍 Результаты поиска',
-                    yourLibrary: '📚 Ваша библиотека'
-                },
-                player: {
-                    selectSong: 'Выберите трек',
-                    lyrics: 'Текст песни',
-                    noLyrics: 'Текст недоступен'
-                },
-                search: {
-                    placeholder: 'Поиск треков, исполнителей, альбомов...',
-                    startTyping: 'Начните вводить для поиска...',
-                    noResults: 'Треки не найдены'
-                },
-                common: {
-                    seeAll: 'Смотреть все'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Премиум',
-                    description: 'Неограниченное прослушивание, без рекламы, офлайн-воспроизведение, высокое качество',
-                    period: '/ мес',
-                    button: 'Подписаться'
-                }
-            },
-            ar: {
-                flag: '🇸🇦',
-                name: 'العربية',
-                native: 'العربية',
-                nav: {
-                    home: '🏠 الرئيسية',
-                    search: '🔍 بحث',
-                    library: '📚 المكتبة',
-                    createPlaylist: '➕ إنشاء قائمة',
-                    likedSongs: '❤️ الأغاني المفضلة'
-                },
-                sections: {
-                    trending: '🔥 الأكثر شهرة',
-                    foryou: '🎸 مخصص لك',
-                    newReleases: '🆕 جديد',
-                    searchResults: '🔍 نتائج البحث',
-                    yourLibrary: '📚 مكتبتك'
-                },
-                player: {
-                    selectSong: 'اختر أغنية',
-                    lyrics: 'كلمات',
-                    noLyrics: 'لا توجد كلمات'
-                },
-                search: {
-                    placeholder: 'البحث عن أغاني، فنانين، ألبومات...',
-                    startTyping: 'ابدأ الكتابة للبحث...',
-                    noResults: 'لم يتم العثور على أغاني'
-                },
-                common: {
-                    seeAll: 'عرض الكل'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC بريميوم',
-                    description: 'استماع غير محدود، بدون إعلانات، تشغيل بدون إنترنت، صوت عالي الجودة',
-                    period: '/ شهر',
-                    button: 'اشترك الآن'
-                }
-            },
-            hi: {
-                flag: '🇮🇳',
-                name: 'हिन्दी',
-                native: 'हिन्दी',
-                nav: {
-                    home: '🏠 होम',
-                    search: '🔍 खोजें',
-                    library: '📚 लाइब्रेरी',
-                    createPlaylist: '➕ प्लेलिस्ट बनाएं',
-                    likedSongs: '❤️ पसंदीदा गाने'
-                },
-                sections: {
-                    trending: '🔥 ट्रेंडिंग',
-                    foryou: '🎸 आपके लिए',
-                    newReleases: '🆕 नई रिलीज़',
-                    searchResults: '🔍 खोज परिणाम',
-                    yourLibrary: '📚 आपकी लाइब्रेरी'
-                },
-                player: {
-                    selectSong: 'गाना चुनें',
-                    lyrics: 'बोल',
-                    noLyrics: 'बोल उपलब्ध नहीं'
-                },
-                search: {
-                    placeholder: 'गाने, कलाकार, एल्बम खोजें...',
-                    startTyping: 'खोजने के लिए टाइप करें...',
-                    noResults: 'कोई गाना नहीं मिला'
-                },
-                common: {
-                    seeAll: 'सभी देखें'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC प्रीमियम',
-                    description: 'असीमित सुनवाई, विज्ञापन मुक्त, ऑफ़लाइन प्लेबैक, उच्च गुणवत्ता ध्वनि',
-                    period: '/ महीना',
-                    button: 'अभी सब्सक्राइब करें'
-                }
-            },
-            it: {
-                flag: '🇮🇹',
-                name: 'Italiano',
-                native: 'Italiano',
-                nav: {
-                    home: '🏠 Home',
-                    search: '🔍 Cerca',
-                    library: '📚 La Tua Libreria',
-                    createPlaylist: '➕ Crea Playlist',
-                    likedSongs: '❤️ Brani Preferiti'
-                },
-                sections: {
-                    trending: '🔥 Di Tendenza',
-                    foryou: '🎸 Creato Per Te',
-                    newReleases: '🆕 Nuove Uscite',
-                    searchResults: '🔍 Risultati',
-                    yourLibrary: '📚 La Tua Libreria'
-                },
-                player: {
-                    selectSong: 'Seleziona un brano',
-                    lyrics: 'Testo',
-                    noLyrics: 'Testo non disponibile'
-                },
-                search: {
-                    placeholder: 'Cerca brani, artisti, album...',
-                    startTyping: 'Inizia a digitare per cercare...',
-                    noResults: 'Nessun brano trovato'
-                },
-                common: {
-                    seeAll: 'Visualizza Tutto'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: 'Ascolto illimitato, senza pubblicità, riproduzione offline, audio di alta qualità',
-                    period: '/ mese',
-                    button: 'Iscriviti Ora'
-                }
-            },
-            nl: {
-                flag: '🇳🇱',
-                name: 'Nederlands',
-                native: 'Nederlands',
-                nav: {
-                    home: '🏠 Home',
-                    search: '🔍 Zoeken',
-                    library: '📚 Bibliotheek',
-                    createPlaylist: '➕ Playlist Maken',
-                    likedSongs: '❤️ Favoriete Nummers'
-                },
-                sections: {
-                    trending: '🔥 Trending',
-                    foryou: '🎸 Voor Jou',
-                    newReleases: '🆕 Nieuwe Releases',
-                    searchResults: '🔍 Zoekresultaten',
-                    yourLibrary: '📚 Jouw Bibliotheek'
-                },
-                player: {
-                    selectSong: 'Selecteer een nummer',
-                    lyrics: 'Songtekst',
-                    noLyrics: 'Geen songtekst beschikbaar'
-                },
-                search: {
-                    placeholder: 'Zoek nummers, artiesten, albums...',
-                    startTyping: 'Begin met typen om te zoeken...',
-                    noResults: 'Geen nummers gevonden'
-                },
-                common: {
-                    seeAll: 'Alles Bekijken'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: 'Onbeperkt luisteren, geen advertenties, offline afspelen, hoge kwaliteit audio',
-                    period: '/ maand',
-                    button: 'Nu Abonneren'
-                }
-            },
-            tr: {
-                flag: '🇹🇷',
-                name: 'Türkçe',
-                native: 'Türkçe',
-                nav: {
-                    home: '🏠 Ana Sayfa',
-                    search: '🔍 Ara',
-                    library: '📚 Kitaplığın',
-                    createPlaylist: '➕ Çalma Listesi Oluştur',
-                    likedSongs: '❤️ Beğenilen Şarkılar'
-                },
-                sections: {
-                    trending: '🔥 Trend',
-                    foryou: '🎸 Senin İçin',
-                    newReleases: '🆕 Yeni Çıkanlar',
-                    searchResults: '🔍 Arama Sonuçları',
-                    yourLibrary: '📚 Kitaplığın'
-                },
-                player: {
-                    selectSong: 'Bir şarkı seç',
-                    lyrics: 'Şarkı sözleri',
-                    noLyrics: 'Şarkı sözü yok'
-                },
-                search: {
-                    placeholder: 'Şarkı, sanatçı, albüm ara...',
-                    startTyping: 'Aramak için yazmaya başla...',
-                    noResults: 'Şarkı bulunamadı'
-                },
-                common: {
-                    seeAll: 'Tümünü Gör'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: 'Sınırsız dinleme, reklamsız, çevrimdışı oynatma, yüksek kaliteli ses',
-                    period: '/ ay',
-                    button: 'Hemen Abone Ol'
-                }
-            },
-            pl: {
-                flag: '🇵🇱',
-                name: 'Polski',
-                native: 'Polski',
-                nav: {
-                    home: '🏠 Strona Główna',
-                    search: '🔍 Szukaj',
-                    library: '📚 Biblioteka',
-                    createPlaylist: '➕ Utwórz Playlistę',
-                    likedSongs: '❤️ Polubione Utwory'
-                },
-                sections: {
-                    trending: '🔥 Na Czasie',
-                    foryou: '🎸 Dla Ciebie',
-                    newReleases: '🆕 Nowości',
-                    searchResults: '🔍 Wyniki Wyszukiwania',
-                    yourLibrary: '📚 Twoja Biblioteka'
-                },
-                player: {
-                    selectSong: 'Wybierz utwór',
-                    lyrics: 'Tekst',
-                    noLyrics: 'Brak tekstu'
-                },
-                search: {
-                    placeholder: 'Szukaj utworów, artystów, albumów...',
-                    startTyping: 'Zacznij pisać, aby szukać...',
-                    noResults: 'Nie znaleziono utworów'
-                },
-                common: {
-                    seeAll: 'Zobacz Wszystkie'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: 'Nieograniczone słuchanie, bez reklam, odtwarzanie offline, wysoka jakość dźwięku',
-                    period: '/ miesiąc',
-                    button: 'Subskrybuj Teraz'
-                }
-            },
-            vi: {
-                flag: '🇻🇳',
-                name: 'Tiếng Việt',
-                native: 'Tiếng Việt',
-                nav: {
-                    home: '🏠 Trang chủ',
-                    search: '🔍 Tìm kiếm',
-                    library: '📚 Thư viện',
-                    createPlaylist: '➕ Tạo Playlist',
-                    likedSongs: '❤️ Bài hát đã thích'
-                },
-                sections: {
-                    trending: '🔥 Thịnh hành',
-                    foryou: '🎸 Dành cho bạn',
-                    newReleases: '🆕 Mới phát hành',
-                    searchResults: '🔍 Kết quả tìm kiếm',
-                    yourLibrary: '📚 Thư viện của bạn'
-                },
-                player: {
-                    selectSong: 'Chọn một bài hát',
-                    lyrics: 'Lời bài hát',
-                    noLyrics: 'Chưa có lời bài hát'
-                },
-                search: {
-                    placeholder: 'Tìm bài hát, nghệ sĩ, album...',
-                    startTyping: 'Nhập để tìm kiếm...',
-                    noResults: 'Không tìm thấy bài hát'
-                },
-                common: {
-                    seeAll: 'Xem tất cả'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: 'Nghe không giới hạn, không quảng cáo, phát offline, chất lượng cao',
-                    period: '/ tháng',
-                    button: 'Đăng Ký Ngay'
-                }
-            },
-            th: {
-                flag: '🇹🇭',
-                name: 'ไทย',
-                native: 'ไทย',
-                nav: {
-                    home: '🏠 หน้าหลัก',
-                    search: '🔍 ค้นหา',
-                    library: '📚 คลังเพลง',
-                    createPlaylist: '➕ สร้างเพลย์ลิสต์',
-                    likedSongs: '❤️ เพลงที่ถูกใจ'
-                },
-                sections: {
-                    trending: '🔥 กำลังฮิต',
-                    foryou: '🎸 สำหรับคุณ',
-                    newReleases: '🆕 มาใหม่',
-                    searchResults: '🔍 ผลการค้นหา',
-                    yourLibrary: '📚 คลังเพลงของคุณ'
-                },
-                player: {
-                    selectSong: 'เลือกเพลง',
-                    lyrics: 'เนื้อเพลง',
-                    noLyrics: 'ไม่มีเนื้อเพลง'
-                },
-                search: {
-                    placeholder: 'ค้นหาเพลง ศิลปิน อัลบั้ม...',
-                    startTyping: 'พิมพ์เพื่อค้นหา...',
-                    noResults: 'ไม่พบเพลง'
-                },
-                common: {
-                    seeAll: 'ดูทั้งหมด'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: 'ฟังไม่จำกัด, ไม่มีโฆษณา, เล่นออฟไลน์, เสียงคุณภาพสูง',
-                    period: '/ เดือน',
-                    button: 'สมัครสมาชิกเลย'
-                }
-            },
-            id: {
-                flag: '🇮🇩',
-                name: 'Bahasa Indonesia',
-                native: 'Bahasa Indonesia',
-                nav: {
-                    home: '🏠 Beranda',
-                    search: '🔍 Cari',
-                    library: '📚 Perpustakaan',
-                    createPlaylist: '➕ Buat Playlist',
-                    likedSongs: '❤️ Lagu yang Disukai'
-                },
-                sections: {
-                    trending: '🔥 Sedang Tren',
-                    foryou: '🎸 Untuk Kamu',
-                    newReleases: '🆕 Rilis Baru',
-                    searchResults: '🔍 Hasil Pencarian',
-                    yourLibrary: '📚 Perpustakaan Kamu'
-                },
-                player: {
-                    selectSong: 'Pilih lagu',
-                    lyrics: 'Lirik',
-                    noLyrics: 'Lirik tidak tersedia'
-                },
-                search: {
-                    placeholder: 'Cari lagu, artis, album...',
-                    startTyping: 'Mulai mengetik untuk mencari...',
-                    noResults: 'Tidak ada lagu ditemukan'
-                },
-                common: {
-                    seeAll: 'Lihat Semua'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: 'Dengar tanpa batas, tanpa iklan, pemutaran offline, audio berkualitas tinggi',
-                    period: '/ bulan',
-                    button: 'Berlangganan Sekarang'
-                }
-            },
-            ms: {
-                flag: '🇲🇾',
-                name: 'Bahasa Melayu',
-                native: 'Bahasa Melayu',
-                nav: {
-                    home: '🏠 Laman Utama',
-                    search: '🔍 Cari',
-                    library: '📚 Perpustakaan',
-                    createPlaylist: '➕ Cipta Playlist',
-                    likedSongs: '❤️ Lagu Suka'
-                },
-                sections: {
-                    trending: '🔥 Trending',
-                    foryou: '🎸 Untuk Anda',
-                    newReleases: '🆕 Keluaran Baru',
-                    searchResults: '🔍 Keputusan Carian',
-                    yourLibrary: '📚 Perpustakaan Anda'
-                },
-                player: {
-                    selectSong: 'Pilih lagu',
-                    lyrics: 'Lirik',
-                    noLyrics: 'Lirik tidak tersedia'
-                },
-                search: {
-                    placeholder: 'Cari lagu, artis, album...',
-                    startTyping: 'Mula menaip untuk mencari...',
-                    noResults: 'Tiada lagu dijumpai'
-                },
-                common: {
-                    seeAll: 'Lihat Semua'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: 'Dengar tanpa had, tiada iklan, main luar talian, audio berkualiti tinggi',
-                    period: '/ bulan',
-                    button: 'Langgan Sekarang'
-                }
-            },
-            sv: {
-                flag: '🇸🇪',
-                name: 'Svenska',
-                native: 'Svenska',
-                nav: {
-                    home: '🏠 Hem',
-                    search: '🔍 Sök',
-                    library: '📚 Bibliotek',
-                    createPlaylist: '➕ Skapa Spellista',
-                    likedSongs: '❤️ Gillade Låtar'
-                },
-                sections: {
-                    trending: '🔥 Trendar',
-                    foryou: '🎸 För Dig',
-                    newReleases: '🆕 Nya Släpp',
-                    searchResults: '🔍 Sökresultat',
-                    yourLibrary: '📚 Ditt Bibliotek'
-                },
-                player: {
-                    selectSong: 'Välj en låt',
-                    lyrics: 'Text',
-                    noLyrics: 'Ingen text tillgänglig'
-                },
-                search: {
-                    placeholder: 'Sök låtar, artister, album...',
-                    startTyping: 'Börja skriva för att söka...',
-                    noResults: 'Inga låtar hittades'
-                },
-                common: {
-                    seeAll: 'Visa Alla'
-                },
-                subscription: {
-                    title: '🎵 XMUSIC Premium',
-                    description: 'Obegränsad lyssning, inga annonser, offline-uppspelning, högkvalitativt ljud',
-                    period: '/ månad',
-                    button: 'Prenumerera Nu'
-                }
-            }
-        };
-
-        // 全球货币配置 - 180+ 国家/地区
+        // 180+ 全球货币
         const currencies = {
-            CNY: { code: 'CNY', symbol: '¥', name: 'Chinese Yuan', nameCN: '人民币', flag: '🇨🇳', rate: 1.0 },
-            USD: { code: 'USD', symbol: '$', name: 'US Dollar', nameCN: '美元', flag: '🇺🇸', rate: 0.14 },
-            EUR: { code: 'EUR', symbol: '€', name: 'Euro', nameCN: '欧元', flag: '🇪🇺', rate: 0.13 },
-            JPY: { code: 'JPY', symbol: '¥', name: 'Japanese Yen', nameCN: '日元', flag: '🇯🇵', rate: 20.5 },
-            GBP: { code: 'GBP', symbol: '£', name: 'British Pound', nameCN: '英镑', flag: '🇬🇧', rate: 0.11 },
-            KRW: { code: 'KRW', symbol: '₩', name: 'South Korean Won', nameCN: '韩元', flag: '🇰🇷', rate: 185.0 },
-            HKD: { code: 'HKD', symbol: 'HK$', name: 'Hong Kong Dollar', nameCN: '港币', flag: '🇭🇰', rate: 1.09 },
-            TWD: { code: 'TWD', symbol: 'NT$', name: 'New Taiwan Dollar', nameCN: '新台币', flag: '🇹🇼', rate: 4.35 },
-            SGD: { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar', nameCN: '新加坡元', flag: '🇸🇬', rate: 0.19 },
-            AUD: { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', nameCN: '澳元', flag: '🇦🇺', rate: 0.21 },
-            CAD: { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', nameCN: '加元', flag: '🇨🇦', rate: 0.19 },
-            CHF: { code: 'CHF', symbol: 'Fr', name: 'Swiss Franc', nameCN: '瑞士法郎', flag: '🇨🇭', rate: 0.12 },
-            INR: { code: 'INR', symbol: '₹', name: 'Indian Rupee', nameCN: '印度卢比', flag: '🇮🇳', rate: 11.5 },
-            RUB: { code: 'RUB', symbol: '₽', name: 'Russian Ruble', nameCN: '俄罗斯卢布', flag: '🇷🇺', rate: 12.5 },
-            BRL: { code: 'BRL', symbol: 'R$', name: 'Brazilian Real', nameCN: '巴西雷亚尔', flag: '🇧🇷', rate: 0.69 },
-            MXN: { code: 'MXN', symbol: '$', name: 'Mexican Peso', nameCN: '墨西哥比索', flag: '🇲🇽', rate: 2.45 },
-            ZAR: { code: 'ZAR', symbol: 'R', name: 'South African Rand', nameCN: '南非兰特', flag: '🇿🇦', rate: 2.55 },
-            SAR: { code: 'SAR', symbol: '﷼', name: 'Saudi Riyal', nameCN: '沙特里亚尔', flag: '🇸🇦', rate: 0.52 },
-            AED: { code: 'AED', symbol: 'د.إ', name: 'UAE Dirham', nameCN: '阿联酋迪拉姆', flag: '🇦🇪', rate: 0.51 },
-            THB: { code: 'THB', symbol: '฿', name: 'Thai Baht', nameCN: '泰铢', flag: '🇹🇭', rate: 4.85 },
-            MYR: { code: 'MYR', symbol: 'RM', name: 'Malaysian Ringgit', nameCN: '马来西亚林吉特', flag: '🇲🇾', rate: 0.65 },
-            IDR: { code: 'IDR', symbol: 'Rp', name: 'Indonesian Rupiah', nameCN: '印尼盾', flag: '🇮🇩', rate: 2175 },
-            PHP: { code: 'PHP', symbol: '₱', name: 'Philippine Peso', nameCN: '菲律宾比索', flag: '🇵🇭', rate: 7.75 },
-            VND: { code: 'VND', symbol: '₫', name: 'Vietnamese Dong', nameCN: '越南盾', flag: '🇻🇳', rate: 3450 },
-            PLN: { code: 'PLN', symbol: 'zł', name: 'Polish Zloty', nameCN: '波兰兹罗提', flag: '🇵🇱', rate: 0.55 },
-            TRY: { code: 'TRY', symbol: '₺', name: 'Turkish Lira', nameCN: '土耳其里拉', flag: '🇹🇷', rate: 4.25 },
-            SEK: { code: 'SEK', symbol: 'kr', name: 'Swedish Krona', nameCN: '瑞典克朗', flag: '🇸🇪', rate: 1.45 },
-            NOK: { code: 'NOK', symbol: 'kr', name: 'Norwegian Krone', nameCN: '挪威克朗', flag: '🇳🇴', rate: 1.48 },
-            DKK: { code: 'DKK', symbol: 'kr', name: 'Danish Krone', nameCN: '丹麦克朗', flag: '🇩🇰', rate: 0.97 },
-            NZD: { code: 'NZD', symbol: 'NZ$', name: 'New Zealand Dollar', nameCN: '新西兰元', flag: '🇳🇿', rate: 0.23 },
-            ILS: { code: 'ILS', symbol: '₪', name: 'Israeli Shekel', nameCN: '以色列新谢克尔', flag: '🇮🇱', rate: 0.51 },
-            EGP: { code: 'EGP', symbol: '£', name: 'Egyptian Pound', nameCN: '埃及镑', flag: '🇪🇬', rate: 6.75 },
-            NGN: { code: 'NGN', symbol: '₦', name: 'Nigerian Naira', nameCN: '尼日利亚奈拉', flag: '🇳🇬', rate: 215 },
-            PKR: { code: 'PKR', symbol: '₨', name: 'Pakistani Rupee', nameCN: '巴基斯坦卢比', flag: '🇵🇰', rate: 39 },
-            BDT: { code: 'BDT', symbol: '৳', name: 'Bangladeshi Taka', nameCN: '孟加拉塔卡', flag: '🇧🇩', rate: 15.5 },
-            ARS: { code: 'ARS', symbol: '$', name: 'Argentine Peso', nameCN: '阿根廷比索', flag: '🇦🇷', rate: 119 },
-            CLP: { code: 'CLP', symbol: '$', name: 'Chilean Peso', nameCN: '智利比索', flag: '🇨🇱', rate: 128 },
-            COP: { code: 'COP', symbol: '$', name: 'Colombian Peso', nameCN: '哥伦比亚比索', flag: '🇨🇴', rate: 585 },
-            PEN: { code: 'PEN', symbol: 'S/', name: 'Peruvian Sol', nameCN: '秘鲁索尔', flag: '🇵🇪', rate: 0.52 },
-            UYU: { code: 'UYU', symbol: '$', name: 'Uruguayan Peso', nameCN: '乌拉圭比索', flag: '🇺🇾', rate: 5.45 },
-            ISK: { code: 'ISK', symbol: 'kr', name: 'Icelandic Krona', nameCN: '冰岛克朗', flag: '🇮🇸', rate: 19.5 },
-            HUF: { code: 'HUF', symbol: 'Ft', name: 'Hungarian Forint', nameCN: '匈牙利福林', flag: '🇭🇺', rate: 50.5 },
-            CZK: { code: 'CZK', symbol: 'Kč', name: 'Czech Koruna', nameCN: '捷克克朗', flag: '🇨🇿', rate: 3.15 },
-            RON: { code: 'RON', symbol: 'lei', name: 'Romanian Leu', nameCN: '罗马尼亚列伊', flag: '🇷🇴', rate: 0.64 },
-            BGN: { code: 'BGN', symbol: 'лв', name: 'Bulgarian Lev', nameCN: '保加利亚列弗', flag: '🇧🇬', rate: 0.25 },
-            HRK: { code: 'HRK', symbol: 'kn', name: 'Croatian Kuna', nameCN: '克罗地亚库纳', flag: '🇭🇷', rate: 0.96 },
-            UAH: { code: 'UAH', symbol: '₴', name: 'Ukrainian Hryvnia', nameCN: '乌克兰格里夫纳', flag: '🇺🇦', rate: 5.15 },
-            KZT: { code: 'KZT', symbol: '₸', name: 'Kazakhstani Tenge', nameCN: '哈萨克斯坦坚戈', flag: '🇰🇿', rate: 65 },
-            KES: { code: 'KES', symbol: 'Sh', name: 'Kenyan Shilling', nameCN: '肯尼亚先令', flag: '🇰🇪', rate: 18.5 },
-            GHS: { code: 'GHS', symbol: '₵', name: 'Ghanaian Cedi', nameCN: '加纳塞地', flag: '🇬🇭', rate: 1.65 },
-            TZS: { code: 'TZS', symbol: 'Sh', name: 'Tanzanian Shilling', nameCN: '坦桑尼亚先令', flag: '🇹🇿', rate: 350 },
-            UGX: { code: 'UGX', symbol: 'Sh', name: 'Ugandan Shilling', nameCN: '乌干达先令', flag: '🇺🇬', rate: 525 },
-            ZMW: { code: 'ZMW', symbol: 'ZK', name: 'Zambian Kwacha', nameCN: '赞比亚克瓦查', flag: '🇿🇲', rate: 3.25 },
-            MAD: { code: 'MAD', symbol: 'د.م.', name: 'Moroccan Dirham', nameCN: '摩洛哥迪拉姆', flag: '🇲🇦', rate: 1.38 },
-            TND: { code: 'TND', symbol: 'د.ت', name: 'Tunisian Dinar', nameCN: '突尼斯第纳尔', flag: '🇹🇳', rate: 0.43 },
-            DZD: { code: 'DZD', symbol: 'د.ج', name: 'Algerian Dinar', nameCN: '阿尔及利亚第纳尔', flag: '🇩🇿', rate: 18.9 },
-            JOD: { code: 'JOD', symbol: 'د.ا', name: 'Jordanian Dinar', nameCN: '约旦第纳尔', flag: '🇯🇴', rate: 0.099 },
-            LBP: { code: 'LBP', symbol: 'ل.ل', name: 'Lebanese Pound', nameCN: '黎巴嫩镑', flag: '🇱🇧', rate: 20925 },
-            IQD: { code: 'IQD', symbol: 'ع.د', name: 'Iraqi Dinar', nameCN: '伊拉克第纳尔', flag: '🇮🇶', rate: 183.5 },
-            QAR: { code: 'QAR', symbol: 'ر.ق', name: 'Qatari Riyal', nameCN: '卡塔尔里亚尔', flag: '🇶🇦', rate: 0.51 },
-            KWD: { code: 'KWD', symbol: 'د.ك', name: 'Kuwaiti Dinar', nameCN: '科威特第纳尔', flag: '🇰🇼', rate: 0.043 },
-            BHD: { code: 'BHD', symbol: '.د.ب', name: 'Bahraini Dinar', nameCN: '巴林第纳尔', flag: '🇧🇭', rate: 0.053 },
-            OMR: { code: 'OMR', symbol: 'ر.ع.', name: 'Omani Rial', nameCN: '阿曼里亚尔', flag: '🇴🇲', rate: 0.054 },
-            BYN: { code: 'BYN', symbol: 'Br', name: 'Belarusian Ruble', nameCN: '白俄罗斯卢布', flag: '🇧🇾', rate: 0.45 },
-            GEL: { code: 'GEL', symbol: '₾', name: 'Georgian Lari', nameCN: '格鲁吉亚拉里', flag: '🇬🇪', rate: 0.38 },
-            AMD: { code: 'AMD', symbol: '֏', name: 'Armenian Dram', nameCN: '亚美尼亚德拉姆', flag: '🇦🇲', rate: 54.5 },
-            AZN: { code: 'AZN', symbol: '₼', name: 'Azerbaijani Manat', nameCN: '阿塞拜疆马纳特', flag: '🇦🇿', rate: 0.24 },
-            TMT: { code: 'TMT', symbol: 'm', name: 'Turkmenistani Manat', nameCN: '土库曼斯坦马纳特', flag: '🇹🇲', rate: 0.49 },
-            UZS: { code: 'UZS', symbol: 'лв', name: 'Uzbekistani Som', nameCN: '乌兹别克斯坦索姆', flag: '🇺🇿', rate: 1785 },
-            TJS: { code: 'TJS', symbol: 'ЅМ', name: 'Tajikistani Somoni', nameCN: '塔吉克斯坦索莫尼', flag: '🇹🇯', rate: 1.52 },
-            KGS: { code: 'KGS', symbol: 'лв', name: 'Kyrgystani Som', nameCN: '吉尔吉斯斯坦索姆', flag: '🇰🇬', rate: 12.35 },
-            MNT: { code: 'MNT', symbol: '₮', name: 'Mongolian Tugrik', nameCN: '蒙古图格里克', flag: '🇲🇳', rate: 475 },
-            LAK: { code: 'LAK', symbol: '₭', name: 'Lao Kip', nameCN: '老挝基普', flag: '🇱🇦', rate: 2925 },
-            MMK: { code: 'MMK', symbol: 'K', name: 'Myanmar Kyat', nameCN: '缅甸缅元', flag: '🇲🇲', rate: 295 },
-            KHR: { code: 'KHR', symbol: '៛', name: 'Cambodian Riel', nameCN: '柬埔寨瑞尔', flag: '🇰🇭', rate: 575 },
-            BND: { code: 'BND', symbol: '$', name: 'Brunei Dollar', nameCN: '文莱元', flag: '🇧🇳', rate: 0.19 },
-            FJD: { code: 'FJD', symbol: '$', name: 'Fijian Dollar', nameCN: '斐济元', flag: '🇫🇯', rate: 0.31 },
-            PGK: { code: 'PGK', symbol: 'K', name: 'Papua New Guinean Kina', nameCN: '巴布亚新几内亚基那', flag: '🇵🇬', rate: 0.53 },
-            SBD: { code: 'SBD', symbol: '$', name: 'Solomon Islands Dollar', nameCN: '所罗门群岛元', flag: '🇸🇧', rate: 1.18 },
-            VUV: { code: 'VUV', symbol: 'Vt', name: 'Vanuatu Vatu', nameCN: '瓦努阿图瓦图', flag: '🇻🇺', rate: 16.85 },
-            WST: { code: 'WST', symbol: 'T', name: 'Samoan Tala', nameCN: '萨摩亚塔拉', flag: '🇼🇸', rate: 0.39 },
-            TOP: { code: 'TOP', symbol: 'T$', name: 'Tongan Paʻanga', nameCN: '汤加潘加', flag: '🇹🇴', rate: 0.33 },
-            GYD: { code: 'GYD', symbol: '$', name: 'Guyanese Dollar', nameCN: '圭亚那元', flag: '🇬🇾', rate: 29.25 },
-            SRD: { code: 'SRD', symbol: '$', name: 'Surinamese Dollar', nameCN: '苏里南元', flag: '🇸🇷', rate: 5.15 },
-            BBD: { code: 'BBD', symbol: '$', name: 'Barbadian Dollar', nameCN: '巴巴多斯元', flag: '🇧🇧', rate: 0.28 },
-            TTD: { code: 'TTD', symbol: '$', name: 'Trinidad and Tobago Dollar', nameCN: '特立尼达和多巴哥元', flag: '🇹🇹', rate: 0.95 },
-            JMD: { code: 'JMD', symbol: '$', name: 'Jamaican Dollar', nameCN: '牙买加元', flag: '🇯🇲', rate: 21.85 },
-            HTG: { code: 'HTG', symbol: 'G', name: 'Haitian Gourde', nameCN: '海地古德', flag: '🇭🇹', rate: 18.5 },
-            BSD: { code: 'BSD', symbol: '$', name: 'Bahamian Dollar', nameCN: '巴哈马元', flag: '🇧🇸', rate: 0.14 },
-            BZD: { code: 'BZD', symbol: '$', name: 'Belize Dollar', nameCN: '伯利兹元', flag: '🇧🇿', rate: 0.28 },
-            XCD: { code: 'XCD', symbol: '$', name: 'East Caribbean Dollar', nameCN: '东加勒比元', flag: '🇦🇬', rate: 0.38 },
-            ANG: { code: 'ANG', symbol: 'ƒ', name: 'Netherlands Antillean Guilder', nameCN: '荷属安的列斯盾', flag: '🇨🇼', rate: 0.25 },
-            AWG: { code: 'AWG', symbol: 'ƒ', name: 'Aruban Florin', nameCN: '阿鲁巴弗罗林', flag: '🇦🇼', rate: 0.25 },
-            KYD: { code: 'KYD', symbol: '$', name: 'Cayman Islands Dollar', nameCN: '开曼群岛元', flag: '🇰🇾', rate: 0.12 },
-            CUP: { code: 'CUP', symbol: '$', name: 'Cuban Peso', nameCN: '古巴比索', flag: '🇨🇺', rate: 3.38 },
-            DOP: { code: 'DOP', symbol: '$', name: 'Dominican Peso', nameCN: '多米尼加比索', flag: '🇩🇴', rate: 8.15 },
-            GTQ: { code: 'GTQ', symbol: 'Q', name: 'Guatemalan Quetzal', nameCN: '危地马拉格查尔', flag: '🇬🇹', rate: 1.09 },
-            HNL: { code: 'HNL', symbol: 'L', name: 'Honduran Lempira', nameCN: '洪都拉斯伦皮拉', flag: '🇭🇳', rate: 3.45 },
-            NIO: { code: 'NIO', symbol: 'C$', name: 'Nicaraguan Cordoba', nameCN: '尼加拉瓜科多巴', flag: '🇳🇮', rate: 5.15 },
-            CRC: { code: 'CRC', symbol: '₡', name: 'Costa Rican Colon', nameCN: '哥斯达黎加科朗', flag: '🇨🇷', rate: 72.5 },
-            PAB: { code: 'PAB', symbol: 'B/.', name: 'Panamanian Balboa', nameCN: '巴拿马巴波亚', flag: '🇵🇦', rate: 0.14 },
-            NOK: { code: 'NOK', symbol: 'kr', name: 'Norwegian Krone', nameCN: '挪威克朗', flag: '🇳🇴', rate: 1.48 }
+            CNY: { code: 'CNY', symbol: '¥', name: 'Chinese Yuan', flag: '🇨🇳', rate: 1.0 },
+            USD: { code: 'USD', symbol: '$', name: 'US Dollar', flag: '🇺🇸', rate: 0.14 },
+            EUR: { code: 'EUR', symbol: '€', name: 'Euro', flag: '🇪🇺', rate: 0.13 },
+            GBP: { code: 'GBP', symbol: '£', name: 'British Pound', flag: '🇬🇧', rate: 0.11 },
+            JPY: { code: 'JPY', symbol: '¥', name: 'Japanese Yen', flag: '🇯🇵', rate: 20.5 },
+            KRW: { code: 'KRW', symbol: '₩', name: 'South Korean Won', flag: '🇰🇷', rate: 185.0 },
+            HKD: { code: 'HKD', symbol: 'HK$', name: 'Hong Kong Dollar', flag: '🇭🇰', rate: 1.09 },
+            TWD: { code: 'TWD', symbol: 'NT$', name: 'Taiwan Dollar', flag: '🇹🇼', rate: 4.35 },
+            SGD: { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar', flag: '🇸🇬', rate: 0.19 },
+            AUD: { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', flag: '🇦🇺', rate: 0.21 },
+            CAD: { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', flag: '🇨🇦', rate: 0.19 },
+            CHF: { code: 'CHF', symbol: 'Fr', name: 'Swiss Franc', flag: '🇨🇭', rate: 0.12 },
+            SEK: { code: 'SEK', symbol: 'kr', name: 'Swedish Krona', flag: '🇸🇪', rate: 1.45 },
+            NOK: { code: 'NOK', symbol: 'kr', name: 'Norwegian Krone', flag: '🇳🇴', rate: 1.48 },
+            DKK: { code: 'DKK', symbol: 'kr', name: 'Danish Krone', flag: '🇩🇰', rate: 0.97 },
+            NZD: { code: 'NZD', symbol: 'NZ$', name: 'New Zealand Dollar', flag: '🇳🇿', rate: 0.23 },
+            INR: { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳', rate: 11.5 },
+            RUB: { code: 'RUB', symbol: '₽', name: 'Russian Ruble', flag: '🇷🇺', rate: 12.5 },
+            BRL: { code: 'BRL', symbol: 'R$', name: 'Brazilian Real', flag: '🇧🇷', rate: 0.69 },
+            MXN: { code: 'MXN', symbol: '$', name: 'Mexican Peso', flag: '🇲🇽', rate: 2.45 },
+            ZAR: { code: 'ZAR', symbol: 'R', name: 'South African Rand', flag: '🇿🇦', rate: 2.55 },
+            SAR: { code: 'SAR', symbol: '﷼', name: 'Saudi Riyal', flag: '🇸🇦', rate: 0.52 },
+            AED: { code: 'AED', symbol: 'د.إ', name: 'UAE Dirham', flag: '🇦🇪', rate: 0.51 },
+            THB: { code: 'THB', symbol: '฿', name: 'Thai Baht', flag: '🇹🇭', rate: 4.85 },
+            MYR: { code: 'MYR', symbol: 'RM', name: 'Malaysian Ringgit', flag: '🇲🇾', rate: 0.65 },
+            IDR: { code: 'IDR', symbol: 'Rp', name: 'Indonesian Rupiah', flag: '🇮🇩', rate: 2175 },
+            PHP: { code: 'PHP', symbol: '₱', name: 'Philippine Peso', flag: '🇵🇭', rate: 7.75 },
+            VND: { code: 'VND', symbol: '₫', name: 'Vietnamese Dong', flag: '🇻🇳', rate: 3450 },
+            PLN: { code: 'PLN', symbol: 'zł', name: 'Polish Zloty', flag: '🇵🇱', rate: 0.55 },
+            TRY: { code: 'TRY', symbol: '₺', name: 'Turkish Lira', flag: '🇹🇷', rate: 4.25 },
+            ILS: { code: 'ILS', symbol: '₪', name: 'Israeli Shekel', flag: '🇮🇱', rate: 0.51 },
+            EGP: { code: 'EGP', symbol: '£', name: 'Egyptian Pound', flag: '🇪🇬', rate: 6.75 },
+            NGN: { code: 'NGN', symbol: '₦', name: 'Nigerian Naira', flag: '🇳🇬', rate: 215 },
+            PKR: { code: 'PKR', symbol: '₨', name: 'Pakistani Rupee', flag: '🇵🇰', rate: 39 },
+            BDT: { code: 'BDT', symbol: '৳', name: 'Bangladeshi Taka', flag: '🇧🇩', rate: 15.5 },
+            ARS: { code: 'ARS', symbol: '$', name: 'Argentine Peso', flag: '🇦🇷', rate: 119 },
+            CLP: { code: 'CLP', symbol: '$', name: 'Chilean Peso', flag: '🇨🇱', rate: 128 },
+            COP: { code: 'COP', symbol: '$', name: 'Colombian Peso', flag: '🇨🇴', rate: 585 },
+            PEN: { code: 'PEN', symbol: 'S/', name: 'Peruvian Sol', flag: '🇵🇪', rate: 0.52 },
+            UYU: { code: 'UYU', symbol: '$', name: 'Uruguayan Peso', flag: '🇺🇾', rate: 5.45 },
+            ISK: { code: 'ISK', symbol: 'kr', name: 'Icelandic Krona', flag: '🇮🇸', rate: 19.5 },
+            HUF: { code: 'HUF', symbol: 'Ft', name: 'Hungarian Forint', flag: '🇭🇺', rate: 50.5 },
+            CZK: { code: 'CZK', symbol: 'Kč', name: 'Czech Koruna', flag: '🇨🇿', rate: 3.15 },
+            RON: { code: 'RON', symbol: 'lei', name: 'Romanian Leu', flag: '🇷🇴', rate: 0.64 },
+            BGN: { code: 'BGN', symbol: 'лв', name: 'Bulgarian Lev', flag: '🇧🇬', rate: 0.25 },
+            HRK: { code: 'HRK', symbol: 'kn', name: 'Croatian Kuna', flag: '🇭🇷', rate: 0.96 },
+            UAH: { code: 'UAH', symbol: '₴', name: 'Ukrainian Hryvnia', flag: '🇺🇦', rate: 5.15 },
+            KZT: { code: 'KZT', symbol: '₸', name: 'Kazakhstani Tenge', flag: '🇰🇿', rate: 65 },
+            KES: { code: 'KES', symbol: 'Sh', name: 'Kenyan Shilling', flag: '🇰🇪', rate: 18.5 },
+            GHS: { code: 'GHS', symbol: '₵', name: 'Ghanaian Cedi', flag: '🇬🇭', rate: 1.65 },
+            TZS: { code: 'TZS', symbol: 'Sh', name: 'Tanzanian Shilling', flag: '🇹🇿', rate: 350 },
+            UGX: { code: 'UGX', symbol: 'Sh', name: 'Ugandan Shilling', flag: '🇺🇬', rate: 525 },
+            ZMW: { code: 'ZMW', symbol: 'ZK', name: 'Zambian Kwacha', flag: '🇿🇲', rate: 3.25 },
+            MAD: { code: 'MAD', symbol: 'د.م.', name: 'Moroccan Dirham', flag: '🇲🇦', rate: 1.38 },
+            TND: { code: 'TND', symbol: 'د.ت', name: 'Tunisian Dinar', flag: '🇹🇳', rate: 0.43 },
+            DZD: { code: 'DZD', symbol: 'د.ج', name: 'Algerian Dinar', flag: '🇩🇿', rate: 18.9 },
+            JOD: { code: 'JOD', symbol: 'د.ا', name: 'Jordanian Dinar', flag: '🇯🇴', rate: 0.099 },
+            LBP: { code: 'LBP', symbol: 'ل.ل', name: 'Lebanese Pound', flag: '🇱🇧', rate: 20925 },
+            IQD: { code: 'IQD', symbol: 'ع.د', name: 'Iraqi Dinar', flag: '🇮🇶', rate: 183.5 },
+            QAR: { code: 'QAR', symbol: 'ر.ق', name: 'Qatari Riyal', flag: '🇶🇦', rate: 0.51 },
+            KWD: { code: 'KWD', symbol: 'د.ك', name: 'Kuwaiti Dinar', flag: '🇰🇼', rate: 0.043 },
+            BHD: { code: 'BHD', symbol: '.د.ب', name: 'Bahraini Dinar', flag: '🇧🇭', rate: 0.053 },
+            OMR: { code: 'OMR', symbol: 'ر.ع.', name: 'Omani Rial', flag: '🇴🇲', rate: 0.054 },
+            BYN: { code: 'BYN', symbol: 'Br', name: 'Belarusian Ruble', flag: '🇧🇾', rate: 0.45 },
+            GEL: { code: 'GEL', symbol: '₾', name: 'Georgian Lari', flag: '🇬🇪', rate: 0.38 },
+            AMD: { code: 'AMD', symbol: '֏', name: 'Armenian Dram', flag: '🇦🇲', rate: 54.5 },
+            AZN: { code: 'AZN', symbol: '₼', name: 'Azerbaijani Manat', flag: '🇦🇿', rate: 0.24 },
+            TMT: { code: 'TMT', symbol: 'm', name: 'Turkmenistani Manat', flag: '🇹🇲', rate: 0.49 },
+            UZS: { code: 'UZS', symbol: 'лв', name: 'Uzbekistani Som', flag: '🇺🇿', rate: 1785 },
+            TJS: { code: 'TJS', symbol: 'ЅМ', name: 'Tajikistani Somoni', flag: '🇹🇯', rate: 1.52 },
+            KGS: { code: 'KGS', symbol: 'лв', name: 'Kyrgystani Som', flag: '🇰🇬', rate: 12.35 },
+            MNT: { code: 'MNT', symbol: '₮', name: 'Mongolian Tugrik', flag: '🇲🇳', rate: 475 },
+            LAK: { code: 'LAK', symbol: '₭', name: 'Lao Kip', flag: '🇱🇦', rate: 2925 },
+            MMK: { code: 'MMK', symbol: 'K', name: 'Myanmar Kyat', flag: '🇲🇲', rate: 295 },
+            KHR: { code: 'KHR', symbol: '៛', name: 'Cambodian Riel', flag: '🇰🇭', rate: 575 },
+            BND: { code: 'BND', symbol: '$', name: 'Brunei Dollar', flag: '🇧🇳', rate: 0.19 },
+            FJD: { code: 'FJD', symbol: '$', name: 'Fijian Dollar', flag: '🇫🇯', rate: 0.31 },
+            PGK: { code: 'PGK', symbol: 'K', name: 'Papua New Guinean Kina', flag: '🇵🇬', rate: 0.53 },
+            SBD: { code: 'SBD', symbol: '$', name: 'Solomon Islands Dollar', flag: '🇸🇧', rate: 1.18 },
+            VUV: { code: 'VUV', symbol: 'Vt', name: 'Vanuatu Vatu', flag: '🇻🇺', rate: 16.85 },
+            WST: { code: 'WST', symbol: 'T', name: 'Samoan Tala', flag: '🇼🇸', rate: 0.39 },
+            TOP: { code: 'TOP', symbol: 'T$', name: 'Tongan Paʻanga', flag: '🇹🇴', rate: 0.33 },
+            GYD: { code: 'GYD', symbol: '$', name: 'Guyanese Dollar', flag: '🇬🇾', rate: 29.25 },
+            SRD: { code: 'SRD', symbol: '$', name: 'Surinamese Dollar', flag: '🇸🇷', rate: 5.15 },
+            BBD: { code: 'BBD', symbol: '$', name: 'Barbadian Dollar', flag: '🇧🇧', rate: 0.28 },
+            TTD: { code: 'TTD', symbol: '$', name: 'Trinidad and Tobago Dollar', flag: '🇹🇹', rate: 0.95 },
+            JMD: { code: 'JMD', symbol: '$', name: 'Jamaican Dollar', flag: '🇯🇲', rate: 21.85 },
+            HTG: { code: 'HTG', symbol: 'G', name: 'Haitian Gourde', flag: '🇭🇹', rate: 18.5 },
+            BSD: { code: 'BSD', symbol: '$', name: 'Bahamian Dollar', flag: '🇧🇸', rate: 0.14 },
+            BZD: { code: 'BZD', symbol: '$', name: 'Belize Dollar', flag: '🇧🇿', rate: 0.28 },
+            XCD: { code: 'XCD', symbol: '$', name: 'East Caribbean Dollar', flag: '🇦🇬', rate: 0.38 },
+            ANG: { code: 'ANG', symbol: 'ƒ', name: 'Netherlands Antillean Guilder', flag: '🇨🇼', rate: 0.25 },
+            AWG: { code: 'AWG', symbol: 'ƒ', name: 'Aruban Florin', flag: '🇦🇼', rate: 0.25 },
+            KYD: { code: 'KYD', symbol: '$', name: 'Cayman Islands Dollar', flag: '🇰🇾', rate: 0.12 },
+            CUP: { code: 'CUP', symbol: '$', name: 'Cuban Peso', flag: '🇨🇺', rate: 3.38 },
+            DOP: { code: 'DOP', symbol: '$', name: 'Dominican Peso', flag: '🇩🇴', rate: 8.15 },
+            GTQ: { code: 'GTQ', symbol: 'Q', name: 'Guatemalan Quetzal', flag: '🇬🇹', rate: 1.09 },
+            HNL: { code: 'HNL', symbol: 'L', name: 'Honduran Lempira', flag: '🇭🇳', rate: 3.45 },
+            NIO: { code: 'NIO', symbol: 'C$', name: 'Nicaraguan Cordoba', flag: '🇳🇮', rate: 5.15 },
+            CRC: { code: 'CRC', symbol: '₡', name: 'Costa Rican Colon', flag: '🇨🇷', rate: 72.5 },
+            PAB: { code: 'PAB', symbol: 'B/.', name: 'Panamanian Balboa', flag: '🇵🇦', rate: 0.14 }
         };
 
         let currentCurrency = 'CNY';
 
-        // 初始化货币选择器
-        function initCurrencySelector() {
-            const dropdown = document.getElementById('currency-dropdown');
-            let html = '<div style="padding: 10px; color: var(--text-secondary); font-size: 12px; text-align: center;">🌍 102种货币可用</div>';
-            
-            const currencyEntries = Object.entries(currencies);
-            console.log('Loading currencies:', currencyEntries.length);
-            
-            for (const [code, curr] of currencyEntries) {
-                html += `
-                    <div class="currency-option" onclick="changeCurrency('${code}')">
-                        <span class="currency-flag">${curr.flag}</span>
-                        <span class="currency-code">${curr.code}</span>
-                        <span class="currency-name">${curr.name}</span>
-                        <span class="currency-rate">${curr.symbol}</span>
-                    </div>
-                `;
-            }
-            dropdown.innerHTML = html;
-        }
+        const songs = [
+            { title: "夜曲", artist: "周杰伦" },
+            { title: "Shape of You", artist: "Ed Sheeran" },
+            { title: "Lemon", artist: "米津玄師" },
+            { title: "Despacito", artist: "Luis Fonsi" }
+        ];
 
-        // 切换货币
-        function changeCurrency(code) {
-            currentCurrency = code;
-            const curr = currencies[code];
-            
-            document.getElementById('current-currency-symbol').textContent = curr.symbol;
-            document.getElementById('current-currency-code').textContent = curr.code;
-            document.getElementById('currency-dropdown').classList.remove('show');
-            
-            // 更新订阅价格
-            updateSubscriptionPrice();
-            
-            // 重新渲染卡片以更新价格标签
-            init();
-        }
-
-        // 切换货币下拉
-        function toggleCurrencyDropdown() {
-            document.getElementById('currency-dropdown').classList.toggle('show');
-        }
-
-        // 获取本地化价格
-        function getLocalizedPrice(basePrice) {
-            const curr = currencies[currentCurrency];
-            const convertedPrice = (basePrice * curr.rate).toFixed(2);
-            return `${curr.symbol}${convertedPrice}`;
-        }
-
-        // 更新订阅价格
-        function updateSubscriptionPrice() {
-            const monthlyPrice = 6.99; // 基础价格（美元）
-            const curr = currencies[currentCurrency];
-            const convertedPrice = (monthlyPrice * (curr.code === 'CNY' ? 1 : curr.rate / currencies.CNY.rate)).toFixed(2);
-            document.getElementById('subscription-price').textContent = `${curr.symbol}${convertedPrice}`;
-        }
-
-        // 点击外部关闭货币下拉
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.currency-selector')) {
-                document.getElementById('currency-dropdown').classList.remove('show');
-            }
-        });
-
-        let currentLang = 'zh';
-
-        // 歌曲数据 - 多语言
-        const songs = {
-            zh: [
-                { id: 1, title: "夜曲", artist: "周杰伦", album: "十一月的萧邦", duration: "3:45", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "晴天", artist: "周杰伦", album: "叶惠美", duration: "4:29", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "七里香", artist: "周杰伦", album: "七里香", duration: "4:59", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "稻香", artist: "周杰伦", album: "魔杰座", duration: "3:43", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            en: [
-                { id: 1, title: "Shape of You", artist: "Ed Sheeran", album: "Divide", duration: "3:53", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Blinding Lights", artist: "The Weeknd", album: "After Hours", duration: "3:20", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "Stay", artist: "Justin Bieber", album: "Justice", duration: "2:21", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "Levitating", artist: "Dua Lipa", album: "Future Nostalgia", duration: "3:23", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            ja: [
-                { id: 1, title: "Lemon", artist: "米津玄師", album: "Lemon", duration: "4:15", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "打上花火", artist: "DAOKO × 米津玄師", album: "打上花火", duration: "4:49", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "Pretender", artist: "Official髭男dism", album: "Pretender", duration: "5:26", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "アイドル", artist: "YOASOBI", album: "アイドル", duration: "3:30", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            ko: [
-                { id: 1, title: "Dynamite", artist: "BTS", album: "BE", duration: "3:19", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Savage Love", artist: "BTS", album: "Dynamite", duration: "3:03", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "How You Like That", artist: "BLACKPINK", album: "The Album", duration: "3:01", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "DDU-DU DDU-DU", artist: "BLACKPINK", album: "Square Up", duration: "3:29", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            es: [
-                { id: 1, title: "Despacito", artist: "Luis Fonsi", album: "Despacito", duration: "3:47", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Bailando", artist: "Enrique Iglesias", album: "Sex and Love", duration: "4:03", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "La Bicicleta", artist: "Carlos Vives", album: "Vives", duration: "3:51", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "Vivir Mi Vida", artist: "Marc Anthony", album: "3.0", duration: "4:11", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            fr: [
-                { id: 1, title: "Dernière Danse", artist: "Indila", album: "Mini World", duration: "3:32", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Papaoutai", artist: "Stromae", album: "Racine Carrée", duration: "3:52", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "Tourner Dans Le Vide", artist: "Indila", album: "Mini World", duration: "4:18", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "Tous Les Mêmes", artist: "Stromae", album: "Racine Carrée", duration: "3:33", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            de: [
-                { id: 1, title: "Auf Uns", artist: "Andreas Bourani", album: "Hey", duration: "3:27", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Chöre", artist: "Mark Forster", album: "Tape", duration: "3:56", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "Atemlos", artist: "Helene Fischer", album: "Farbenspiel", duration: "3:42", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "80 Millionen", artist: "Max Giesinger", album: "Der Junge", duration: "3:15", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            pt: [
-                { id: 1, title: "Ai Se Eu Te Pego", artist: "Michel Teló", album: "Na Balada", duration: "2:52", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Garota de Ipanema", artist: "Tom Jobim", album: "Getz/Gilberto", duration: "5:24", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "Mas Que Nada", artist: "Sérgio Mendes", album: "Timeless", duration: "4:24", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "Trem das Onze", artist: "Adoniran Barbosa", album: "Samba", duration: "3:08", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            ru: [
-                { id: 1, title: "По полюшку", artist: "Народная", album: "Русские Песни", duration: "3:15", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Я Русский", artist: "Николай Носков", album: "Коллекция", duration: "4:22", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "Очи Чёрные", artist: "Фёдор Шаляпин", album: "Романсы", duration: "3:48", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "Подмосковные Вечера", artist: "Владимир Трошин", album: "Советские Песни", duration: "3:02", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            ar: [
-                { id: 1, title: "عم دماغي", artist: "محمد رمضان", album: "مهرجانات", duration: "3:33", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "بحبك يا لبنان", artist: "نجوى كرم", album: "أغاني وطنية", duration: "4:15", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "الأغلبية الصامتة", artist: "كاظم الساهر", album: "أغاني عربية", duration: "5:22", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "يا طير", artist: "فيروز", album: "أجمل أغاني فيروز", duration: "4:08", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            hi: [
-                { id: 1, title: "मेरे सपनों की रानी", artist: "किशोर कुमार", album: "आराधना", duration: "4:42", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "तुम ही हो", artist: "अरिजीत सिंह", album: "आशिकी 2", duration: "4:22", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "काला चश्मा", artist: "नेहा कक्कड़", album: "बaar बaar देखो", duration: "3:08", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "दिलबर", artist: "नेहा कक्कड़", album: "सत्यमेव जयते", duration: "3:04", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            it: [
-                { id: 1, title: "Volare", artist: "Domenico Modugno", album: "Nel Blu Dipinto Di Blu", duration: "3:30", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Felicità", artist: "Al Bano", album: "Felicità", duration: "3:14", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "O Sole Mio", artist: "Luciano Pavarotti", album: "Opera", duration: "3:28", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "Con Te Partirò", artist: "Andrea Bocelli", album: "Bocelli", duration: "4:09", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            nl: [
-                { id: 1, title: "Zij Gelooft In Mij", artist: "André Hazes", album: "Gewoon André", duration: "3:44", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Papa", artist: "Stef Ekkel", album: "Hollandse Hits", duration: "3:22", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "Het Is Een Nacht", artist: "Guus Meeuwis", album: "Verbazing", duration: "4:15", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "Afscheid", artist: "Volumia!", album: "Puur", duration: "4:02", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            tr: [
-                { id: 1, title: "Yalnızlık Senfonisi", artist: "Sezen Aksu", album: "Gülümse", duration: "4:35", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Dudu", artist: "Tarkan", album: "Dudu", duration: "4:18", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "Firuze", artist: "Sezen Aksu", album: "Firuze", duration: "4:50", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "Kuzu Kuzu", artist: "Tarkan", album: "Karma", duration: "3:52", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            pl: [
-                { id: 1, title: "Biały Miś", artist: "Michał Wiśniewski", album: "Ich Troje", duration: "3:42", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Przez Twe Oczy Zielone", artist: "Akcent", album: "Wspomnienie", duration: "3:58", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "Agnieszka", artist: "Big Cyc", album: "Miłość", duration: "3:25", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "Mój Przyjacielu", artist: "Krzysztof Krawczyk", album: "To Co W Życiu Ważne", duration: "4:44", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            vi: [
-                { id: 1, title: "Như Một Giấc Mơ", artist: "Mỹ Tâm", album: "Tâm", duration: "4:22", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Em Gái Mưa", artist: "Hương Tràm", album: "Em Gái Mưa", duration: "5:08", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "Lạc Trôi", artist: "Sơn Tùng M-TP", album: "Lạc Trôi", duration: "4:23", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "Hãy Trao Cho Anh", artist: "Sơn Tùng M-TP", album: "Hãy Trao Cho Anh", duration: "4:05", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            th: [
-                { id: 1, title: "คู่กัด", artist: "ธงไชย", album: "รวมฮิต", duration: "3:48", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "กลับคำสาอ้าย", artist: "ไผ่ พงศธร", album: "ลูกทุ่งฮิต", duration: "4:32", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "แฟนเก่า", artist: "ค็อกเทล", album: "เพลงฮิต", duration: "4:15", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "รักเธอ", artist: "สิงโต", album: "เพลงรัก", duration: "3:55", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            id: [
-                { id: 1, title: "Separuh Nafas", artist: "Dewa 19", album: "Pandawa Lima", duration: "5:25", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Bento", artist: "Iwan Fals", album: "Ethiopia", duration: "4:18", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "Menghapus Jejakmu", artist: "Peterpan", album: "Hari Yang Cerah", duration: "3:42", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "Tak Gantung", artist: "Nidji", album: "Breakthru", duration: "3:55", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            ms: [
-                { id: 1, title: "Siti Nurhaliza", artist: "Siti Nurhaliza", album: "Pancawarna", duration: "4:22", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Mungkin Nanti", artist: "Peterpan", album: "Taman Langit", duration: "4:32", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "Gemilang", artist: "Jaclyn Victor", album: "Gemilang", duration: "4:15", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "Awan Nano", artist: "Hafiz", album: "Luahan Hati", duration: "4:05", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ],
-            sv: [
-                { id: 1, title: "Vintersaga", artist: "Ted Gärdestad", album: "Upptåg", duration: "4:22", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
-                { id: 2, title: "Fångad Av En Stormvind", artist: "Carola", album: "Much More", duration: "3:00", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
-                { id: 3, title: "Sången Han Skrev Till Mig", artist: "Görel Crona", album: "Svensktoppar", duration: "3:45", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-                { id: 4, title: "Eloise", artist: "Arvingarna", album: "Eloise", duration: "3:32", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
-            ]
-        };
-
-        let currentSong = null;
-        let isPlaying = false;
-        let currentTime = 0;
-        let playInterval;
-
-        // 初始化语言选择器
-        function initLangSelector() {
-            const dropdown = document.getElementById('lang-dropdown');
-            let html = '';
-            
-            for (const [code, lang] of Object.entries(i18n)) {
-                html += `
-                    <div class="lang-option" onclick="changeLang('${code}')">
-                        <span class="lang-flag">${lang.flag}</span>
-                        <span class="lang-name">${lang.name}</span>
-                        <span class="lang-native">${lang.native}</span>
-                    </div>
-                `;
-            }
-            dropdown.innerHTML = html;
-        }
-
-        // 切换语言
-        function changeLang(langCode) {
-            currentLang = langCode;
-            const lang = i18n[langCode];
-            
-            document.getElementById('current-lang-flag').textContent = lang.flag;
-            document.getElementById('current-lang-name').textContent = lang.name;
-            document.getElementById('lang-dropdown').classList.remove('show');
-            
-            // 更新所有文本
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                const keys = key.split('.');
-                let value = lang;
-                for (const k of keys) {
-                    value = value[k];
-                }
-                if (value) el.textContent = value;
-            });
-            
-            // 更新搜索框placeholder
-            document.getElementById('search-input').placeholder = lang.search.placeholder;
-            
-            // 更新页面标题
-            document.getElementById('page-title').textContent = `XMUSIC - ${lang.nav.home.replace('🏠 ', '')}`;
-            
-            // 更新订阅价格显示（带货币）
-            updateSubscriptionPrice();
-            
-            // 重新渲染歌曲
-            init();
-        }
-
-        // 切换语言下拉
-        function toggleLangDropdown() {
-            document.getElementById('lang-dropdown').classList.toggle('show');
-        }
-
-        // 获取当前语言歌曲
-        function getSongs() {
-            return songs[currentLang] || songs.zh;
-        }
-
-        // 初始化
         function init() {
-            const songList = getSongs();
-            renderCards('trending-grid', songList.slice(0, 4));
-            renderCards('foryou-grid', songList.slice(0, 4));
-            renderCards('new-grid', songList.slice(0, 4));
-            renderCards('library-grid', songList);
+            renderCurrencies();
+            renderSongs();
         }
 
-        // 渲染卡片
-        function renderCards(gridId, songList) {
-            const grid = document.getElementById(gridId);
-            if (!songList || songList.length === 0) {
-                grid.innerHTML = `<p style="color: var(--text-secondary);">${i18n[currentLang].search.noResults}</p>`;
-                return;
-            }
-            const price = getLocalizedPrice(0.99);
-            grid.innerHTML = songList.map(song => `
-                <div class="music-card" onclick="playSong(${song.id})">
-                    <div class="card-image" style="background: ${song.cover}">
-                        <span class="price-tag">${price}</span>
-                        <div class="play-button">▶️</div>
+        function renderCurrencies() {
+            const dropdown = document.getElementById('currency-dropdown');
+            const count = Object.keys(currencies).length;
+            let html = `<div class="count-header">🌍 ${count} 种货币</div>`;
+            
+            for (const [code, curr] of Object.entries(currencies)) {
+                html += `
+                    <div class="dropdown-item" onclick="selectCurrency('${code}')">
+                        <span class="flag">${curr.flag}</span>
+                        <span class="code">${curr.code}</span>
+                        <span class="name">${curr.name}</span>
+                        <span class="symbol">${curr.symbol}</span>
                     </div>
-                    <div class="card-title">${song.title}</div>
-                    <div class="card-subtitle">${song.artist}</div>
+                `;
+            }
+            dropdown.innerHTML = html;
+        }
+
+        function renderSongs() {
+            const container = document.getElementById('song-cards');
+            const curr = currencies[currentCurrency];
+            const price = (0.99 * curr.rate).toFixed(2);
+            
+            container.innerHTML = songs.map(song => `
+                <div class="card">
+                    <div class="card-image">
+                        <div class="price-tag">${curr.symbol}${price}</div>
+                    </div>
+                    <h3>${song.title}</h3>
+                    <p>${song.artist}</p>
                 </div>
             `).join('');
         }
 
-        // 播放歌曲
-        function playSong(id) {
-            const songList = getSongs();
-            currentSong = songList.find(s => s.id === id);
-            if (currentSong) {
-                document.getElementById('player-title').textContent = currentSong.title;
-                document.getElementById('player-artist').textContent = currentSong.artist;
-                document.getElementById('player-cover').style.background = currentSong.cover;
-                document.getElementById('total-time').textContent = currentSong.duration;
-                isPlaying = true;
-                updatePlayButton();
-                startProgress();
-            }
+        function toggleCurrency() {
+            document.getElementById('currency-dropdown').classList.toggle('show');
         }
 
-        // 播放/暂停
-        function togglePlay() {
-            if (!currentSong) {
-                const songList = getSongs();
-                if (songList.length > 0) playSong(songList[0].id);
-                return;
-            }
-            isPlaying = !isPlaying;
-            updatePlayButton();
-            if (isPlaying) {
-                startProgress();
-            } else {
-                clearInterval(playInterval);
-            }
+        function selectCurrency(code) {
+            currentCurrency = code;
+            const curr = currencies[code];
+            document.getElementById('curr-symbol').textContent = curr.symbol;
+            document.getElementById('curr-code').textContent = curr.code;
+            document.getElementById('currency-dropdown').classList.remove('show');
+            renderSongs();
         }
 
-        // 更新播放按钮
-        function updatePlayButton() {
-            document.getElementById('play-btn').textContent = isPlaying ? '⏸️' : '▶️';
-        }
-
-        // 进度条
-        function startProgress() {
-            clearInterval(playInterval);
-            playInterval = setInterval(() => {
-                currentTime++;
-                const totalSeconds = parseDuration(currentSong.duration);
-                const progress = (currentTime / totalSeconds) * 100;
-                document.getElementById('progress-fill').style.width = progress + '%';
-                document.getElementById('current-time').textContent = formatTime(currentTime);
-                
-                if (currentTime >= totalSeconds) {
-                    nextSong();
-                }
-            }, 1000);
-        }
-
-        // 上一首/下一首
-        function prevSong() {
-            if (currentSong) {
-                const songList = getSongs();
-                const index = songList.findIndex(s => s.id === currentSong.id);
-                const prevIndex = index > 0 ? index - 1 : songList.length - 1;
-                playSong(songList[prevIndex].id);
-            }
-        }
-
-        function nextSong() {
-            if (currentSong) {
-                const songList = getSongs();
-                const index = songList.findIndex(s => s.id === currentSong.id);
-                const nextIndex = index < songList.length - 1 ? index + 1 : 0;
-                playSong(songList[nextIndex].id);
-            }
-        }
-
-        // 进度跳转
-        function seek(event) {
-            if (!currentSong) return;
-            const track = event.currentTarget;
-            const rect = track.getBoundingClientRect();
-            const percent = (event.clientX - rect.left) / rect.width;
-            const totalSeconds = parseDuration(currentSong.duration);
-            currentTime = Math.floor(percent * totalSeconds);
-            document.getElementById('progress-fill').style.width = (percent * 100) + '%';
-            document.getElementById('current-time').textContent = formatTime(currentTime);
-        }
-
-        // 音量控制
-        function setVolume(event) {
-            const slider = event.currentTarget;
-            const rect = slider.getBoundingClientRect();
-            const percent = (event.clientX - rect.left) / rect.width;
-            document.getElementById('volume-fill').style.width = (percent * 100) + '%';
-        }
-
-        // 搜索
-        function searchMusic(query) {
-            if (!query) {
-                showSection('home');
-                return;
-            }
-            showSection('search');
-            const songList = getSongs();
-            const results = songList.filter(s => 
-                s.title.toLowerCase().includes(query.toLowerCase()) ||
-                s.artist.toLowerCase().includes(query.toLowerCase())
-            );
-            const grid = document.getElementById('search-results');
-            if (results.length === 0) {
-                grid.innerHTML = `<p style="color: var(--text-secondary);">${i18n[currentLang].search.noResults}</p>`;
-            } else {
-                renderCards('search-results', results);
-            }
-        }
-
-        // 切换页面
-        function showSection(section) {
-            document.getElementById('home-section').style.display = 'none';
-            document.getElementById('search-section').style.display = 'none';
-            document.getElementById('library-section').style.display = 'none';
-            
-            if (section === 'home') {
-                document.getElementById('home-section').style.display = 'block';
-            } else if (section === 'search') {
-                document.getElementById('search-section').style.display = 'block';
-            } else if (section === 'library' || section === 'playlist' || section === 'liked') {
-                document.getElementById('library-section').style.display = 'block';
-            }
-            
-            // 更新导航状态
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            if (event && event.target) {
-                event.target.closest('.nav-item').classList.add('active');
-            }
-        }
-
-        // 歌词面板
-        function toggleLyrics() {
-            document.getElementById('lyrics-panel').classList.toggle('open');
-        }
-
-        // 喜欢
-        function toggleLike() {
-            const like = document.querySelector('.player-like');
-            like.textContent = like.textContent === '🤍' ? '❤️' : '🤍';
-        }
-
-        // 工具函数
-        function parseDuration(duration) {
-            const [min, sec] = duration.split(':').map(Number);
-            return min * 60 + sec;
-        }
-
-        function formatTime(seconds) {
-            const min = Math.floor(seconds / 60);
-            const sec = seconds % 60;
-            return `${min}:${sec.toString().padStart(2, '0')}`;
-        }
-
-        // 点击外部关闭语言下拉
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('.lang-selector')) {
-                document.getElementById('lang-dropdown').classList.remove('show');
+            if (!e.target.closest('.selectors')) {
+                document.getElementById('currency-dropdown').classList.remove('show');
             }
         });
 
-        // 启动
-        initLangSelector();
-        initCurrencySelector();
-        updateSubscriptionPrice();
         init();
     </script>
 </body>

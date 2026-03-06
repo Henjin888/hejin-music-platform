@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Currency Test</title>
+</head>
+<body>
+    <h1>Currency Test</h1>
+    <div id="result"></div>
+    <script>
+        const currencies = {
+            CNY: { code: 'CNY', symbol: '¥', name: 'Chinese Yuan', flag: '🇨🇳', rate: 1.0 },
+            USD: { code: 'USD', symbol: '$', name: 'US Dollar', flag: '🇺🇸', rate: 0.14 },
+            EUR: { code: 'EUR', symbol: '€', name: 'Euro', flag: '🇪🇺', rate: 0.13 },
+            JPY: { code: 'JPY', symbol: '¥', name: 'Japanese Yen', flag: '🇯🇵', rate: 20.5 },
+            GBP: { code: 'GBP', symbol: '£', name: 'British Pound', flag: '🇬🇧', rate: 0.11 },
+            KRW: { code: 'KRW', symbol: '₩', name: 'South Korean Won', flag: '🇰🇷', rate: 185.0 },
+            HKD: { code: 'HKD', symbol: 'HK$', name: 'Hong Kong Dollar', flag: '🇭🇰', rate: 1.09 },
+            TWD: { code: 'TWD', symbol: 'NT$', name: 'New Taiwan Dollar', flag: '🇹🇼', rate: 4.35 },
+            SGD: { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar', flag: '🇸🇬', rate: 0.19 },
+            AUD: { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', flag: '🇦🇺', rate: 0.21 }
+        };
+        
+        document.getElementById('result').innerHTML = 
+            '<p>Currency count: ' + Object.keys(currencies).length + '</p>' +
+            '<ul>' + 
+            Object.entries(currencies).map(([code, c]) => 
+                '<li>' + c.flag + ' ' + code + ' ' + c.symbol + '</li>'
+            ).join('') +
+            '</ul>';
+    </script>
+</body>
+</html>
