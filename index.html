@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMUSIC - 在线音乐平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #1db954;
+            --primary-dark: #1ed760;
+            --bg-dark: #121212;
+            --bg-card: #181818;
+            --bg-hover: #282828;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --sidebar-width: 240px;
+            --player-height: 90px;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 侧边栏 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: #000;
+            padding: 24px 16px;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding: 0 12px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: -1px;
+        }
+        
+        .nav-section {
+            margin-bottom: 24px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            color: var(--text-primary);
+            background: var(--bg-hover);
+        }
+        
+        .nav-item i {
+            font-size: 24px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 24px 32px;
+            padding-bottom: calc(var(--player-height) + 40px);
+        }
+        
+        /* 顶部栏 */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        
+        .search-box {
+            position: relative;
+            width: 400px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 44px;
+            border: none;
+            border-radius: 25px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        
+        .search-box input:focus {
+            background: var(--bg-hover);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        
+        .search-box::before {
+            content: "🔍";
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.6;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        /* 内容区块 */
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .see-all {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .see-all:hover {
+            text-decoration: underline;
+        }
+        
+        /* 卡片网格 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 24px;
+        }
+        
+        .music-card {
+            background: var(--bg-card);
+            padding: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .music-card:hover {
+            background: var(--bg-hover);
+            transform: translateY(-4px);
+        }
+        
+        .music-card:hover .play-button {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .card-image {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #333, #555);
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .play-button {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: all 0.3s;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        
+        .play-button:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+        
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .card-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* 播放器 */
+        .player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--player-height);
+            background: var(--bg-card);
+            border-top: 1px solid #282828;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            z-index: 200;
+        }
+        
+        .player-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 30%;
+            min-width: 200px;
+        }
+        
+        .player-cover {
+            width: 56px;
+            height: 56px;
+            border-radius: 4px;
+            background: linear-gradient(135deg, #333, #555);
+        }
+        
+        .player-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .player-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .player-artist {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .player-like {
+            margin-left: auto;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 20px;
+        }
+        
+        .player-like:hover {
+            color: var(--primary);
+        }
+        
+        .player-center {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            max-width: 40%;
+        }
+        
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        
+        .control-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .control-btn:hover {
+            color: var(--text-primary);
+        }
+        
+        .control-btn.play {
+            width: 40px;
+            height: 40px;
+            background: var(--text-primary);
+            color: var(--bg-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .control-btn.play:hover {
+            transform: scale(1.1);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .time {
+            font-size: 12px;
+            color: var(--text-secondary);
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .progress-track {
+            flex: 1;
+            height: 4px;
+            background: #4d4d4d;
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--text-primary);
+            border-radius: 2px;
+            width: 30%;
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: var(--text-primary);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .progress-track:hover .progress-fill::after {
+            opacity: 1;
+        }
+        
+        .player-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 30%;
+            min-width: 200px;
+            justify-content: flex-end;
+        }
+        
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 136px;
+        }
+        
+        .volume-slider {
+            flex: 1;
+            height: 4px;
+            background: #4d4d4d;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        
+        .volume-fill {
+            height: 100%;
+            background: var(--text-primary);
+            border-radius: 2px;
+            width: 70%;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 72px;
+            }
+            .logo-text, .nav-item span {
+                display: none;
+            }
+            .main-content {
+                margin-left: 72px;
+            }
+            .search-box {
+                width: 300px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .player-left, .player-right {
+                display: none;
+            }
+            .player-center {
+                max-width: 100%;
+            }
+            .search-box {
+                width: 200px;
+            }
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* 动画 */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .playing .card-image {
+            animation: pulse 2s infinite;
+        }
+        
+        /* 歌词面板 */
+        .lyrics-panel {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: var(--bg-dark);
+            z-index: 300;
+            transition: right 0.3s;
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        .lyrics-panel.open {
+            right: 0;
+        }
+        
+        .lyrics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .lyrics-line {
+            padding: 12px 0;
+            color: var(--text-secondary);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .lyrics-line.active {
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- 侧边栏 -->
+    <nav class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">🎵</div>
+            <span class="logo-text">XMUSIC</span>
+        </div>
+        
+        <div class="nav-section">
+            <a href="#" class="nav-item active" onclick="showSection('home')">
+                <i>🏠</i>
+                <span>首页</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('search')">
+                <i>🔍</i>
+                <span>搜索</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('library')">
+                <i>📚</i>
+                <span>音乐库</span>
+            </a>
+        </div>
+        
+        <div class="nav-section">
+            <a href="#" class="nav-item" onclick="showSection('playlist')">
+                <i>➕</i>
+                <span>创建歌单</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('liked')">
+                <i>❤️</i>
+                <span>喜欢的歌曲</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        <div class="top-bar">
+            <div class="search-box">
+                <input type="text" placeholder="搜索歌曲、艺人、专辑..." id="searchInput" onkeyup="searchMusic(this.value)">
+            </div>
+            <div class="user-menu">
+                <span style="color: var(--text-secondary); font-size: 14px;">Henjin888</span>
+                <div class="user-avatar">H</div>
+            </div>
+        </div>
+
+        <!-- 首页内容 -->
+        <div id="home-section">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">🔥 热门推荐</h2>
+                    <a href="#" class="see-all">显示全部</a>
+                </div>
+                <div class="card-grid" id="trending-grid">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">🎸 为你打造</h2>
+                    <a href="#" class="see-all">显示全部</a>
+                </div>
+                <div class="card-grid" id="foryou-grid">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">🆕 最新发行</h2>
+                    <a href="#" class="see-all">显示全部</a>
+                </div>
+                <div class="card-grid" id="new-grid">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 搜索结果 -->
+        <div id="search-section" style="display: none;">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">🔍 搜索结果</h2>
+                </div>
+                <div class="card-grid" id="search-results">
+                    <p style="color: var(--text-secondary);">输入关键词开始搜索...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 音乐库 -->
+        <div id="library-section" style="display: none;">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">📚 你的音乐库</h2>
+                </div>
+                <div class="card-grid" id="library-grid">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 播放器 -->
+    <div class="player">
+        <div class="player-left">
+            <div class="player-cover" id="player-cover"></div>
+            <div class="player-info">
+                <div class="player-title" id="player-title">选择一首歌曲</div>
+                <div class="player-artist" id="player-artist">-</div>
+            </div>
+            <div class="player-like" onclick="toggleLike()">🤍</div>
+        </div>
+
+        <div class="player-center">
+            <div class="player-controls">
+                <button class="control-btn">🔀</button>
+                <button class="control-btn" onclick="prevSong()">⏮️</button>
+                <button class="control-btn play" onclick="togglePlay()" id="play-btn">▶️</button>
+                <button class="control-btn" onclick="nextSong()">⏭️</button>
+                <button class="control-btn">🔁</button>
+            </div>
+            <div class="progress-bar">
+                <span class="time" id="current-time">0:00</span>
+                <div class="progress-track" onclick="seek(event)">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <span class="time" id="total-time">3:45</span>
+            </div>
+        </div>
+
+        <div class="player-right">
+            <button class="control-btn" onclick="toggleLyrics()">🎤</button>
+            <button class="control-btn">📋</button>
+            <div class="volume-control">
+                <button class="control-btn">🔊</button>
+                <div class="volume-slider" onclick="setVolume(event)">
+                    <div class="volume-fill" id="volume-fill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 歌词面板 -->
+    <div class="lyrics-panel" id="lyrics-panel">
+        <div class="lyrics-header">
+            <h3>歌词</h3>
+            <button class="control-btn" onclick="toggleLyrics()">✕</button>
+        </div>
+        <div id="lyrics-content">
+            <div class="lyrics-line active">暂无歌词</div>
+        </div>
+    </div>
+
+    <script>
+        // 模拟歌曲数据
+        const songs = [
+            { id: 1, title: "夜曲", artist: "周杰伦", album: "十一月的萧邦", duration: "3:45", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+            { id: 2, title: "晴天", artist: "周杰伦", album: "叶惠美", duration: "4:29", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+            { id: 3, title: "七里香", artist: "周杰伦", album: "七里香", duration: "4:59", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+            { id: 4, title: "稻香", artist: "周杰伦", album: "魔杰座", duration: "3:43", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            { id: 5, title: "告白气球", artist: "周杰伦", album: "周杰伦的床边故事", duration: "3:35", cover: "linear-gradient(135deg, #fa709a, #fee140)" },
+            { id: 6, title: "演员", artist: "薛之谦", album: "初学者", duration: "4:20", cover: "linear-gradient(135deg, #30cfd0, #330867)" },
+            { id: 7, title: "光年之外", artist: "G.E.M.邓紫棋", album: "PASSENGERS", duration: "3:55", cover: "linear-gradient(135deg, #a8edea, #fed6e3)" },
+            { id: 8, title: "起风了", artist: "买辣椒也用券", album: "起风了", duration: "5:13", cover: "linear-gradient(135deg, #ffecd2, #fcb69f)" },
+        ];
+
+        let currentSong = null;
+        let isPlaying = false;
+        let currentTime = 0;
+        let playInterval;
+
+        // 初始化
+        function init() {
+            renderCards('trending-grid', songs.slice(0, 4));
+            renderCards('foryou-grid', songs.slice(2, 6));
+            renderCards('new-grid', songs.slice(4, 8));
+            renderCards('library-grid', songs);
+        }
+
+        // 渲染卡片
+        function renderCards(gridId, songList) {
+            const grid = document.getElementById(gridId);
+            grid.innerHTML = songList.map(song => `
+                <div class="music-card" onclick="playSong(${song.id})">
+                    <div class="card-image" style="background: ${song.cover}">
+                        <div class="play-button">▶️</div>
+                    </div>
+                    <div class="card-title">${song.title}</div>
+                    <div class="card-subtitle">${song.artist}</div>
+                </div>
+            `).join('');
+        }
+
+        // 播放歌曲
+        function playSong(id) {
+            currentSong = songs.find(s => s.id === id);
+            if (currentSong) {
+                document.getElementById('player-title').textContent = currentSong.title;
+                document.getElementById('player-artist').textContent = currentSong.artist;
+                document.getElementById('player-cover').style.background = currentSong.cover;
+                document.getElementById('total-time').textContent = currentSong.duration;
+                isPlaying = true;
+                updatePlayButton();
+                startProgress();
+            }
+        }
+
+        // 播放/暂停
+        function togglePlay() {
+            if (!currentSong) {
+                playSong(1);
+                return;
+            }
+            isPlaying = !isPlaying;
+            updatePlayButton();
+            if (isPlaying) {
+                startProgress();
+            } else {
+                clearInterval(playInterval);
+            }
+        }
+
+        // 更新播放按钮
+        function updatePlayButton() {
+            document.getElementById('play-btn').textContent = isPlaying ? '⏸️' : '▶️';
+        }
+
+        // 进度条
+        function startProgress() {
+            clearInterval(playInterval);
+            playInterval = setInterval(() => {
+                currentTime++;
+                const totalSeconds = parseDuration(currentSong.duration);
+                const progress = (currentTime / totalSeconds) * 100;
+                document.getElementById('progress-fill').style.width = progress + '%';
+                document.getElementById('current-time').textContent = formatTime(currentTime);
+                
+                if (currentTime >= totalSeconds) {
+                    nextSong();
+                }
+            }, 1000);
+        }
+
+        // 上一首/下一首
+        function prevSong() {
+            if (currentSong) {
+                const index = songs.findIndex(s => s.id === currentSong.id);
+                const prevIndex = index > 0 ? index - 1 : songs.length - 1;
+                playSong(songs[prevIndex].id);
+            }
+        }
+
+        function nextSong() {
+            if (currentSong) {
+                const index = songs.findIndex(s => s.id === currentSong.id);
+                const nextIndex = index < songs.length - 1 ? index + 1 : 0;
+                playSong(songs[nextIndex].id);
+            }
+        }
+
+        // 进度跳转
+        function seek(event) {
+            if (!currentSong) return;
+            const track = event.currentTarget;
+            const rect = track.getBoundingClientRect();
+            const percent = (event.clientX - rect.left) / rect.width;
+            const totalSeconds = parseDuration(currentSong.duration);
+            currentTime = Math.floor(percent * totalSeconds);
+            document.getElementById('progress-fill').style.width = (percent * 100) + '%';
+            document.getElementById('current-time').textContent = formatTime(currentTime);
+        }
+
+        // 音量控制
+        function setVolume(event) {
+            const slider = event.currentTarget;
+            const rect = slider.getBoundingClientRect();
+            const percent = (event.clientX - rect.left) / rect.width;
+            document.getElementById('volume-fill').style.width = (percent * 100) + '%';
+        }
+
+        // 搜索
+        function searchMusic(query) {
+            if (!query) {
+                showSection('home');
+                return;
+            }
+            showSection('search');
+            const results = songs.filter(s => 
+                s.title.toLowerCase().includes(query.toLowerCase()) ||
+                s.artist.toLowerCase().includes(query.toLowerCase())
+            );
+            const grid = document.getElementById('search-results');
+            if (results.length === 0) {
+                grid.innerHTML = '<p style="color: var(--text-secondary);">没有找到相关歌曲</p>';
+            } else {
+                renderCards('search-results', results);
+            }
+        }
+
+        // 切换页面
+        function showSection(section) {
+            document.getElementById('home-section').style.display = 'none';
+            document.getElementById('search-section').style.display = 'none';
+            document.getElementById('library-section').style.display = 'none';
+            
+            if (section === 'home') {
+                document.getElementById('home-section').style.display = 'block';
+            } else if (section === 'search') {
+                document.getElementById('search-section').style.display = 'block';
+            } else if (section === 'library') {
+                document.getElementById('library-section').style.display = 'block';
+            } else if (section === 'playlist' || section === 'liked') {
+                document.getElementById('library-section').style.display = 'block';
+            }
+            
+            // 更新导航状态
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
+        }
+
+        // 歌词面板
+        function toggleLyrics() {
+            document.getElementById('lyrics-panel').classList.toggle('open');
+        }
+
+        // 喜欢
+        function toggleLike() {
+            const like = document.querySelector('.player-like');
+            like.textContent = like.textContent === '🤍' ? '❤️' : '🤍';
+        }
+
+        // 工具函数
+        function parseDuration(duration) {
+            const [min, sec] = duration.split(':').map(Number);
+            return min * 60 + sec;
+        }
+
+        function formatTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = seconds % 60;
+            return `${min}:${sec.toString().padStart(2, '0')}`;
+        }
+
+        // 启动
+        init();
+    </script>
+</body>
+</html>
