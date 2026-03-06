@@ -73,11 +73,26 @@
             background: var(--bg-card);
             border-radius: 12px;
             padding: 10px;
-            min-width: 280px;
-            max-height: 400px;
-            overflow-y: auto;
+            min-width: 320px;
+            max-height: 500px;
+            overflow-y: scroll;
             display: none;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            z-index: 9999;
+        }
+        
+        .currency-dropdown::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .currency-dropdown::-webkit-scrollbar-track {
+            background: var(--bg-hover);
+            border-radius: 4px;
+        }
+        
+        .currency-dropdown::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
         }
         
         .currency-dropdown.show {
@@ -1822,9 +1837,12 @@
         // 初始化货币选择器
         function initCurrencySelector() {
             const dropdown = document.getElementById('currency-dropdown');
-            let html = '';
+            let html = '<div style="padding: 10px; color: var(--text-secondary); font-size: 12px; text-align: center;">🌍 102种货币可用</div>';
             
-            for (const [code, curr] of Object.entries(currencies)) {
+            const currencyEntries = Object.entries(currencies);
+            console.log('Loading currencies:', currencyEntries.length);
+            
+            for (const [code, curr] of currencyEntries) {
                 html += `
                     <div class="currency-option" onclick="changeCurrency('${code}')">
                         <span class="currency-flag">${curr.flag}</span>
