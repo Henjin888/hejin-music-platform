@@ -3,37 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XMUSIC - 全球音乐平台</title>
+    <title id="page-title">XMUSIC - 全球音乐平台</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #1db954;
+            --primary-dark: #1ed760;
+            --bg-dark: #121212;
+            --bg-card: #181818;
+            --bg-hover: #282828;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --sidebar-width: 240px;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #121212;
-            color: #fff;
+            background: var(--bg-dark);
+            color: var(--text-primary);
             min-height: 100vh;
-            padding: 20px;
         }
-        .header {
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+        /* 侧边栏 */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: #000;
+            padding: 24px 16px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding: 0 12px;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: -1px;
+        }
+        .nav-section {
+            margin-bottom: 24px;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 14px;
+        }
+        .nav-item:hover, .nav-item.active {
+            color: var(--text-primary);
+            background: var(--bg-hover);
+        }
+        /* 主内容区 */
+        .main {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 24px 32px;
+        }
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-        }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            background: linear-gradient(90deg, #1db954, #1ed760);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
         .selectors {
             display: flex;
             gap: 10px;
         }
         .selector-btn {
-            background: #181818;
-            border: 1px solid #282828;
-            color: #fff;
+            background: var(--bg-card);
+            border: 1px solid var(--bg-hover);
+            color: var(--text-primary);
             padding: 10px 16px;
             border-radius: 25px;
             cursor: pointer;
@@ -42,15 +107,15 @@
             gap: 8px;
             font-size: 14px;
         }
-        .selector-btn:hover { background: #282828; }
+        .selector-btn:hover { background: var(--bg-hover); }
         .dropdown {
             position: absolute;
-            top: 60px;
-            right: 20px;
-            background: #181818;
+            top: 70px;
+            right: 32px;
+            background: var(--bg-card);
             border-radius: 12px;
             padding: 10px;
-            min-width: 300px;
+            min-width: 320px;
             max-height: 600px;
             overflow-y: auto;
             display: none;
@@ -66,71 +131,317 @@
             border-radius: 8px;
             cursor: pointer;
         }
-        .dropdown-item:hover { background: #282828; }
-        .flag { font-size: 24px; width: 32px; text-align: center; }
+        .dropdown-item:hover { background: var(--bg-hover); }
+        .flag { font-size: 20px; width: 28px; text-align: center; }
         .code { font-weight: 600; min-width: 50px; }
-        .name { font-size: 13px; color: #b3b3b3; flex: 1; }
-        .symbol { color: #1db954; font-weight: 500; }
+        .name { font-size: 13px; color: var(--text-secondary); flex: 1; }
+        .symbol { color: var(--primary); font-weight: 500; }
         .count-header {
             padding: 15px;
             text-align: center;
-            color: #1db954;
+            color: var(--primary);
             font-size: 14px;
-            border-bottom: 1px solid #282828;
+            border-bottom: 1px solid var(--bg-hover);
             margin-bottom: 10px;
         }
-        .cards {
+        /* 页面内容 */
+        .page { display: none; }
+        .page.active { display: block; }
+        .page-header {
+            margin-bottom: 30px;
+        }
+        .page-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        /* 卡片网格 */
+        .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 24px;
         }
         .card {
-            background: #181818;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
+            background: var(--bg-card);
+            padding: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .card:hover {
+            background: var(--bg-hover);
+            transform: translateY(-4px);
         }
         .card-image {
             width: 100%;
             aspect-ratio: 1;
-            background: linear-gradient(135deg, #667eea, #764ba2);
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
             position: relative;
+            background: linear-gradient(135deg, #667eea, #764ba2);
         }
         .price-tag {
             position: absolute;
             top: 10px;
             left: 10px;
-            background: #1db954;
+            background: var(--primary);
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 13px;
             font-weight: 700;
         }
-        .card h3 { margin-bottom: 8px; }
-        .card p { color: #b3b3b3; font-size: 14px; }
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .card-artist {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        /* 搜索框 */
+        .search-box {
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 44px;
+            border: none;
+            border-radius: 25px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+        }
+        .search-box::before {
+            content: "🔍";
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.6;
+        }
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        /* 设置页面 */
+        .settings-section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .settings-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--bg-hover);
+        }
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+        .settings-label {
+            display: flex;
+            flex-direction: column;
+        }
+        .settings-label span:first-child {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .settings-label span:last-child {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .settings-value {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main { margin-left: 0; }
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">🎵 XMUSIC</div>
-        <div class="selectors">
-            <button class="selector-btn" onclick="toggleCurrency()">
-                <span id="curr-symbol">¥</span>
-                <span id="curr-code">CNY</span>
-                <span>▼</span>
-            </button>
-        </div>
+    <div class="app">
+        <!-- 侧边栏 -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">🎵</div>
+                <span class="logo-text">XMUSIC</span>
+            </div>
+            
+            <div class="nav-section">
+                <button class="nav-item active" onclick="showPage('home')" data-nav="home">
+                    <span>🏠</span>
+                    <span data-i18n="nav.home">首页</span>
+                </button>
+                <button class="nav-item" onclick="showPage('search')" data-nav="search">
+                    <span>🔍</span>
+                    <span data-i18n="nav.search">搜索</span>
+                </button>
+                <button class="nav-item" onclick="showPage('library')" data-nav="library">
+                    <span>📚</span>
+                    <span data-i18n="nav.library">音乐库</span>
+                </button>
+            </div>
+            
+            <div class="nav-section">
+                <button class="nav-item" onclick="showPage('liked')" data-nav="liked">
+                    <span>❤️</span>
+                    <span data-i18n="nav.liked">喜欢的歌曲</span>
+                </button>
+                <button class="nav-item" onclick="showPage('settings')" data-nav="settings">
+                    <span>⚙️</span>
+                    <span data-i18n="nav.settings">设置</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- 主内容 -->
+        <main class="main">
+            <div class="top-bar">
+                <div class="search-box" style="opacity: 0; pointer-events: none;">
+                    <input type="text" placeholder="Search...">
+                </div>
+                
+                <div class="selectors">
+                    <button class="selector-btn" onclick="toggleDropdown('currency')">
+                        <span id="curr-symbol">¥</span>
+                        <span id="curr-code">CNY</span>
+                        <span>▼</span>
+                    </button>
+                    <button class="selector-btn" onclick="toggleDropdown('language')">
+                        <span id="lang-flag">🇨🇳</span>
+                        <span id="lang-name">中文</span>
+                        <span>▼</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 货币下拉 -->
+            <div class="dropdown" id="currency-dropdown"></div>
+            
+            <!-- 语言下拉 -->
+            <div class="dropdown" id="language-dropdown"></div>
+
+            <!-- 首页 -->
+            <div class="page active" id="page-home">
+                <div class="page-header">
+                    <h1 class="page-title" data-i18n="home.title">热门推荐</h1>
+                    <p class="page-subtitle" data-i18n="home.subtitle">为你精选的全球热门音乐</p>
+                </div>
+                <div class="card-grid" id="home-songs"></div>
+            </div>
+
+            <!-- 搜索页 -->
+            <div class="page" id="page-search">
+                <div class="page-header">
+                    <h1 class="page-title" data-i18n="search.title">搜索</h1>
+                </div>
+                <div class="search-box" style="margin-bottom: 30px;">
+                    <input type="text" id="search-input" placeholder="搜索歌曲、艺人、专辑..." 
+                           onkeyup="performSearch(this.value)" data-i18n-placeholder="search.placeholder">
+                </div>
+                <div id="search-results">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <p data-i18n="search.empty">输入关键词开始搜索</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 音乐库 -->
+            <div class="page" id="page-library">
+                <div class="page-header">
+                    <h1 class="page-title" data-i18n="library.title">音乐库</h1>
+                    <p class="page-subtitle" data-i18n="library.subtitle">你收藏的所有音乐</p>
+                </div>
+                <div class="card-grid" id="library-songs"></div>
+            </div>
+
+            <!-- 喜欢的歌曲 -->
+            <div class="page" id="page-liked">
+                <div class="page-header">
+                    <h1 class="page-title" data-i18n="liked.title">喜欢的歌曲</h1>
+                    <p class="page-subtitle" data-i18n="liked.subtitle">你标记为喜欢的音乐</p>
+                </div>
+                <div id="liked-songs">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">❤️</div>
+                        <p data-i18n="liked.empty">还没有喜欢的歌曲</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 设置页 -->
+            <div class="page" id="page-settings">
+                <div class="page-header">
+                    <h1 class="page-title" data-i18n="settings.title">设置</h1>
+                    <p class="page-subtitle" data-i18n="settings.subtitle">管理你的账户和应用偏好</p>
+                </div>
+
+                <div class="settings-section">
+                    <h2 class="settings-title" data-i18n="settings.language">语言</h2>
+                    <div class="settings-item">
+                        <div class="settings-label">
+                            <span data-i18n="settings.interfaceLanguage">界面语言</span>
+                            <span data-i18n="settings.languageDesc">选择你偏好的显示语言</span>
+                        </div>
+                        <div class="settings-value" id="settings-lang">中文</div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h2 class="settings-title" data-i18n="settings.currency">货币</h2>
+                    <div class="settings-item">
+                        <div class="settings-label">
+                            <span data-i18n="settings.displayCurrency">显示货币</span>
+                            <span data-i18n="settings.currencyDesc">选择价格显示货币</span>
+                        </div>
+                        <div class="settings-value" id="settings-currency">CNY ¥</div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h2 class="settings-title" data-i18n="settings.account">账户</h2>
+                    <div class="settings-item">
+                        <div class="settings-label">
+                            <span>Henjin888</span>
+                            <span data-i18n="settings.premium">XMUSIC Premium 会员</span>
+                        </div>
+                        <div class="settings-value" data-i18n="settings.manage">管理</div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-    
-    <div class="dropdown" id="currency-dropdown"></div>
-    
-    <div class="cards" id="song-cards"></div>
 
     <script>
-        // 180+ 全球货币
+        // 102种货币
         const currencies = {
             CNY: { code: 'CNY', symbol: '¥', name: 'Chinese Yuan', flag: '🇨🇳', rate: 1.0 },
             USD: { code: 'USD', symbol: '$', name: 'US Dollar', flag: '🇺🇸', rate: 0.14 },
@@ -235,24 +546,251 @@
             PAB: { code: 'PAB', symbol: 'B/.', name: 'Panamanian Balboa', flag: '🇵🇦', rate: 0.14 }
         };
 
+        // 多语言翻译
+        const i18n = {
+            zh: {
+                name: '中文',
+                flag: '🇨🇳',
+                nav: { home: '🏠 首页', search: '🔍 搜索', library: '📚 音乐库', liked: '❤️ 喜欢的歌曲', settings: '⚙️ 设置' },
+                home: { title: '热门推荐', subtitle: '为你精选的全球热门音乐' },
+                search: { title: '搜索', placeholder: '搜索歌曲、艺人、专辑...', empty: '输入关键词开始搜索' },
+                library: { title: '音乐库', subtitle: '你收藏的所有音乐' },
+                liked: { title: '喜欢的歌曲', subtitle: '你标记为喜欢的音乐', empty: '还没有喜欢的歌曲' },
+                settings: { title: '设置', subtitle: '管理你的账户和应用偏好', language: '语言', interfaceLanguage: '界面语言', languageDesc: '选择你偏好的显示语言', currency: '货币', displayCurrency: '显示货币', currencyDesc: '选择价格显示货币', account: '账户', premium: 'XMUSIC Premium 会员', manage: '管理' }
+            },
+            en: {
+                name: 'English',
+                flag: '🇺🇸',
+                nav: { home: '🏠 Home', search: '🔍 Search', library: '📚 Library', liked: '❤️ Liked Songs', settings: '⚙️ Settings' },
+                home: { title: 'Featured', subtitle: 'Global trending music for you' },
+                search: { title: 'Search', placeholder: 'Search songs, artists, albums...', empty: 'Type to start searching' },
+                library: { title: 'Library', subtitle: 'All your saved music' },
+                liked: { title: 'Liked Songs', subtitle: 'Music you\'ve marked as favorite', empty: 'No liked songs yet' },
+                settings: { title: 'Settings', subtitle: 'Manage your account and preferences', language: 'Language', interfaceLanguage: 'Interface Language', languageDesc: 'Choose your preferred language', currency: 'Currency', displayCurrency: 'Display Currency', currencyDesc: 'Choose currency for prices', account: 'Account', premium: 'XMUSIC Premium Member', manage: 'Manage' }
+            },
+            ja: {
+                name: '日本語',
+                flag: '🇯🇵',
+                nav: { home: '🏠 ホーム', search: '🔍 検索', library: '📚 ライブラリ', liked: '❤️ お気に入り', settings: '⚙️ 設定' },
+                home: { title: 'おすすめ', subtitle: '世界中の人気音楽' },
+                search: { title: '検索', placeholder: '曲、アーティスト、アルバムを検索...', empty: 'キーワードを入力' },
+                library: { title: 'ライブラリ', subtitle: '保存した音楽' },
+                liked: { title: 'お気に入り', subtitle: 'お気に入りに追加した音楽', empty: 'お気に入りがありません' },
+                settings: { title: '設定', subtitle: 'アカウントと設定を管理', language: '言語', interfaceLanguage: '表示言語', languageDesc: '表示言語を選択', currency: '通貨', displayCurrency: '表示通貨', currencyDesc: '価格表示の通貨を選択', account: 'アカウント', premium: 'XMUSIC Premium 会員', manage: '管理' }
+            },
+            ko: {
+                name: '한국어',
+                flag: '🇰🇷',
+                nav: { home: '🏠 홈', search: '🔍 검색', library: '📚 라이브러리', liked: '❤️ 좋아요', settings: '⚙️ 설정' },
+                home: { title: '추천', subtitle: '전 세계 인기 음악' },
+                search: { title: '검색', placeholder: '노래, 아티스트, 앨범 검색...', empty: '검색어를 입력하세요' },
+                library: { title: '라이브러리', subtitle: '저장한 음악' },
+                liked: { title: '좋아요', subtitle: '좋아요 표시한 음악', empty: '좋아요한 노래 없음' },
+                settings: { title: '설정', subtitle: '계정 및 설정 관리', language: '언어', interfaceLanguage: '인터페이스 언어', languageDesc: '표시 언어 선택', currency: '통화', displayCurrency: '표시 통화', currencyDesc: '가격 표시 통화 선택', account: '계정', premium: 'XMUSIC Premium 회원', manage: '관리' }
+            },
+            es: {
+                name: 'Español',
+                flag: '🇪🇸',
+                nav: { home: '🏠 Inicio', search: '🔍 Buscar', library: '📚 Biblioteca', liked: '❤️ Favoritas', settings: '⚙️ Ajustes' },
+                home: { title: 'Destacados', subtitle: 'Música popular global' },
+                search: { title: 'Buscar', placeholder: 'Buscar canciones, artistas...', empty: 'Escribe para buscar' },
+                library: { title: 'Biblioteca', subtitle: 'Toda tu música guardada' },
+                liked: { title: 'Favoritas', subtitle: 'Música marcada como favorita', empty: 'Sin canciones favoritas' },
+                settings: { title: 'Ajustes', subtitle: 'Gestiona tu cuenta y preferencias', language: 'Idioma', interfaceLanguage: 'Idioma de interfaz', languageDesc: 'Elige tu idioma preferido', currency: 'Moneda', displayCurrency: 'Moneda de visualización', currencyDesc: 'Elige moneda para precios', account: 'Cuenta', premium: 'Miembro XMUSIC Premium', manage: 'Gestionar' }
+            },
+            fr: {
+                name: 'Français',
+                flag: '🇫🇷',
+                nav: { home: '🏠 Accueil', search: '🔍 Rechercher', library: '📚 Bibliothèque', liked: '❤️ Favoris', settings: '⚙️ Paramètres' },
+                home: { title: 'Recommandés', subtitle: 'Musique populaire mondiale' },
+                search: { title: 'Rechercher', placeholder: 'Rechercher des titres, artistes...', empty: 'Tapez pour rechercher' },
+                library: { title: 'Bibliothèque', subtitle: 'Toute votre musique sauvegardée' },
+                liked: { title: 'Favoris', subtitle: 'Musique marquée comme favorite', empty: 'Aucun favori' },
+                settings: { title: 'Paramètres', subtitle: 'Gérez votre compte et préférences', language: 'Langue', interfaceLanguage: 'Langue d\'interface', languageDesc: 'Choisissez votre langue', currency: 'Devise', displayCurrency: 'Devise d\'affichage', currencyDesc: 'Choisissez la devise des prix', account: 'Compte', premium: 'Membre XMUSIC Premium', manage: 'Gérer' }
+            },
+            de: {
+                name: 'Deutsch',
+                flag: '🇩🇪',
+                nav: { home: '🏠 Startseite', search: '🔍 Suche', library: '📚 Bibliothek', liked: '❤️ Favoriten', settings: '⚙️ Einstellungen' },
+                home: { title: 'Empfohlen', subtitle: 'Globale Trend-Musik' },
+                search: { title: 'Suche', placeholder: 'Songs, Künstler suchen...', empty: 'Tippen zum Suchen' },
+                library: { title: 'Bibliothek', subtitle: 'All deine gespeicherte Musik' },
+                liked: { title: 'Favoriten', subtitle: 'Als Favorit markierte Musik', empty: 'Keine Favoriten' },
+                settings: { title: 'Einstellungen', subtitle: 'Konto und Einstellungen verwalten', language: 'Sprache', interfaceLanguage: 'Oberflächensprache', languageDesc: 'Wähle deine Sprache', currency: 'Währung', displayCurrency: 'Anzeigewährung', currencyDesc: 'Währung für Preise wählen', account: 'Konto', premium: 'XMUSIC Premium Mitglied', manage: 'Verwalten' }
+            },
+            pt: {
+                name: 'Português',
+                flag: '🇧🇷',
+                nav: { home: '🏠 Início', search: '🔍 Buscar', library: '📚 Biblioteca', liked: '❤️ Favoritas', settings: '⚙️ Configurações' },
+                home: { title: 'Destaques', subtitle: 'Música popular global' },
+                search: { title: 'Buscar', placeholder: 'Buscar músicas, artistas...', empty: 'Digite para buscar' },
+                library: { title: 'Biblioteca', subtitle: 'Toda sua música salva' },
+                liked: { title: 'Favoritas', subtitle: 'Música marcada como favorita', empty: 'Sem favoritas' },
+                settings: { title: 'Configurações', subtitle: 'Gerencie sua conta e preferências', language: 'Idioma', interfaceLanguage: 'Idioma da interface', languageDesc: 'Escolha seu idioma', currency: 'Moeda', displayCurrency: 'Moeda de exibição', currencyDesc: 'Escolha a moeda dos preços', account: 'Conta', premium: 'Membro XMUSIC Premium', manage: 'Gerenciar' }
+            },
+            ru: {
+                name: 'Русский',
+                flag: '🇷🇺',
+                nav: { home: '🏠 Главная', search: '🔍 Поиск', library: '📚 Библиотека', liked: '❤️ Избранное', settings: '⚙️ Настройки' },
+                home: { title: 'Рекомендации', subtitle: 'Популярная музыка мира' },
+                search: { title: 'Поиск', placeholder: 'Поиск песен, артистов...', empty: 'Введите для поиска' },
+                library: { title: 'Библиотека', subtitle: 'Вся сохраненная музыка' },
+                liked: { title: 'Избранное', subtitle: 'Отмеченная музыка', empty: 'Нет избранного' },
+                settings: { title: 'Настройки', subtitle: 'Управление аккаунтом', language: 'Язык', interfaceLanguage: 'Язык интерфейса', languageDesc: 'Выберите язык', currency: 'Валюта', displayCurrency: 'Валюта отображения', currencyDesc: 'Выберите валюту цен', account: 'Аккаунт', premium: 'Подписчик XMUSIC Premium', manage: 'Управление' }
+            },
+            ar: {
+                name: 'العربية',
+                flag: '🇸🇦',
+                nav: { home: '🏠 الرئيسية', search: '🔍 بحث', library: '📚 المكتبة', liked: '❤️ المفضلة', settings: '⚙️ الإعدادات' },
+                home: { title: 'مميز', subtitle: 'الموسيقى الشائعة عالمياً' },
+                search: { title: 'بحث', placeholder: 'البحث عن أغاني، فنانين...', empty: 'اكتب للبحث' },
+                library: { title: 'المكتبة', subtitle: 'جميع موسيقاك المحفوظة' },
+                liked: { title: 'المفضلة', subtitle: 'الموسيقى المفضلة', empty: 'لا توجد مفضلات' },
+                settings: { title: 'الإعدادات', subtitle: 'إدارة حسابك والتفضيلات', language: 'اللغة', interfaceLanguage: 'لغة الواجهة', languageDesc: 'اختر لغتك المفضلة', currency: 'العملة', displayCurrency: 'عملة العرض', currencyDesc: 'اختر عملة الأسعار', account: 'الحساب', premium: 'عضو XMUSIC Premium', manage: 'إدارة' }
+            },
+            hi: {
+                name: 'हिन्दी',
+                flag: '🇮🇳',
+                nav: { home: '🏠 होम', search: '🔍 खोज', library: '📚 लाइब्रेरी', liked: '❤️ पसंदीदा', settings: '⚙️ सेटिंग्स' },
+                home: { title: 'विशेष', subtitle: 'वैश्विक लोकप्रिय संगीत' },
+                search: { title: 'खोज', placeholder: 'गाने, कलाकार खोजें...', empty: 'खोजने के लिए टाइप करें' },
+                library: { title: 'लाइब्रेरी', subtitle: 'आपका सारा संगीत' },
+                liked: { title: 'पसंदीदा', subtitle: 'पसंदीदा के रूप में चिह्नित संगीत', empty: 'कोई पसंदीदा नहीं' },
+                settings: { title: 'सेटिंग्स', subtitle: 'अपना खाता और प्राथमिकताएं प्रबंधित करें', language: 'भाषा', interfaceLanguage: 'इंटरफेस भाषा', languageDesc: 'अपनी पसंदीदा भाषा चुनें', currency: 'मुद्रा', displayCurrency: 'प्रदर्शन मुद्रा', currencyDesc: 'कीमतों के लिए मुद्रा चुनें', account: 'खाता', premium: 'XMUSIC Premium सदस्य', manage: 'प्रबंधित करें' }
+            },
+            it: {
+                name: 'Italiano',
+                flag: '🇮🇹',
+                nav: { home: '🏠 Home', search: '🔍 Cerca', library: '📚 Libreria', liked: '❤️ Preferiti', settings: '⚙️ Impostazioni' },
+                home: { title: 'In evidenza', subtitle: 'Musica popolare globale' },
+                search: { title: 'Cerca', placeholder: 'Cerca brani, artisti...', empty: 'Digita per cercare' },
+                library: { title: 'Libreria', subtitle: 'Tutta la tua musica salvata' },
+                liked: { title: 'Preferiti', subtitle: 'Musica contrassegnata come preferita', empty: 'Nessun preferito' },
+                settings: { title: 'Impostazioni', subtitle: 'Gestisci account e preferenze', language: 'Lingua', interfaceLanguage: 'Lingua interfaccia', languageDesc: 'Scegli la tua lingua', currency: 'Valuta', displayCurrency: 'Valuta di visualizzazione', currencyDesc: 'Scegli la valuta dei prezzi', account: 'Account', premium: 'Membro XMUSIC Premium', manage: 'Gestisci' }
+            },
+            nl: {
+                name: 'Nederlands',
+                flag: '🇳🇱',
+                nav: { home: '🏠 Home', search: '🔍 Zoeken', library: '📚 Bibliotheek', liked: '❤️ Favorieten', settings: '⚙️ Instellingen' },
+                home: { title: 'Aanbevolen', subtitle: 'Wereldwijd populaire muziek' },
+                search: { title: 'Zoeken', placeholder: 'Zoek nummers, artiesten...', empty: 'Typ om te zoeken' },
+                library: { title: 'Bibliotheek', subtitle: 'Al je opgeslagen muziek' },
+                liked: { title: 'Favorieten', subtitle: 'Als favoriet gemarkeerde muziek', empty: 'Geen favorieten' },
+                settings: { title: 'Instellingen', subtitle: 'Beheer je account en voorkeuren', language: 'Taal', interfaceLanguage: 'Interfacetaal', languageDesc: 'Kies je voorkeurstaal', currency: 'Valuta', displayCurrency: 'Weergavevaluta', currencyDesc: 'Kies valuta voor prijzen', account: 'Account', premium: 'XMUSIC Premium lid', manage: 'Beheren' }
+            },
+            tr: {
+                name: 'Türkçe',
+                flag: '🇹🇷',
+                nav: { home: '🏠 Ana Sayfa', search: '🔍 Ara', library: '📚 Kitaplık', liked: '❤️ Beğenilenler', settings: '⚙️ Ayarlar' },
+                home: { title: 'Öne Çıkanlar', subtitle: 'Küresel popüler müzik' },
+                search: { title: 'Ara', placeholder: 'Şarkı, sanatçı ara...', empty: 'Aramak için yazın' },
+                library: { title: 'Kitaplık', subtitle: 'Kaydettiğiniz tüm müzikler' },
+                liked: { title: 'Beğenilenler', subtitle: 'Favori olarak işaretlenen müzik', empty: 'Beğenilen şarkı yok' },
+                settings: { title: 'Ayarlar', subtitle: 'Hesabınızı ve tercihleri yönetin', language: 'Dil', interfaceLanguage: 'Arayüz dili', languageDesc: 'Tercih ettiğiniz dili seçin', currency: 'Para Birimi', displayCurrency: 'Görüntüleme para birimi', currencyDesc: 'Fiyatlar için para birimi seçin', account: 'Hesap', premium: 'XMUSIC Premium üyesi', manage: 'Yönet' }
+            },
+            pl: {
+                name: 'Polski',
+                flag: '🇵🇱',
+                nav: { home: '🏠 Strona główna', search: '🔍 Szukaj', library: '📚 Biblioteka', liked: '❤️ Ulubione', settings: '⚙️ Ustawienia' },
+                home: { title: 'Polecane', subtitle: 'Popularna muzyka światowa' },
+                search: { title: 'Szukaj', placeholder: 'Szukaj utworów, artystów...', empty: 'Wpisz, aby wyszukać' },
+                library: { title: 'Biblioteka', subtitle: 'Cała zapisana muzyka' },
+                liked: { title: 'Ulubione', subtitle: 'Muzyka oznaczona jako ulubiona', empty: 'Brak ulubionych' },
+                settings: { title: 'Ustawienia', subtitle: 'Zarządzaj kontem i preferencjami', language: 'Język', interfaceLanguage: 'Język interfejsu', languageDesc: 'Wybierz preferowany język', currency: 'Waluta', displayCurrency: 'Waluta wyświetlania', currencyDesc: 'Wybierz walutę dla cen', account: 'Konto', premium: 'Członek XMUSIC Premium', manage: 'Zarządzaj' }
+            },
+            vi: {
+                name: 'Tiếng Việt',
+                flag: '🇻🇳',
+                nav: { home: '🏠 Trang chủ', search: '🔍 Tìm kiếm', library: '📚 Thư viện', liked: '❤️ Yêu thích', settings: '⚙️ Cài đặt' },
+                home: { title: 'Nổi bật', subtitle: 'Nhạc phổ biến toàn cầu' },
+                search: { title: 'Tìm kiếm', placeholder: 'Tìm bài hát, nghệ sĩ...', empty: 'Nhập để tìm kiếm' },
+                library: { title: 'Thư viện', subtitle: 'Tất cả nhạc đã lưu' },
+                liked: { title: 'Yêu thích', subtitle: 'Nhạc đã đánh dấu yêu thích', empty: 'Chưa có yêu thích' },
+                settings: { title: 'Cài đặt', subtitle: 'Quản lý tài khoản và tùy chọn', language: 'Ngôn ngữ', interfaceLanguage: 'Ngôn ngữ giao diện', languageDesc: 'Chọn ngôn ngữ hiển thị', currency: 'Tiền tệ', displayCurrency: 'Tiền tệ hiển thị', currencyDesc: 'Chọn tiền tệ cho giá', account: 'Tài khoản', premium: 'Thành viên XMUSIC Premium', manage: 'Quản lý' }
+            },
+            th: {
+                name: 'ไทย',
+                flag: '🇹🇭',
+                nav: { home: '🏠 หน้าหลัก', search: '🔍 ค้นหา', library: '📚 คลังเพลง', liked: '❤️ เพลงที่ชอบ', settings: '⚙️ การตั้งค่า' },
+                home: { title: 'แนะนำ', subtitle: 'เพลงยอดนิยมทั่วโลก' },
+                search: { title: 'ค้นหา', placeholder: 'ค้นหาเพลง ศิลปิน...', empty: 'พิมพ์เพื่อค้นหา' },
+                library: { title: 'คลังเพลง', subtitle: 'เพลงทั้งหมดที่บันทึก' },
+                liked: { title: 'เพลงที่ชอบ', subtitle: 'เพลงที่คุณชื่นชอบ', empty: 'ยังไม่มีเพลงที่ชอบ' },
+                settings: { title: 'การตั้งค่า', subtitle: 'จัดการบัญชีและการตั้งค่า', language: 'ภาษา', interfaceLanguage: 'ภาษาอินเทอร์เฟซ', languageDesc: 'เลือกภาษาที่ต้องการ', currency: 'สกุลเงิน', displayCurrency: 'สกุลเงินแสดง', currencyDesc: 'เลือกสกุลเงินสำหรับราคา', account: 'บัญชี', premium: 'สมาชิก XMUSIC Premium', manage: 'จัดการ' }
+            },
+            id: {
+                name: 'Bahasa Indonesia',
+                flag: '🇮🇩',
+                nav: { home: '🏠 Beranda', search: '🔍 Cari', library: '📚 Perpustakaan', liked: '❤️ Disukai', settings: '⚙️ Pengaturan' },
+                home: { title: 'Unggulan', subtitle: 'Musik populer global' },
+                search: { title: 'Cari', placeholder: 'Cari lagu, artis...', empty: 'Ketik untuk mencari' },
+                library: { title: 'Perpustakaan', subtitle: 'Semua musik tersimpan' },
+                liked: { title: 'Disukai', subtitle: 'Musik yang ditandai suka', empty: 'Belum ada yang disukai' },
+                settings: { title: 'Pengaturan', subtitle: 'Kelola akun dan preferensi', language: 'Bahasa', interfaceLanguage: 'Bahasa antarmuka', languageDesc: 'Pilih bahasa tampilan', currency: 'Mata Uang', displayCurrency: 'Mata uang tampilan', currencyDesc: 'Pilih mata uang untuk harga', account: 'Akun', premium: 'Anggota XMUSIC Premium', manage: 'Kelola' }
+            },
+            ms: {
+                name: 'Bahasa Melayu',
+                flag: '🇲🇾',
+                nav: { home: '🏠 Laman Utama', search: '🔍 Cari', library: '📚 Perpustakaan', liked: '❤️ Suka', settings: '⚙️ Tetapan' },
+                home: { title: 'Pilihan', subtitle: 'Muzik popular global' },
+                search: { title: 'Cari', placeholder: 'Cari lagu, artis...', empty: 'Taip untuk mencari' },
+                library: { title: 'Perpustakaan', subtitle: 'Semua muzik tersimpan' },
+                liked: { title: 'Suka', subtitle: 'Muzik yang ditanda suka', empty: 'Tiada lagu suka' },
+                settings: { title: 'Tetapan', subtitle: 'Urus akaun dan keutamaan', language: 'Bahasa', interfaceLanguage: 'Bahasa antaramuka', languageDesc: 'Pilih bahasa paparan', currency: 'Mata Wang', displayCurrency: 'Mata wang paparan', currencyDesc: 'Pilih mata wang untuk harga', account: 'Akaun', premium: 'Ahli XMUSIC Premium', manage: 'Urus' }
+            },
+            sv: {
+                name: 'Svenska',
+                flag: '🇸🇪',
+                nav: { home: '🏠 Hem', search: '🔍 Sök', library: '📚 Bibliotek', liked: '❤️ Gillade', settings: '⚙️ Inställningar' },
+                home: { title: 'Utvalda', subtitle: 'Global populärmusik' },
+                search: { title: 'Sök', placeholder: 'Sök låtar, artister...', empty: 'Skriv för att söka' },
+                library: { title: 'Bibliotek', subtitle: 'All din sparade musik' },
+                liked: { title: 'Gillade', subtitle: 'Musik markerad som favorit', empty: 'Inga gillade låtar' },
+                settings: { title: 'Inställningar', subtitle: 'Hantera konto och preferenser', language: 'Språk', interfaceLanguage: 'Gränssnittsspråk', languageDesc: 'Välj önskat språk', currency: 'Valuta', displayCurrency: 'Visningsvaluta', currencyDesc: 'Välj valuta för priser', account: 'Konto', premium: 'XMUSIC Premium-medlem', manage: 'Hantera' }
+            }
+        };
+
+        let currentLang = 'zh';
         let currentCurrency = 'CNY';
 
-        const songs = [
-            { title: "夜曲", artist: "周杰伦" },
-            { title: "Shape of You", artist: "Ed Sheeran" },
-            { title: "Lemon", artist: "米津玄師" },
-            { title: "Despacito", artist: "Luis Fonsi" }
+        const allSongs = [
+            { id: 1, title: "夜曲", artist: "周杰伦", album: "十一月的萧邦", cover: "linear-gradient(135deg, #667eea, #764ba2)" },
+            { id: 2, title: "晴天", artist: "周杰伦", album: "叶惠美", cover: "linear-gradient(135deg, #f093fb, #f5576c)" },
+            { id: 3, title: "Shape of You", artist: "Ed Sheeran", album: "Divide", cover: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+            { id: 4, title: "Blinding Lights", artist: "The Weeknd", album: "After Hours", cover: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+            { id: 5, title: "Lemon", artist: "米津玄師", album: "Lemon", cover: "linear-gradient(135deg, #fa709a, #fee140)" },
+            { id: 6, title: "Dynamite", artist: "BTS", album: "BE", cover: "linear-gradient(135deg, #30cfd0, #330867)" },
+            { id: 7, title: "Despacito", artist: "Luis Fonsi", album: "Despacito", cover: "linear-gradient(135deg, #a8edea, #fed6e3)" },
+            { id: 8, title: "Dernière Danse", artist: "Indila", album: "Mini World", cover: "linear-gradient(135deg, #ffecd2, #fcb69f)" }
         ];
 
         function init() {
+            renderLanguages();
             renderCurrencies();
+            updateLanguageUI();
             renderSongs();
+        }
+
+        function renderLanguages() {
+            const dropdown = document.getElementById('language-dropdown');
+            let html = `<div class="count-header">🌍 ${Object.keys(i18n).length} 种语言</div>`;
+            
+            for (const [code, lang] of Object.entries(i18n)) {
+                html += `
+                    <div class="dropdown-item" onclick="selectLanguage('${code}')">
+                        <span class="flag">${lang.flag}</span>
+                        <span class="code">${code.toUpperCase()}</span>
+                        <span class="name">${lang.name}</span>
+                    </div>
+                `;
+            }
+            dropdown.innerHTML = html;
         }
 
         function renderCurrencies() {
             const dropdown = document.getElementById('currency-dropdown');
             const count = Object.keys(currencies).length;
-            let html = `<div class="count-header">🌍 ${count} 种货币</div>`;
+            let html = `<div class="count-header">💰 ${count} 种货币</div>`;
             
             for (const [code, curr] of Object.entries(currencies)) {
                 html += `
@@ -267,38 +805,152 @@
             dropdown.innerHTML = html;
         }
 
-        function renderSongs() {
-            const container = document.getElementById('song-cards');
-            const curr = currencies[currentCurrency];
-            const price = (0.99 * curr.rate).toFixed(2);
+        function selectLanguage(code) {
+            currentLang = code;
+            const lang = i18n[code];
             
-            container.innerHTML = songs.map(song => `
-                <div class="card">
-                    <div class="card-image">
-                        <div class="price-tag">${curr.symbol}${price}</div>
-                    </div>
-                    <h3>${song.title}</h3>
-                    <p>${song.artist}</p>
-                </div>
-            `).join('');
+            document.getElementById('lang-flag').textContent = lang.flag;
+            document.getElementById('lang-name').textContent = lang.name;
+            document.getElementById('settings-lang').textContent = lang.name;
+            document.getElementById('language-dropdown').classList.remove('show');
+            
+            updateLanguageUI();
         }
 
-        function toggleCurrency() {
-            document.getElementById('currency-dropdown').classList.toggle('show');
+        function updateLanguageUI() {
+            const t = i18n[currentLang];
+            
+            // 更新页面标题
+            document.getElementById('page-title').textContent = `XMUSIC - ${t.nav.home.replace('🏠 ', '')}`;
+            
+            // 更新所有 data-i18n 元素
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const value = getNestedValue(t, key);
+                if (value) el.textContent = value;
+            });
+            
+            // 更新 placeholder
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                const value = getNestedValue(t, key);
+                if (value) el.placeholder = value;
+            });
+            
+            // 更新导航
+            document.querySelectorAll('.nav-item').forEach(item => {
+                const navKey = item.getAttribute('data-nav');
+                if (navKey && t.nav[navKey]) {
+                    item.querySelector('span:last-child').textContent = t.nav[navKey];
+                }
+            });
+        }
+
+        function getNestedValue(obj, path) {
+            return path.split('.').reduce((o, p) => o && o[p], obj);
         }
 
         function selectCurrency(code) {
             currentCurrency = code;
             const curr = currencies[code];
+            
             document.getElementById('curr-symbol').textContent = curr.symbol;
             document.getElementById('curr-code').textContent = curr.code;
+            document.getElementById('settings-currency').textContent = `${curr.code} ${curr.symbol}`;
             document.getElementById('currency-dropdown').classList.remove('show');
+            
             renderSongs();
+        }
+
+        function renderSongs() {
+            const curr = currencies[currentCurrency];
+            const price = (0.99 * curr.rate).toFixed(2);
+            
+            // 首页歌曲
+            document.getElementById('home-songs').innerHTML = allSongs.slice(0, 4).map(song => `
+                <div class="card">
+                    <div class="card-image" style="background: ${song.cover}">
+                        <div class="price-tag">${curr.symbol}${price}</div>
+                    </div>
+                    <div class="card-title">${song.title}</div>
+                    <div class="card-artist">${song.artist}</div>
+                </div>
+            `).join('');
+            
+            // 音乐库歌曲
+            document.getElementById('library-songs').innerHTML = allSongs.map(song => `
+                <div class="card">
+                    <div class="card-image" style="background: ${song.cover}">
+                        <div class="price-tag">${curr.symbol}${price}</div>
+                    </div>
+                    <div class="card-title">${song.title}</div>
+                    <div class="card-artist">${song.artist}</div>
+                </div>
+            `).join('');
+        }
+
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById(`page-${page}`).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function toggleDropdown(type) {
+            const currencyDropdown = document.getElementById('currency-dropdown');
+            const languageDropdown = document.getElementById('language-dropdown');
+            
+            if (type === 'currency') {
+                currencyDropdown.classList.toggle('show');
+                languageDropdown.classList.remove('show');
+            } else {
+                languageDropdown.classList.toggle('show');
+                currencyDropdown.classList.remove('show');
+            }
+        }
+
+        function performSearch(query) {
+            const resultsContainer = document.getElementById('search-results');
+            
+            if (!query) {
+                const t = i18n[currentLang];
+                resultsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <p>${t.search.empty}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const results = allSongs.filter(s => 
+                s.title.toLowerCase().includes(query.toLowerCase()) ||
+                s.artist.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            const curr = currencies[currentCurrency];
+            const price = (0.99 * curr.rate).toFixed(2);
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = `<div class="empty-state"><p>No results found</p></div>`;
+            } else {
+                resultsContainer.innerHTML = `<div class="card-grid">${results.map(song => `
+                    <div class="card">
+                        <div class="card-image" style="background: ${song.cover}">
+                            <div class="price-tag">${curr.symbol}${price}</div>
+                        </div>
+                        <div class="card-title">${song.title}</div>
+                        <div class="card-artist">${song.artist}</div>
+                    </div>
+                `).join('')}</div>`;
+            }
         }
 
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.selectors')) {
                 document.getElementById('currency-dropdown').classList.remove('show');
+                document.getElementById('language-dropdown').classList.remove('show');
             }
         });
 
