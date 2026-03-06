@@ -37,6 +37,154 @@
             top: 20px;
             right: 20px;
             z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* 货币选择器 */
+        .currency-selector {
+            position: relative;
+        }
+        
+        .currency-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-hover);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        
+        .currency-btn:hover {
+            background: var(--bg-hover);
+            transform: scale(1.05);
+        }
+        
+        .currency-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 10px;
+            min-width: 280px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        
+        .currency-dropdown.show {
+            display: block;
+        }
+        
+        .currency-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .currency-option:hover {
+            background: var(--bg-hover);
+        }
+        
+        .currency-flag {
+            font-size: 20px;
+            width: 28px;
+            text-align: center;
+        }
+        
+        .currency-code {
+            font-weight: 600;
+            min-width: 50px;
+        }
+        
+        .currency-name {
+            font-size: 13px;
+            color: var(--text-secondary);
+            flex: 1;
+        }
+        
+        .currency-rate {
+            font-size: 12px;
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        /* 价格标签 */
+        .price-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(29, 185, 84, 0.4);
+        }
+        
+        .subscription-banner {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .subscription-info h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        
+        .subscription-info p {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+        }
+        
+        .subscription-price {
+            text-align: right;
+        }
+        
+        .price-amount {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        .price-period {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .subscribe-btn {
+            background: var(--text-primary);
+            color: var(--bg-dark);
+            border: none;
+            padding: 12px 32px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+        
+        .subscribe-btn:hover {
+            transform: scale(1.05);
+            background: var(--primary);
+            color: var(--text-primary);
         }
         
         .lang-btn {
@@ -612,15 +760,28 @@
     </style>
 </head>
 <body>
-    <!-- 语言选择器 -->
+    <!-- 语言和货币选择器 -->
     <div class="lang-selector">
-        <button class="lang-btn" onclick="toggleLangDropdown()">
-            <span id="current-lang-flag">🇨🇳</span>
-            <span id="current-lang-name">中文</span>
-            <span>▼</span>
-        </button>
-        <div class="lang-dropdown" id="lang-dropdown">
-            <!-- 语言选项将由JS生成 -->
+        <div class="currency-selector">
+            <button class="currency-btn" onclick="toggleCurrencyDropdown()">
+                <span id="current-currency-symbol">¥</span>
+                <span id="current-currency-code">CNY</span>
+                <span>▼</span>
+            </button>
+            <div class="currency-dropdown" id="currency-dropdown">
+                <!-- 货币选项由JS生成 -->
+            </div>
+        </div>
+        
+        <div class="language-selector">
+            <button class="lang-btn" onclick="toggleLangDropdown()">
+                <span id="current-lang-flag">🇨🇳</span>
+                <span id="current-lang-name">中文</span>
+                <span>▼</span>
+            </button>
+            <div class="lang-dropdown" id="lang-dropdown">
+                <!-- 语言选项将由JS生成 -->
+            </div>
         </div>
     </div>
 
@@ -673,6 +834,19 @@
 
         <!-- 首页内容 -->
         <div id="home-section">
+            <!-- 订阅横幅 -->
+            <div class="subscription-banner">
+                <div class="subscription-info">
+                    <h3 data-i18n="subscription.title">🎵 XMUSIC Premium</h3>
+                    <p data-i18n="subscription.description">无限畅听，无广告，离线播放，高品质音质</p>
+                </div>
+                <div class="subscription-price">
+                    <div class="price-amount" id="subscription-price">¥6.99</div>
+                    <div class="price-period" data-i18n="subscription.period">/ 月</div>
+                    <button class="subscribe-btn" data-i18n="subscription.button">立即订阅</button>
+                </div>
+            </div>
+
             <div class="section">
                 <div class="section-header">
                     <h2 class="section-title" data-i18n="sections.trending">🔥 热门推荐</h2>
@@ -805,6 +979,12 @@
                 },
                 common: {
                     seeAll: '显示全部'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: '无限畅听，无广告，离线播放，高品质音质',
+                    period: '/ 月',
+                    button: '立即订阅'
                 }
             },
             en: {
@@ -837,6 +1017,12 @@
                 },
                 common: {
                     seeAll: 'See All'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: 'Unlimited listening, no ads, offline playback, high-quality audio',
+                    period: '/ month',
+                    button: 'Subscribe Now'
                 }
             },
             ja: {
@@ -869,6 +1055,12 @@
                 },
                 common: {
                     seeAll: 'すべて表示'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC プレミアム',
+                    description: '無制限再生、広告なし、オフライン再生、高音質',
+                    period: '/ 月',
+                    button: '今すぐ登録'
                 }
             },
             ko: {
@@ -901,6 +1093,12 @@
                 },
                 common: {
                     seeAll: '모두 보기'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC 프리미엄',
+                    description: '무제한 재생, 광고 없음, 오프라인 재생, 고품질 음향',
+                    period: '/ 월',
+                    button: '지금 구독'
                 }
             },
             es: {
@@ -933,6 +1131,12 @@
                 },
                 common: {
                     seeAll: 'Ver Todo'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: 'Escucha ilimitada, sin anuncios, reproducción offline, audio de alta calidad',
+                    period: '/ mes',
+                    button: 'Suscribirse'
                 }
             },
             fr: {
@@ -965,6 +1169,12 @@
                 },
                 common: {
                     seeAll: 'Tout Voir'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: 'Écoute illimitée, sans publicité, lecture hors ligne, audio haute qualité',
+                    period: '/ mois',
+                    button: 'Abonnez-vous'
                 }
             },
             de: {
@@ -997,6 +1207,12 @@
                 },
                 common: {
                     seeAll: 'Alle Anzeigen'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: 'Unbegrenztes Hören, werbefrei, Offline-Wiedergabe, Hochwertiger Sound',
+                    period: '/ Monat',
+                    button: 'Jetzt Abonnieren'
                 }
             },
             pt: {
@@ -1029,6 +1245,12 @@
                 },
                 common: {
                     seeAll: 'Ver Tudo'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: 'Escuta ilimitada, sem anúncios, reprodução offline, áudio de alta qualidade',
+                    period: '/ mês',
+                    button: 'Assine Agora'
                 }
             },
             ru: {
@@ -1061,6 +1283,12 @@
                 },
                 common: {
                     seeAll: 'Смотреть все'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Премиум',
+                    description: 'Неограниченное прослушивание, без рекламы, офлайн-воспроизведение, высокое качество',
+                    period: '/ мес',
+                    button: 'Подписаться'
                 }
             },
             ar: {
@@ -1093,6 +1321,12 @@
                 },
                 common: {
                     seeAll: 'عرض الكل'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC بريميوم',
+                    description: 'استماع غير محدود، بدون إعلانات، تشغيل بدون إنترنت، صوت عالي الجودة',
+                    period: '/ شهر',
+                    button: 'اشترك الآن'
                 }
             },
             hi: {
@@ -1125,6 +1359,12 @@
                 },
                 common: {
                     seeAll: 'सभी देखें'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC प्रीमियम',
+                    description: 'असीमित सुनवाई, विज्ञापन मुक्त, ऑफ़लाइन प्लेबैक, उच्च गुणवत्ता ध्वनि',
+                    period: '/ महीना',
+                    button: 'अभी सब्सक्राइब करें'
                 }
             },
             it: {
@@ -1157,6 +1397,12 @@
                 },
                 common: {
                     seeAll: 'Visualizza Tutto'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: 'Ascolto illimitato, senza pubblicità, riproduzione offline, audio di alta qualità',
+                    period: '/ mese',
+                    button: 'Iscriviti Ora'
                 }
             },
             nl: {
@@ -1189,6 +1435,12 @@
                 },
                 common: {
                     seeAll: 'Alles Bekijken'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: 'Onbeperkt luisteren, geen advertenties, offline afspelen, hoge kwaliteit audio',
+                    period: '/ maand',
+                    button: 'Nu Abonneren'
                 }
             },
             tr: {
@@ -1221,6 +1473,12 @@
                 },
                 common: {
                     seeAll: 'Tümünü Gör'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: 'Sınırsız dinleme, reklamsız, çevrimdışı oynatma, yüksek kaliteli ses',
+                    period: '/ ay',
+                    button: 'Hemen Abone Ol'
                 }
             },
             pl: {
@@ -1253,6 +1511,12 @@
                 },
                 common: {
                     seeAll: 'Zobacz Wszystkie'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: 'Nieograniczone słuchanie, bez reklam, odtwarzanie offline, wysoka jakość dźwięku',
+                    period: '/ miesiąc',
+                    button: 'Subskrybuj Teraz'
                 }
             },
             vi: {
@@ -1285,6 +1549,12 @@
                 },
                 common: {
                     seeAll: 'Xem tất cả'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: 'Nghe không giới hạn, không quảng cáo, phát offline, chất lượng cao',
+                    period: '/ tháng',
+                    button: 'Đăng Ký Ngay'
                 }
             },
             th: {
@@ -1317,6 +1587,12 @@
                 },
                 common: {
                     seeAll: 'ดูทั้งหมด'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: 'ฟังไม่จำกัด, ไม่มีโฆษณา, เล่นออฟไลน์, เสียงคุณภาพสูง',
+                    period: '/ เดือน',
+                    button: 'สมัครสมาชิกเลย'
                 }
             },
             id: {
@@ -1349,6 +1625,12 @@
                 },
                 common: {
                     seeAll: 'Lihat Semua'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: 'Dengar tanpa batas, tanpa iklan, pemutaran offline, audio berkualitas tinggi',
+                    period: '/ bulan',
+                    button: 'Berlangganan Sekarang'
                 }
             },
             ms: {
@@ -1381,6 +1663,12 @@
                 },
                 common: {
                     seeAll: 'Lihat Semua'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: 'Dengar tanpa had, tiada iklan, main luar talian, audio berkualiti tinggi',
+                    period: '/ bulan',
+                    button: 'Langgan Sekarang'
                 }
             },
             sv: {
@@ -1413,9 +1701,184 @@
                 },
                 common: {
                     seeAll: 'Visa Alla'
+                },
+                subscription: {
+                    title: '🎵 XMUSIC Premium',
+                    description: 'Obegränsad lyssning, inga annonser, offline-uppspelning, högkvalitativt ljud',
+                    period: '/ månad',
+                    button: 'Prenumerera Nu'
                 }
             }
         };
+
+        // 全球货币配置 - 180+ 国家/地区
+        const currencies = {
+            CNY: { code: 'CNY', symbol: '¥', name: 'Chinese Yuan', nameCN: '人民币', flag: '🇨🇳', rate: 1.0 },
+            USD: { code: 'USD', symbol: '$', name: 'US Dollar', nameCN: '美元', flag: '🇺🇸', rate: 0.14 },
+            EUR: { code: 'EUR', symbol: '€', name: 'Euro', nameCN: '欧元', flag: '🇪🇺', rate: 0.13 },
+            JPY: { code: 'JPY', symbol: '¥', name: 'Japanese Yen', nameCN: '日元', flag: '🇯🇵', rate: 20.5 },
+            GBP: { code: 'GBP', symbol: '£', name: 'British Pound', nameCN: '英镑', flag: '🇬🇧', rate: 0.11 },
+            KRW: { code: 'KRW', symbol: '₩', name: 'South Korean Won', nameCN: '韩元', flag: '🇰🇷', rate: 185.0 },
+            HKD: { code: 'HKD', symbol: 'HK$', name: 'Hong Kong Dollar', nameCN: '港币', flag: '🇭🇰', rate: 1.09 },
+            TWD: { code: 'TWD', symbol: 'NT$', name: 'New Taiwan Dollar', nameCN: '新台币', flag: '🇹🇼', rate: 4.35 },
+            SGD: { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar', nameCN: '新加坡元', flag: '🇸🇬', rate: 0.19 },
+            AUD: { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', nameCN: '澳元', flag: '🇦🇺', rate: 0.21 },
+            CAD: { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', nameCN: '加元', flag: '🇨🇦', rate: 0.19 },
+            CHF: { code: 'CHF', symbol: 'Fr', name: 'Swiss Franc', nameCN: '瑞士法郎', flag: '🇨🇭', rate: 0.12 },
+            INR: { code: 'INR', symbol: '₹', name: 'Indian Rupee', nameCN: '印度卢比', flag: '🇮🇳', rate: 11.5 },
+            RUB: { code: 'RUB', symbol: '₽', name: 'Russian Ruble', nameCN: '俄罗斯卢布', flag: '🇷🇺', rate: 12.5 },
+            BRL: { code: 'BRL', symbol: 'R$', name: 'Brazilian Real', nameCN: '巴西雷亚尔', flag: '🇧🇷', rate: 0.69 },
+            MXN: { code: 'MXN', symbol: '$', name: 'Mexican Peso', nameCN: '墨西哥比索', flag: '🇲🇽', rate: 2.45 },
+            ZAR: { code: 'ZAR', symbol: 'R', name: 'South African Rand', nameCN: '南非兰特', flag: '🇿🇦', rate: 2.55 },
+            SAR: { code: 'SAR', symbol: '﷼', name: 'Saudi Riyal', nameCN: '沙特里亚尔', flag: '🇸🇦', rate: 0.52 },
+            AED: { code: 'AED', symbol: 'د.إ', name: 'UAE Dirham', nameCN: '阿联酋迪拉姆', flag: '🇦🇪', rate: 0.51 },
+            THB: { code: 'THB', symbol: '฿', name: 'Thai Baht', nameCN: '泰铢', flag: '🇹🇭', rate: 4.85 },
+            MYR: { code: 'MYR', symbol: 'RM', name: 'Malaysian Ringgit', nameCN: '马来西亚林吉特', flag: '🇲🇾', rate: 0.65 },
+            IDR: { code: 'IDR', symbol: 'Rp', name: 'Indonesian Rupiah', nameCN: '印尼盾', flag: '🇮🇩', rate: 2175 },
+            PHP: { code: 'PHP', symbol: '₱', name: 'Philippine Peso', nameCN: '菲律宾比索', flag: '🇵🇭', rate: 7.75 },
+            VND: { code: 'VND', symbol: '₫', name: 'Vietnamese Dong', nameCN: '越南盾', flag: '🇻🇳', rate: 3450 },
+            PLN: { code: 'PLN', symbol: 'zł', name: 'Polish Zloty', nameCN: '波兰兹罗提', flag: '🇵🇱', rate: 0.55 },
+            TRY: { code: 'TRY', symbol: '₺', name: 'Turkish Lira', nameCN: '土耳其里拉', flag: '🇹🇷', rate: 4.25 },
+            SEK: { code: 'SEK', symbol: 'kr', name: 'Swedish Krona', nameCN: '瑞典克朗', flag: '🇸🇪', rate: 1.45 },
+            NOK: { code: 'NOK', symbol: 'kr', name: 'Norwegian Krone', nameCN: '挪威克朗', flag: '🇳🇴', rate: 1.48 },
+            DKK: { code: 'DKK', symbol: 'kr', name: 'Danish Krone', nameCN: '丹麦克朗', flag: '🇩🇰', rate: 0.97 },
+            NZD: { code: 'NZD', symbol: 'NZ$', name: 'New Zealand Dollar', nameCN: '新西兰元', flag: '🇳🇿', rate: 0.23 },
+            ILS: { code: 'ILS', symbol: '₪', name: 'Israeli Shekel', nameCN: '以色列新谢克尔', flag: '🇮🇱', rate: 0.51 },
+            EGP: { code: 'EGP', symbol: '£', name: 'Egyptian Pound', nameCN: '埃及镑', flag: '🇪🇬', rate: 6.75 },
+            NGN: { code: 'NGN', symbol: '₦', name: 'Nigerian Naira', nameCN: '尼日利亚奈拉', flag: '🇳🇬', rate: 215 },
+            PKR: { code: 'PKR', symbol: '₨', name: 'Pakistani Rupee', nameCN: '巴基斯坦卢比', flag: '🇵🇰', rate: 39 },
+            BDT: { code: 'BDT', symbol: '৳', name: 'Bangladeshi Taka', nameCN: '孟加拉塔卡', flag: '🇧🇩', rate: 15.5 },
+            ARS: { code: 'ARS', symbol: '$', name: 'Argentine Peso', nameCN: '阿根廷比索', flag: '🇦🇷', rate: 119 },
+            CLP: { code: 'CLP', symbol: '$', name: 'Chilean Peso', nameCN: '智利比索', flag: '🇨🇱', rate: 128 },
+            COP: { code: 'COP', symbol: '$', name: 'Colombian Peso', nameCN: '哥伦比亚比索', flag: '🇨🇴', rate: 585 },
+            PEN: { code: 'PEN', symbol: 'S/', name: 'Peruvian Sol', nameCN: '秘鲁索尔', flag: '🇵🇪', rate: 0.52 },
+            UYU: { code: 'UYU', symbol: '$', name: 'Uruguayan Peso', nameCN: '乌拉圭比索', flag: '🇺🇾', rate: 5.45 },
+            ISK: { code: 'ISK', symbol: 'kr', name: 'Icelandic Krona', nameCN: '冰岛克朗', flag: '🇮🇸', rate: 19.5 },
+            HUF: { code: 'HUF', symbol: 'Ft', name: 'Hungarian Forint', nameCN: '匈牙利福林', flag: '🇭🇺', rate: 50.5 },
+            CZK: { code: 'CZK', symbol: 'Kč', name: 'Czech Koruna', nameCN: '捷克克朗', flag: '🇨🇿', rate: 3.15 },
+            RON: { code: 'RON', symbol: 'lei', name: 'Romanian Leu', nameCN: '罗马尼亚列伊', flag: '🇷🇴', rate: 0.64 },
+            BGN: { code: 'BGN', symbol: 'лв', name: 'Bulgarian Lev', nameCN: '保加利亚列弗', flag: '🇧🇬', rate: 0.25 },
+            HRK: { code: 'HRK', symbol: 'kn', name: 'Croatian Kuna', nameCN: '克罗地亚库纳', flag: '🇭🇷', rate: 0.96 },
+            UAH: { code: 'UAH', symbol: '₴', name: 'Ukrainian Hryvnia', nameCN: '乌克兰格里夫纳', flag: '🇺🇦', rate: 5.15 },
+            KZT: { code: 'KZT', symbol: '₸', name: 'Kazakhstani Tenge', nameCN: '哈萨克斯坦坚戈', flag: '🇰🇿', rate: 65 },
+            KES: { code: 'KES', symbol: 'Sh', name: 'Kenyan Shilling', nameCN: '肯尼亚先令', flag: '🇰🇪', rate: 18.5 },
+            GHS: { code: 'GHS', symbol: '₵', name: 'Ghanaian Cedi', nameCN: '加纳塞地', flag: '🇬🇭', rate: 1.65 },
+            TZS: { code: 'TZS', symbol: 'Sh', name: 'Tanzanian Shilling', nameCN: '坦桑尼亚先令', flag: '🇹🇿', rate: 350 },
+            UGX: { code: 'UGX', symbol: 'Sh', name: 'Ugandan Shilling', nameCN: '乌干达先令', flag: '🇺🇬', rate: 525 },
+            ZMW: { code: 'ZMW', symbol: 'ZK', name: 'Zambian Kwacha', nameCN: '赞比亚克瓦查', flag: '🇿🇲', rate: 3.25 },
+            MAD: { code: 'MAD', symbol: 'د.م.', name: 'Moroccan Dirham', nameCN: '摩洛哥迪拉姆', flag: '🇲🇦', rate: 1.38 },
+            TND: { code: 'TND', symbol: 'د.ت', name: 'Tunisian Dinar', nameCN: '突尼斯第纳尔', flag: '🇹🇳', rate: 0.43 },
+            DZD: { code: 'DZD', symbol: 'د.ج', name: 'Algerian Dinar', nameCN: '阿尔及利亚第纳尔', flag: '🇩🇿', rate: 18.9 },
+            JOD: { code: 'JOD', symbol: 'د.ا', name: 'Jordanian Dinar', nameCN: '约旦第纳尔', flag: '🇯🇴', rate: 0.099 },
+            LBP: { code: 'LBP', symbol: 'ل.ل', name: 'Lebanese Pound', nameCN: '黎巴嫩镑', flag: '🇱🇧', rate: 20925 },
+            IQD: { code: 'IQD', symbol: 'ع.د', name: 'Iraqi Dinar', nameCN: '伊拉克第纳尔', flag: '🇮🇶', rate: 183.5 },
+            QAR: { code: 'QAR', symbol: 'ر.ق', name: 'Qatari Riyal', nameCN: '卡塔尔里亚尔', flag: '🇶🇦', rate: 0.51 },
+            KWD: { code: 'KWD', symbol: 'د.ك', name: 'Kuwaiti Dinar', nameCN: '科威特第纳尔', flag: '🇰🇼', rate: 0.043 },
+            BHD: { code: 'BHD', symbol: '.د.ب', name: 'Bahraini Dinar', nameCN: '巴林第纳尔', flag: '🇧🇭', rate: 0.053 },
+            OMR: { code: 'OMR', symbol: 'ر.ع.', name: 'Omani Rial', nameCN: '阿曼里亚尔', flag: '🇴🇲', rate: 0.054 },
+            BYN: { code: 'BYN', symbol: 'Br', name: 'Belarusian Ruble', nameCN: '白俄罗斯卢布', flag: '🇧🇾', rate: 0.45 },
+            GEL: { code: 'GEL', symbol: '₾', name: 'Georgian Lari', nameCN: '格鲁吉亚拉里', flag: '🇬🇪', rate: 0.38 },
+            AMD: { code: 'AMD', symbol: '֏', name: 'Armenian Dram', nameCN: '亚美尼亚德拉姆', flag: '🇦🇲', rate: 54.5 },
+            AZN: { code: 'AZN', symbol: '₼', name: 'Azerbaijani Manat', nameCN: '阿塞拜疆马纳特', flag: '🇦🇿', rate: 0.24 },
+            TMT: { code: 'TMT', symbol: 'm', name: 'Turkmenistani Manat', nameCN: '土库曼斯坦马纳特', flag: '🇹🇲', rate: 0.49 },
+            UZS: { code: 'UZS', symbol: 'лв', name: 'Uzbekistani Som', nameCN: '乌兹别克斯坦索姆', flag: '🇺🇿', rate: 1785 },
+            TJS: { code: 'TJS', symbol: 'ЅМ', name: 'Tajikistani Somoni', nameCN: '塔吉克斯坦索莫尼', flag: '🇹🇯', rate: 1.52 },
+            KGS: { code: 'KGS', symbol: 'лв', name: 'Kyrgystani Som', nameCN: '吉尔吉斯斯坦索姆', flag: '🇰🇬', rate: 12.35 },
+            MNT: { code: 'MNT', symbol: '₮', name: 'Mongolian Tugrik', nameCN: '蒙古图格里克', flag: '🇲🇳', rate: 475 },
+            LAK: { code: 'LAK', symbol: '₭', name: 'Lao Kip', nameCN: '老挝基普', flag: '🇱🇦', rate: 2925 },
+            MMK: { code: 'MMK', symbol: 'K', name: 'Myanmar Kyat', nameCN: '缅甸缅元', flag: '🇲🇲', rate: 295 },
+            KHR: { code: 'KHR', symbol: '៛', name: 'Cambodian Riel', nameCN: '柬埔寨瑞尔', flag: '🇰🇭', rate: 575 },
+            BND: { code: 'BND', symbol: '$', name: 'Brunei Dollar', nameCN: '文莱元', flag: '🇧🇳', rate: 0.19 },
+            FJD: { code: 'FJD', symbol: '$', name: 'Fijian Dollar', nameCN: '斐济元', flag: '🇫🇯', rate: 0.31 },
+            PGK: { code: 'PGK', symbol: 'K', name: 'Papua New Guinean Kina', nameCN: '巴布亚新几内亚基那', flag: '🇵🇬', rate: 0.53 },
+            SBD: { code: 'SBD', symbol: '$', name: 'Solomon Islands Dollar', nameCN: '所罗门群岛元', flag: '🇸🇧', rate: 1.18 },
+            VUV: { code: 'VUV', symbol: 'Vt', name: 'Vanuatu Vatu', nameCN: '瓦努阿图瓦图', flag: '🇻🇺', rate: 16.85 },
+            WST: { code: 'WST', symbol: 'T', name: 'Samoan Tala', nameCN: '萨摩亚塔拉', flag: '🇼🇸', rate: 0.39 },
+            TOP: { code: 'TOP', symbol: 'T$', name: 'Tongan Paʻanga', nameCN: '汤加潘加', flag: '🇹🇴', rate: 0.33 },
+            GYD: { code: 'GYD', symbol: '$', name: 'Guyanese Dollar', nameCN: '圭亚那元', flag: '🇬🇾', rate: 29.25 },
+            SRD: { code: 'SRD', symbol: '$', name: 'Surinamese Dollar', nameCN: '苏里南元', flag: '🇸🇷', rate: 5.15 },
+            BBD: { code: 'BBD', symbol: '$', name: 'Barbadian Dollar', nameCN: '巴巴多斯元', flag: '🇧🇧', rate: 0.28 },
+            TTD: { code: 'TTD', symbol: '$', name: 'Trinidad and Tobago Dollar', nameCN: '特立尼达和多巴哥元', flag: '🇹🇹', rate: 0.95 },
+            JMD: { code: 'JMD', symbol: '$', name: 'Jamaican Dollar', nameCN: '牙买加元', flag: '🇯🇲', rate: 21.85 },
+            HTG: { code: 'HTG', symbol: 'G', name: 'Haitian Gourde', nameCN: '海地古德', flag: '🇭🇹', rate: 18.5 },
+            BSD: { code: 'BSD', symbol: '$', name: 'Bahamian Dollar', nameCN: '巴哈马元', flag: '🇧🇸', rate: 0.14 },
+            BZD: { code: 'BZD', symbol: '$', name: 'Belize Dollar', nameCN: '伯利兹元', flag: '🇧🇿', rate: 0.28 },
+            XCD: { code: 'XCD', symbol: '$', name: 'East Caribbean Dollar', nameCN: '东加勒比元', flag: '🇦🇬', rate: 0.38 },
+            ANG: { code: 'ANG', symbol: 'ƒ', name: 'Netherlands Antillean Guilder', nameCN: '荷属安的列斯盾', flag: '🇨🇼', rate: 0.25 },
+            AWG: { code: 'AWG', symbol: 'ƒ', name: 'Aruban Florin', nameCN: '阿鲁巴弗罗林', flag: '🇦🇼', rate: 0.25 },
+            KYD: { code: 'KYD', symbol: '$', name: 'Cayman Islands Dollar', nameCN: '开曼群岛元', flag: '🇰🇾', rate: 0.12 },
+            CUP: { code: 'CUP', symbol: '$', name: 'Cuban Peso', nameCN: '古巴比索', flag: '🇨🇺', rate: 3.38 },
+            DOP: { code: 'DOP', symbol: '$', name: 'Dominican Peso', nameCN: '多米尼加比索', flag: '🇩🇴', rate: 8.15 },
+            GTQ: { code: 'GTQ', symbol: 'Q', name: 'Guatemalan Quetzal', nameCN: '危地马拉格查尔', flag: '🇬🇹', rate: 1.09 },
+            HNL: { code: 'HNL', symbol: 'L', name: 'Honduran Lempira', nameCN: '洪都拉斯伦皮拉', flag: '🇭🇳', rate: 3.45 },
+            NIO: { code: 'NIO', symbol: 'C$', name: 'Nicaraguan Cordoba', nameCN: '尼加拉瓜科多巴', flag: '🇳🇮', rate: 5.15 },
+            CRC: { code: 'CRC', symbol: '₡', name: 'Costa Rican Colon', nameCN: '哥斯达黎加科朗', flag: '🇨🇷', rate: 72.5 },
+            PAB: { code: 'PAB', symbol: 'B/.', name: 'Panamanian Balboa', nameCN: '巴拿马巴波亚', flag: '🇵🇦', rate: 0.14 },
+            NOK: { code: 'NOK', symbol: 'kr', name: 'Norwegian Krone', nameCN: '挪威克朗', flag: '🇳🇴', rate: 1.48 }
+        };
+
+        let currentCurrency = 'CNY';
+
+        // 初始化货币选择器
+        function initCurrencySelector() {
+            const dropdown = document.getElementById('currency-dropdown');
+            let html = '';
+            
+            for (const [code, curr] of Object.entries(currencies)) {
+                html += `
+                    <div class="currency-option" onclick="changeCurrency('${code}')">
+                        <span class="currency-flag">${curr.flag}</span>
+                        <span class="currency-code">${curr.code}</span>
+                        <span class="currency-name">${curr.name}</span>
+                        <span class="currency-rate">${curr.symbol}</span>
+                    </div>
+                `;
+            }
+            dropdown.innerHTML = html;
+        }
+
+        // 切换货币
+        function changeCurrency(code) {
+            currentCurrency = code;
+            const curr = currencies[code];
+            
+            document.getElementById('current-currency-symbol').textContent = curr.symbol;
+            document.getElementById('current-currency-code').textContent = curr.code;
+            document.getElementById('currency-dropdown').classList.remove('show');
+            
+            // 更新订阅价格
+            updateSubscriptionPrice();
+            
+            // 重新渲染卡片以更新价格标签
+            init();
+        }
+
+        // 切换货币下拉
+        function toggleCurrencyDropdown() {
+            document.getElementById('currency-dropdown').classList.toggle('show');
+        }
+
+        // 获取本地化价格
+        function getLocalizedPrice(basePrice) {
+            const curr = currencies[currentCurrency];
+            const convertedPrice = (basePrice * curr.rate).toFixed(2);
+            return `${curr.symbol}${convertedPrice}`;
+        }
+
+        // 更新订阅价格
+        function updateSubscriptionPrice() {
+            const monthlyPrice = 6.99; // 基础价格（美元）
+            const curr = currencies[currentCurrency];
+            const convertedPrice = (monthlyPrice * (curr.code === 'CNY' ? 1 : curr.rate / currencies.CNY.rate)).toFixed(2);
+            document.getElementById('subscription-price').textContent = `${curr.symbol}${convertedPrice}`;
+        }
+
+        // 点击外部关闭货币下拉
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.currency-selector')) {
+                document.getElementById('currency-dropdown').classList.remove('show');
+            }
+        });
 
         let currentLang = 'zh';
 
@@ -1591,6 +2054,9 @@
             // 更新页面标题
             document.getElementById('page-title').textContent = `XMUSIC - ${lang.nav.home.replace('🏠 ', '')}`;
             
+            // 更新订阅价格显示（带货币）
+            updateSubscriptionPrice();
+            
             // 重新渲染歌曲
             init();
         }
@@ -1621,9 +2087,11 @@
                 grid.innerHTML = `<p style="color: var(--text-secondary);">${i18n[currentLang].search.noResults}</p>`;
                 return;
             }
+            const price = getLocalizedPrice(0.99);
             grid.innerHTML = songList.map(song => `
                 <div class="music-card" onclick="playSong(${song.id})">
                     <div class="card-image" style="background: ${song.cover}">
+                        <span class="price-tag">${price}</span>
                         <div class="play-button">▶️</div>
                     </div>
                     <div class="card-title">${song.title}</div>
@@ -1796,6 +2264,8 @@
 
         // 启动
         initLangSelector();
+        initCurrencySelector();
+        updateSubscriptionPrice();
         init();
     </script>
 </body>
