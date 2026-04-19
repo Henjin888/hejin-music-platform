@@ -2,22 +2,27 @@
 // 使用 Supabase Auth + Database
 
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
-const supabaseUrl = "https://tyalbokyowdeskfrures.supabase.co";
-const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://tyalbokyowdeskfrures.supabase.co";
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 
-// 创建客户端
-export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-  },
-});
+// 如果没有配置 key，返回 null
+const isConfigured = !!supabaseUrl && !!supabaseAnonKey;
 
-export const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
+// 创建客户端
+export const supabase: SupabaseClient | null = isConfigured 
+  ? createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+      },
+    })
+  : null;
+
+export const supabaseAdmin = serviceRoleKey 
+  ? createClient(supabaseUrl, serviceRoleKey)
+  : null;
 
 // ============ 类型定义 ============
 
@@ -63,23 +68,27 @@ export interface ProjectResultRecord {
 // ============ 认证函数 ============
 
 export async function signUp(email: string, password: string) {
+  if (!supabase) throw new Error("Supabase not configured");
   const { data, error } = await supabase.auth.signUp({ email, password });
   if (error) throw error;
   return data;
 }
 
 export async function signIn(email: string, password: string) {
+  if (!supabase) throw new Error("Supabase not configured");
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) throw error;
   return data;
 }
 
 export async function signOut() {
+  if (!supabase) return;
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
 }
 
 export async function getCurrentUser() {
+  if (!supabase) return null;
   const { data: { user }, error } = await supabase.auth.getUser();
   if (error) return null;
   return user;
@@ -88,6 +97,7 @@ export async function getCurrentUser() {
 // ============ 数据库操作 ============
 
 export async function createProfile(userId: string, email: string, nickname?: string) {
+  if (!supabaseAdmin) throw new Error("Supabase not configured");
   const { data, error } = await supabaseAdmin
     .from("profiles")
     .insert({ id: userId, email, nickname })
@@ -98,6 +108,7 @@ export async function createProfile(userId: string, email: string, nickname?: st
 }
 
 export async function getProfile(userId: string): Promise<Profile | null> {
+  if (!supabase) return null;
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
@@ -109,6 +120,7 @@ export async function getProfile(userId: string): Promise<Profile | null> {
 
 // 项目操作
 export async function createProjectRecord(userId: string, title: string, goal: string) {
+  if (!supabaseAdmin) throw new Error("Supabase not configured");
   const { data, error } = await supabaseAdmin
     .from("projects")
     .insert({ user_id: userId, title, goal })
@@ -119,6 +131,7 @@ export async function createProjectRecord(userId: string, title: string, goal: s
 }
 
 export async function getUserProjects(userId: string): Promise<Project[]> {
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from("projects")
     .select("*")
@@ -133,6 +146,7 @@ export async function saveProjectResults(
   resultType: string,
   content: any
 ) {
+  if (!supabaseAdmin) return null;
   const { data, error } = await supabaseAdmin
     .from("project_results")
     .insert({ project_id: projectId, result_type: resultType, content })
@@ -143,6 +157,7 @@ export async function saveProjectResults(
 }
 
 export async function getProjectResults(projectId: string): Promise<ProjectResultRecord[]> {
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from("project_results")
     .select("*")
@@ -153,6 +168,7 @@ export async function getProjectResults(projectId: string): Promise<ProjectResul
 }
 
 export async function updateProjectStatus(projectId: string, status: string) {
+  if (!supabaseAdmin) return null;
   const { data, error } = await supabaseAdmin
     .from("projects")
     .update({ status, updated_at: new Date().toISOString() })
