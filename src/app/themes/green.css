@@ -1,0 +1,118 @@
+/* VocalOS 黑绿色主题设计系统 */
+
+@layer base {
+  /* 主色调：深墨绿 */
+  :root {
+    /* 背景色 - 深黑绿 */
+    --background: 160 30% 8%;        /* #0d1a14 - 深墨绿色背景 */
+    --foreground: 160 20% 90%;       /* #e6f0e8 - 浅绿白文字 */
+    
+    /* 卡片的士宁 */
+    --card: 160 25% 12%;           /* #141f19 - 卡片背景 */
+    --card-foreground: 160 20% 90%;
+    
+    /* 弹窗 */
+    --popover: 160 25% 12%;
+    --popover-foreground: 160 20% 90%;
+    
+    /* 主色：荧光绿 */
+    --primary: 160 80% 45%;       /* #00ff7f - 荧光绿 */
+    --primary-foreground: 160 80% 15%; /* #003d1f - 深绿文字 */
+    
+    /* 次要 */
+    --secondary: 160 40% 25%;     /* #1a3323 - 次要绿 */
+    --secondary-foreground: 160 20% 90%;
+    
+    /* 静音 */
+    --muted: 160 30% 18%;         /* #1f2e22 - 静音绿 */
+    --muted-foreground: 160 15% 60%;
+    
+    /* 强调 */
+    --accent: 160 50% 35%;        /* #2d4a35 - 强调绿 */
+    --accent-foreground: 160 20% 90%;
+    
+    /* 破坏 */
+    --destructive: 0 70% 45%;     /* #ff4444 - 红色 */
+    --destructive-foreground: 0 0% 100%;
+    
+    /* 边框 */
+    --border: 160 30% 25%;        /* #233828 - 绿边框 */
+    --input: 160 30% 25%;
+    --ring: 160 80% 45%;
+    
+    /* 半径 */
+    --radius: 0.75rem;
+  }
+
+  /* 暗色模式 - 保持深黑绿 */
+  .dark {
+    --background: 160 30% 6%;
+    --foreground: 160 20% 90%;
+    --card: 160 25% 10%;
+    --card-foreground: 160 20% 90%;
+    --primary: 160 80% 50%;
+    --secondary: 160 35% 20%;
+    --muted: 160 30% 15%;
+  }
+}
+
+/* 特殊效果 */
+.glow-green {
+  box-shadow: 0 0 20px rgba(0, 255, 127, 0.3);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(0, 255, 127, 0.5);
+}
+
+.bg-matrix {
+  background: 
+    linear-gradient(160deg, rgba(0, 255, 127, 0.03) 0%, transparent 50%),
+    linear-gradient(160deg, transparent 50%, rgba(0, 255, 127, 0.02) 100%);
+}
+
+/* 按钮效果 */
+.btn-neon {
+  background: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  box-shadow: 0 0 5px var(--primary);
+  transition: all 0.3s ease;
+}
+
+.btn-neon:hover {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow: 0 0 20px var(--primary);
+}
+
+/* 输入框效果 */
+.input-glow {
+  border-color: var(--border);
+  transition: all 0.3s ease;
+}
+
+.input-glow:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 10px rgba(0, 255, 127, 0.2);
+}
+
+/* 渐变背景 */
+.hero-gradient {
+  background: 
+    radial-gradient(ellipse at 50% 0%, rgba(0, 255, 127, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 255, 127, 0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 20% 80%, rgba(0, 255, 127, 0.05) 0%, transparent 40%),
+    var(--background);
+}
+
+/* 卡片悬浮效果 */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 15px rgba(0, 255, 127, 0.15);
+  transform: translateY(-2px);
+}

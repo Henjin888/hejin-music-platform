@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 背景色 - 深墨绿 */
+    --background: 160 30% 8%;
+    --foreground: 160 20% 90%;
+    
+    --card: 160 25% 12%;
+    --card-foreground: 160 20% 90%;
+    
+    --popover: 160 25% 12%;
+    --popover-foreground: 160 20% 90%;
+    
+    /* 主色：荧光绿 */
+    --primary: 160 80% 45%;
+    --primary-foreground: 160 80% 15%;
+    
+    /* 次要 */
+    --secondary: 160 40% 25%;
+    --secondary-foreground: 160 20% 90%;
+    
+    /* 静音 */
+    --muted: 160 30% 18%;
+    --muted-foreground: 160 15% 60%;
+    
+    /* 强调 */
+    --accent: 160 50% 35%;
+    --accent-foreground: 160 20% 90%;
+    
+    /* 破坏 */
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* 边框 */
+    --border: 160 30% 25%;
+    --input: 160 30% 25%;
+    --ring: 160 80% 45%;
+    
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* 矩阵风格背景 */
+.hero-bg {
+  background: 
+    radial-gradient(ellipse at 50% 0%, rgba(0, 255, 127, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 255, 127, 0.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 20% 80%, rgba(0, 255, 127, 0.04) 0%, transparent 40%),
+    hsl(var(--background));
+}
+
+/* 霓虹发光按钮 */
+.btn-neon {
+  @apply bg-transparent border border-primary text-primary font-medium;
+  box-shadow: 0 0 8px rgba(0, 255, 127, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-neon:hover {
+  @apply bg-primary text-primary-foreground;
+  box-shadow: 0 0 20px rgba(0, 255, 127, 0.5);
+}
+
+.btn-neon:active {
+  transform: scale(0.98);
+}
+
+/* 输入框发光 */
+.input-glow {
+  @apply border-2 border-input bg-background transition-all duration-200;
+}
+
+.input-glow:focus {
+  @apply border-primary;
+  box-shadow: 0 0 12px rgba(0, 255, 127, 0.2);
+}
+
+/* 卡片悬浮效果 */
+.card-glow {
+  @apply transition-all duration-300;
+}
+
+.card-glow:hover {
+  @apply border-primary/50;
+  box-shadow: 0 0 20px rgba(0, 255, 127, 0.1);
+  transform: translateY(-2px);
+}
+
+/* 渐变文字 */
+.text-gradient-green {
+  background: linear-gradient(135deg, #00ff7f 0%, #00cc66 50%, #00994d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 悬浮渐变 */
+.hover-gradient:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 127, 0.1) 0%, rgba(0, 255, 127, 0.05) 100%);
+}
+
+/* 网格背景效果 */
+.grid-bg {
+  background-image: 
+    linear-gradient(rgba(0, 255, 127, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 127, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
